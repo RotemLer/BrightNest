@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd  # Ensure 'pandas' library is installed: pip install pandas
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
