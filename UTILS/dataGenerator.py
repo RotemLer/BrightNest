@@ -1,42 +1,57 @@
 import pandas as pd
-import os
-from sdv.single_table import CTGANSynthesizer
+from datetime import datetime, timedelta
+from sdv.single_table import TVAESynthesizer
 from sdv.metadata import SingleTableMetadata
 
-# קובץ קלט
-csv_path = "Updated_HomeC.csv"
-output_path = "synthetic_data.csv"
+# טען את הדאטה הסינתטי (אם כבר יש לך את הקובץ מוכן)
+df = pd.read_csv("Smoothed_Temperature_Home_Data.csv")
+df.columns = df.columns.str.strip()
+df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%d %H:%M:%S")
 
-# בדיקה שהקובץ קיים
-if not os.path.exists(csv_path):
-    raise FileNotFoundError(f"❌ File not found: {csv_path}")
+# Feature Engineering
+df["hour"] = df["time"].dt.hour
+df["dayofyear"] = df["time"].dt.dayofyear
+df = df.drop(columns=["time", "time.1"], errors="ignore")
 
-print("📥 Loading dataset...")
-df = pd.read_csv(csv_path)
-
-# גילוי מטאדאטה מהדאטה
-print("🔍 Detecting metadata...")
+# יצירת Metadata
 metadata = SingleTableMetadata()
 metadata.detect_from_dataframe(data=df)
 
-# המרה ידנית של עמודות קטגוריאליות
-for col in ['icon', 'summary']:
-    if col in df.columns:
-        metadata.update_column(column_name=col, sdtype='categorical')
+# הגדרת עמודות קטגוריאליות
+discrete_columns = df.select_dtypes(include="object").columns.tolist()
+for col in discrete_columns:
+    metadata.update_column(column_name=col, sdtype="categorical")
 
 # יצירת המודל
-print("⚙️ Initializing CTGANSynthesizer...")
-synthesizer = CTGANSynthesizer(metadata=metadata, epochs=500)
+model = TVAESynthesizer(
+    metadata=metadata,
+    enforce_min_max_values=True,
+    enforce_rounding=True
+)
 
-# אימון המודל
-print("🚀 Fitting model... This may take a minute.")
-synthesizer.fit(df)
+# אימון
+print("🔧 מאמן את TVAE על הדאטה...")
+model.fit(df)
 
-# יצירת דאטה סינתטי
-print("✨ Sampling synthetic data...")
-synthetic_data = synthesizer.sample(500)
-synthetic_data.to_csv(output_path, index=False)
+# דגימה
+synthetic = model.sample(8760)
 
-print(f"✅ Synthetic data saved to: {output_path}")
-print("📊 Preview:")
-print(synthetic_data.head())
+# נוודא שהשעות והימים תקינים
+synthetic["hour"] = synthetic["hour"].round().clip(0, 23).astype(int)
+synthetic["dayofyear"] = synthetic["dayofyear"].round().clip(1, 365).astype(int)
+
+# ✨ יצירת רצף זמן מדויק (לפי סדר שעה ביממה ויום בשנה)
+start_date = datetime(2024, 1, 1)
+hourly_time_range = [start_date + timedelta(hours=i) for i in range(8760)]
+
+# ✨ מיון הדאטה לפי סדר הגיוני כדי להתאים לרצף הזמן
+synthetic = synthetic.sort_values(["dayofyear", "hour"]).reset_index(drop=True)
+synthetic["time"] = hourly_time_range
+
+# סידור מחדש של העמודות
+cols = ["time"] + [col for col in synthetic.columns if col != "time"]
+synthetic = synthetic[cols]
+
+# שמירה
+synthetic.to_csv("synthetic_tvae_smoothed_fixed_time.csv", index=False)
+print("✅ synthetic_tvae_smoothed_fixed_time.csv נוצר בהצלחה!")
