@@ -7,7 +7,8 @@ from collections import defaultdict
 from sklearn.metrics import mean_absolute_error
 
 # Load data
-file_path = "C:\\Studies\\final project\\project\\generateDataSet\\Hourly_HomeC.csv.gz"
+
+file_path = "C:\\Studies\\final project\\project\\generateDataSet\\Smoothed_Temperature_Home_Data.csv.gz"
 df = pd.read_csv(file_path, compression="gzip", parse_dates=["time"])
 
 # Define columns
@@ -33,9 +34,18 @@ boiler_targets = {
 # Drop missing values
 df = df.dropna(subset=weather_features + boiler_targets["with"] + boiler_targets["without"]).reset_index(drop=True)
 
-# Split to train (first 3 days = 72 rows) and test
-train_df = df.iloc[:72]
-test_df = df.iloc[72:]
+# Split to train  and test
+train_ratio = 0.8  # אפשר גם 0.7 אם רוצים יותר נתוני בדיקה
+split_index = int(len(df) * train_ratio)
+
+df["date"] = df["time"].dt.date
+unique_days = df["date"].unique()
+train_days = unique_days[:int(len(unique_days) * train_ratio)]
+test_days = unique_days[int(len(unique_days) * train_ratio):]
+
+train_df = df[df["date"].isin(train_days)].drop(columns="date")
+test_df = df[df["date"].isin(test_days)].drop(columns="date")
+
 
 # Normalize input features
 scaler_x = MinMaxScaler()
@@ -112,11 +122,14 @@ for system_type, targets in results.items():
 summary_df = pd.DataFrame(summary)
 summary_df = summary_df.sort_values(by="Error %")
 
-# Merge all predictions to one table
-combined_df = test_df[["time"]].copy().drop_duplicates().reset_index(drop=True)
+# Merge all predictions to one table – safer with concat by index
+combined_df = None  # נתחיל עם None
 
 for system_type, targets in results.items():
     for target, df_pred in targets.items():
+        df_pred = df_pred.copy()
+        df_pred["time"] = df_pred["time"].dt.floor("h")  # עיגול לשעה שלמה
+
         col_name_pred = f"{target} - Predicted"
         col_name_actual = f"{target} - Actual"
         col_name_error = f"{target} - Error %"
@@ -128,9 +141,15 @@ for system_type, targets in results.items():
             "Error %": col_name_error
         })
 
-        combined_df = combined_df.merge(reduced_df, on="time", how="left")
+        if combined_df is None:
+            combined_df = reduced_df
+        else:
+            # שמירה על עמודת time רק פעם אחת
+            reduced_df = reduced_df.drop(columns=["time"])
+            combined_df = pd.concat([combined_df.reset_index(drop=True), reduced_df.reset_index(drop=True)], axis=1)
+
 
 # Export files
-combined_df.to_csv("boiler_all_predictions_by_hour.csv", index=False)
-summary_df.to_csv("boiler_prediction_summary.csv", index=False)
+combined_df.to_csv("new_boiler_all_predictions_by_hour.csv", index=False)
+summary_df.to_csv("new_boiler_prediction_summary.csv", index=False)
 print("✅ Combined hourly predictions exported to: boiler_all_predictions_by_hour.csv")
