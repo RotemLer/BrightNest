@@ -1,19 +1,24 @@
-from sdv.tabular import CTGAN  # Ensure the `sdv` library is installed with `pip install sdv`. Recommended version: `pip install sdv==1.4.0`.
 import pandas as pd
+from sdv.single_table import CTGANSynthesizer
+from sdv.metadata import SingleTableMetadata
 
-#load the file to generate
-df = pd.read_csv("Hourly_HomeC.csv")
 
-# translate the text to category
-df['summary'] = df['summary'].astype('category')
-df['icon'] = df['icon'].astype('category')
+df = pd.read_csv("Updated_HomeC.csv")
 
-# Training the model
-model = CTGAN(epochs=500)
-model.fit(df)
 
-# creat 500 line of new data
-synthetic_data = model.sample(500)
+metadata = SingleTableMetadata()
+metadata.detect_from_dataframe(data=df)
 
-# show the new data
+
+synthesizer = CTGANSynthesizer(metadata, epochs=500)
+
+
+synthesizer.fit(df)
+
+
+synthetic_data = synthesizer.sample(500)
+
+
+synthetic_data.to_csv("synthetic_data.csv", index=False)
+
 print(synthetic_data.head())
