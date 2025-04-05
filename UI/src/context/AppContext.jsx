@@ -8,7 +8,11 @@ export const AppContext = createContext({
     boilerStatus: false,
   },
   updateSettings: () => {},
+
   weatherData: [],
   predictedBoilerTemp: 0,
+
   toggleBoilerStatus: () => {},
+  
+  toggleTheme: () => {}, // אנו רק משתפים את הפונקציה פה
 });
