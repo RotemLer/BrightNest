@@ -5,7 +5,7 @@ from datetime import time
 # File paths
 input_file = "weather_hourly_2024.csv"
 output_file = "Updated_With_Boiler_Hourly_Realistic_v4.csv.gz"
-
+##TEST##
 # Constants
 BOILER_SIZES = [50, 100, 150]
 ENERGY_PER_DEGREE_PER_LITER = 1.16 / 1000  # kWh per liter per °C
