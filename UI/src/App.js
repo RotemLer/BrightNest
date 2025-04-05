@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout/Layout';
 import Dashboard from './components/Dashboard/Dashboard';
+import Layout from './components/Layout/Layout';
 import UserSettings from './components/Settings/UserSettings';
 import { AppContext } from './context/AppContext';
 
-// דוגמה לנתוני ברירת מחדל
 const defaultSettings = {
   location: 'תל אביב',
-  showerDuration: 10, // בדקות
+  showerDuration: 10,
   preferredShowerTime: '07:00',
-  boilerStatus: false, // כבוי כברירת מחדל
+  boilerStatus: false,
 };
 
-// דוגמה לנתוני מזג אוויר התחלתיים
 const initialWeatherData = [
   { date: '2025-04-05', temp: 24, humidity: 65, description: 'בהיר' },
   { date: '2025-04-06', temp: 26, humidity: 70, description: 'מעונן חלקית' },
@@ -22,25 +21,20 @@ const initialWeatherData = [
 
 function App() {
   const [userSettings, setUserSettings] = useState(defaultSettings);
-  const [weatherData, setWeatherData] = useState(initialWeatherData);
+  const [weatherData] = useState(initialWeatherData);
   const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(35);
+  const [theme, setTheme] = useState('light'); // מצב ברירת מחדל
 
-  // פונקציה להדמיית שליפת נתוני מזג אוויר מה-API
   useEffect(() => {
-    // במקרה אמיתי - כאן תהיה קריאה לשירות מזג האוויר
     console.log('Weather data loaded');
   }, []);
 
-  // פונקציה להדמיית חישוב טמפרטורת הדוד המוערכת בהתבסס על המודל
   useEffect(() => {
-    // במקרה אמיתי - נבצע כאן חישוב על סמך המודל המאומן
-    // לוגיקה פשוטה לדוגמה:
     const outsideTemp = weatherData[0].temp;
     const simulatedPrediction = outsideTemp > 25 ? 42 : outsideTemp > 20 ? 38 : 35;
     setPredictedBoilerTemp(simulatedPrediction);
   }, [weatherData]);
 
-  // פונקציה שתטפל בהחלפת סטטוס הדוד
   const toggleBoilerStatus = () => {
     setUserSettings(prev => ({
       ...prev,
@@ -48,7 +42,6 @@ function App() {
     }));
   };
 
-  // פונקציה לעדכון הגדרות המשתמש
   const updateSettings = (newSettings) => {
     setUserSettings(prev => ({
       ...prev,
@@ -56,25 +49,31 @@ function App() {
     }));
   };
 
-  // הערכים שנשתף בקונטקסט
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   const contextValue = {
     userSettings,
     updateSettings,
     weatherData,
     predictedBoilerTemp,
-    toggleBoilerStatus
+    toggleBoilerStatus,
+    toggleTheme,
   };
 
   return (
     <AppContext.Provider value={contextValue}>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/settings" element={<UserSettings />} />
-          </Routes>
-        </Layout>
-      </Router>
+      <div className={theme === 'dark' ? 'dark' : ''}>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/settings" element={<UserSettings />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </div>
     </AppContext.Provider>
   );
 }
