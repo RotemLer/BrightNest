@@ -9,7 +9,7 @@ output_file = "Updated_With_Boiler_Hourly_Realistic_v4.csv.gz"
 # Constants
 BOILER_SIZES = [50, 100, 150]
 ENERGY_PER_DEGREE_PER_LITER = 1.16 / 1000  # kWh per liter per °C
-MAX_RADIATION = 1000  # עבור נרמול הקרינה
+MAX_RADIATION = 1000  # radiation normalizations
 HEATING_START = time(18, 0)
 HEATING_END = time(21, 0)
 MAX_TEMP_SOLAR = 60
@@ -54,11 +54,9 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
             min_temp_no_solar = 0.6 * ambient_temp
             temp_without = prev_without
 
-            if is_heating_time:
-                temp_without += random.uniform(0.2, 0.4)
-            else:
-                delta_env = ambient_temp - temp_without
-                temp_without += 0.08 * delta_env + random.uniform(-0.1, 0.1)
+
+            delta_env = ambient_temp - temp_without
+            temp_without += 0.08 * delta_env + random.uniform(-0.1, 0.1)
 
             temp_without = max(min(add_noise(temp_without, 0.15), MAX_TEMP_NO_SOLAR), min_temp_no_solar)
             previous_temps[size]["without"] = temp_without
@@ -68,9 +66,8 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
             size_modifier = 1 - (size - 50) / 200
             solar_gain = radiation_norm * (1 - cloud_cover) * size_modifier
 
-            if is_heating_time:
-                temp_with += random.uniform(0.2, 0.4)
-            elif is_day and radiation > 0:
+
+            if is_day and radiation > 0:
                 temp_with += solar_gain * 5
             else:
                 delta_env = ambient_temp - temp_with
@@ -85,11 +82,6 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
             # Energy consumption
             energy_without = 0.0
             energy_with = 0.0
-            if is_heating_time:
-                delta_without = max(0, temp_without - prev_without)
-                delta_with = max(0, temp_with - prev_with)
-                energy_without = delta_without * size * ENERGY_PER_DEGREE_PER_LITER
-                energy_with = delta_with * size * ENERGY_PER_DEGREE_PER_LITER
 
             chunk.at[chunk.index[i], f"boiler temp for {size} L without solar system"] = round(temp_without, 2)
             chunk.at[chunk.index[i], f"boiler temp for {size} L with solar system"] = round(temp_with, 2)
