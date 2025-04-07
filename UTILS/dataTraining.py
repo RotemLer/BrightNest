@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
+from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import mean_absolute_error
 
 # Load and prepare data
@@ -29,22 +30,34 @@ targets = [
 # Drop NA
 df = df.dropna(subset=features + targets).reset_index(drop=True)
 
-# Split train/test
+# Add day column
 df["day"] = df["date"].dt.date
-train_days = df["day"].unique()[:int(len(df["day"].unique()) * 0.8)]
+
+# Split train / val / test by unique days
+unique_days = df["day"].unique()
+n_days = len(unique_days)
+train_days = unique_days[:int(n_days * 0.7)]
+val_days = unique_days[int(n_days * 0.7):int(n_days * 0.85)]
+test_days = unique_days[int(n_days * 0.85):]
+
 train_df = df[df["day"].isin(train_days)].drop(columns="day")
-test_df = df[~df["day"].isin(train_days)].drop(columns="day")
+val_df = df[df["day"].isin(val_days)].drop(columns="day")
+test_df = df[df["day"].isin(test_days)].drop(columns="day")
 
 # Normalize inputs
 scaler_x = MinMaxScaler()
 X_train = scaler_x.fit_transform(train_df[features])
+X_val = scaler_x.transform(val_df[features])
 X_test = scaler_x.transform(test_df[features])
+
 X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1]))
+X_val = X_val.reshape((X_val.shape[0], 1, X_val.shape[1]))
 X_test = X_test.reshape((X_test.shape[0], 1, X_test.shape[1]))
 
 # Normalize outputs
 scaler_y = MinMaxScaler()
 y_train = scaler_y.fit_transform(train_df[targets])
+y_val = scaler_y.transform(val_df[targets])
 y_test_actual = test_df[targets].values
 
 # Define and train model
@@ -54,7 +67,16 @@ model = Sequential([
     Dense(len(targets))
 ])
 model.compile(optimizer='adam', loss='mse')
-model.fit(X_train, y_train, epochs=20, verbose=1)
+
+early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
+model.fit(
+    X_train, y_train,
+    epochs=50,
+    validation_data=(X_val, y_val),
+    callbacks=[early_stop],
+    verbose=1
+)
 
 # Save the trained model
 model.save("boiler_temperature_multitarget.h5")
