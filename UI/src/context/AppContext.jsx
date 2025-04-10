@@ -14,5 +14,5 @@ export const AppContext = createContext({
 
   toggleBoilerStatus: () => {},
   
-  toggleTheme: () => {}, // אנו רק משתפים את הפונקציה פה
+  toggleTheme: () => {}, 
 });
