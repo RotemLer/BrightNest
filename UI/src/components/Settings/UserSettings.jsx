@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// רשימה של מיקומים לדוגמה
+//example of a location picker component
 const israelCities = [
   'ירושלים', 'תל אביב', 'חיפה', 'באר שבע', 'אילת', 'נתניה', 
   'אשדוד', 'ראשון לציון', 'פתח תקווה', 'חולון', 'בני ברק'
@@ -10,7 +10,7 @@ function LocationPicker({ selectedLocation, onLocationSelect }) {
   const [searchTerm, setSearchTerm] = useState(selectedLocation);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // סינון המיקומים לפי מה שהמשתמש הקליד
+
   const filteredLocations = israelCities.filter(city => 
     city.includes(searchTerm)
   );
