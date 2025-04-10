@@ -45,7 +45,7 @@ url = "https://archive-api.open-meteo.com/v1/archive"
 params = {
     "latitude": 32.0809,
     "longitude": 34.7806,
-    "start_date": "2024-01-01",
+    "start_date": "2022-01-01",
     "end_date": "2024-12-31",
     "daily": "weather_code",
     "hourly": [
