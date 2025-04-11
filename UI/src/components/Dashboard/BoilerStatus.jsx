@@ -3,10 +3,17 @@ import React from 'react';
 function BoilerStatus({ isOn, predictedTemp, toggleBoiler }) {
   // חישוב צבע הרקע בהתאם לטמפרטורה
   const getTempColorClass = () => {
-    if (predictedTemp >= 45) return 'bg-red-500'; // אדום
+    if (predictedTemp >= 45) return 'bg-red-500'; // red
+    if (predictedTemp >= 42) return 'bg-purple-500'; // perple
+    if (predictedTemp >= 43 && predictedTemp < 45) return 'bg-indigo-500'; // indigo
+    if (predictedTemp >= 40 && predictedTemp < 42) return 'bg-pink-500'; // pink
+    if (predictedTemp >= 39 && predictedTemp < 40) return 'bg-rose-500'; // rose
+    if (predictedTemp >= 38 && predictedTemp < 39) return 'bg-amber-500'; // amber
+    if (predictedTemp >= 38 && predictedTemp < 40) return 'bg-teal-500'; // טורקיז
+    if (predictedTemp >= 37 && predictedTemp < 38) return 'bg-green-500'; // ירוק
     if (predictedTemp >= 40) return 'bg-orange-500'; // כתום
     if (predictedTemp >= 35) return 'bg-yellow-500'; // צהוב
-    return 'bg-blue-500'; // כחול
+    return 'bg-blue-500'; // blue
   };
 
   return (
