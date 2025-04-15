@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
@@ -55,7 +56,7 @@ test_df = df[df["day"].isin(test_days)].drop(columns="day")
 columns_to_exclude = target_columns + ["date"]
 features = sorted([col for col in train_df.columns if col not in columns_to_exclude])
 
-# === 9. Add missing feature columns to val/test (with 0s)
+# === 9. Add missing feature columns to val/test (with 0s) ===
 for col in features:
     for part in [val_df, test_df]:
         if col not in part.columns:
@@ -72,7 +73,7 @@ y_train_raw = scaler_y.fit_transform(train_df[target_columns])
 y_val_raw = scaler_y.transform(val_df[target_columns])
 y_test_actual = test_df[target_columns].values
 
-# === 11. Rebuild scaled DataFrames
+# === 11. Rebuild scaled DataFrames ===
 train_df_scaled = pd.DataFrame(X_train_raw, columns=features)
 train_df_scaled[target_columns] = y_train_raw
 
@@ -82,27 +83,51 @@ val_df_scaled[target_columns] = y_val_raw
 test_df_scaled = pd.DataFrame(X_test_raw, columns=features)
 test_df_scaled[target_columns] = y_test_actual
 
-# === ✅ 12. DEBUG: check alignment
+# === ✅ 12. DEBUG: check alignment ===
 for df_name, df_part in [("train", train_df_scaled), ("val", val_df_scaled), ("test", test_df_scaled)]:
     df_cols = df_part.columns.tolist()
     for col in features:
         if col not in df_cols:
             raise ValueError(f"❌ {col} missing in {df_name}_df_scaled")
 
-# === 13. Create sequences
+# === 13. Robust Sequence Creation ===
 def create_sequences(df, feature_cols, target_cols, seq_len=6):
+    if df is None or feature_cols is None or target_cols is None:
+        raise ValueError("Input arguments must not be None.")
+
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("df must be a pandas DataFrame.")
+
+    missing_features = [col for col in feature_cols if col not in df.columns]
+    missing_targets = [col for col in target_cols if col not in df.columns]
+    if missing_features or missing_targets:
+        raise ValueError(f"Missing columns in dataframe: {missing_features + missing_targets}")
+
+    if len(df) < seq_len:
+        raise ValueError(f"Not enough data to create sequences of length {seq_len}. Data length: {len(df)}")
+
     X_seq, y_seq = [], []
+    feature_data = df[feature_cols].values
+    target_data = df[target_cols].values
+
     for i in range(seq_len, len(df)):
-        X_seq.append(df[feature_cols].iloc[i-seq_len:i].values)
-        y_seq.append(df[target_cols].iloc[i].values)
+        X_seq.append(feature_data[i-seq_len:i])
+        y_seq.append(target_data[i])
+
     return np.array(X_seq), np.array(y_seq)
 
+# === 14. Generate Sequences ===
 SEQUENCE_LENGTH = 6
 X_train, y_train = create_sequences(train_df_scaled, features, target_columns, SEQUENCE_LENGTH)
 X_val, y_val = create_sequences(val_df_scaled, features, target_columns, SEQUENCE_LENGTH)
 X_test, y_test_actual_seq = create_sequences(test_df_scaled, features, target_columns, SEQUENCE_LENGTH)
 
-# === 14. Build and train model
+print("✅ Created sequences:")
+print(f"  X_train: {X_train.shape}, y_train: {y_train.shape}")
+print(f"  X_val: {X_val.shape}, y_val: {y_val.shape}")
+print(f"  X_test: {X_test.shape}, y_test_actual_seq: {y_test_actual_seq.shape}")
+
+# === 15. Build and train model ===
 model = Sequential([
     Input(shape=(SEQUENCE_LENGTH, X_train.shape[2])),
     LSTM(50, activation='relu'),
@@ -112,8 +137,6 @@ model.compile(optimizer='adam', loss='mse')
 early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
 
 model.fit(X_train, y_train, epochs=50, validation_data=(X_val, y_val), callbacks=[early_stop], verbose=1)
-
-import matplotlib.pyplot as plt
 
 # === 📊 Plot training vs validation loss ===
 history = model.history.history
@@ -130,14 +153,16 @@ plt.savefig("training_loss_plot.png")
 plt.close()
 
 print("📈 Training vs validation loss plot saved as training_loss_plot.png")
-# === 15. Save model
-model.save("boiler_temperature_multitarget_lstm6h.h5")
 
-# === 16. Predict and inverse scale
+# === 16. Save model ===
+model.save("boiler_temperature_multitarget_lstm6h.h5")
+print("✅ Model saved as boiler_temperature_multitarget_lstm6h.h5")
+
+# === 17. Predict and inverse scale ===
 y_pred_scaled = model.predict(X_test)
 y_pred = scaler_y.inverse_transform(y_pred_scaled)
 
-# === 17. Save predictions
+# === 18. Save predictions ===
 df_result = pd.DataFrame({
     "time": test_df["date"].iloc[SEQUENCE_LENGTH:SEQUENCE_LENGTH+len(y_pred)].values
 })
@@ -149,7 +174,7 @@ for i, target in enumerate(target_columns):
 df_result.to_csv("boiler_multitarget_predictions.csv", index=False)
 print("📁 Predictions saved to boiler_multitarget_predictions.csv")
 
-# === 18. Save error distribution
+# === 19. Save error distribution ===
 error_summary = {}
 for target in target_columns:
     err_col = f"{target} - Error %"
@@ -167,7 +192,6 @@ error_df = pd.DataFrame(error_summary).T
 error_df.to_csv("boiler_prediction_error_distribution.csv")
 print("📊 Error summary saved to boiler_prediction_error_distribution.csv")
 
-# === 19. Report time
+# === 20. Report time ===
 end_time = time.time()
-print("✅ Model saved as boiler_temperature_multitarget_lstm6h.h5")
 print(f"🕒 Total training time: {end_time - start_time:.2f} seconds")
