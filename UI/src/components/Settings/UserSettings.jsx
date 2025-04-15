@@ -1,58 +1,80 @@
 import React, { useState } from 'react';
+import LocationPicker from './LocationPicker';
 
-//example of a location picker component
-const israelCities = [
-  'ירושלים', 'תל אביב', 'חיפה', 'באר שבע', 'אילת', 'נתניה', 
-  'אשדוד', 'ראשון לציון', 'פתח תקווה', 'חולון', 'בני ברק'
-];
+function UserSettings() {
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    location: '',
+    birthdate: '',
+  });
 
-function LocationPicker({ selectedLocation, onLocationSelect }) {
-  const [searchTerm, setSearchTerm] = useState(selectedLocation);
-  const [showDropdown, setShowDropdown] = useState(false);
-
-
-  const filteredLocations = israelCities.filter(city => 
-    city.includes(searchTerm)
-  );
-
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-    setShowDropdown(true);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleLocationClick = (city) => {
-    setSearchTerm(city);
-    onLocationSelect(city);
-    setShowDropdown(false);
+  const handleLocationChange = (city) => {
+    setUserData((prev) => ({ ...prev, location: city }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(userData); // פה תוכל לשלוח לשרת
   };
 
   return (
-    <div className="relative">
+    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 space-y-4 bg-white dark:bg-gray-900 shadow-md rounded-2xl">
+      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">הגדרות משתמש</h2>
+
       <input
-        type="text"
-        value={searchTerm}
-        onChange={handleInputChange}
-        onFocus={() => setShowDropdown(true)}
-        onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
-        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-        placeholder="הקלד עיר..."
+        name="name"
+        placeholder="שם מלא"
+        value={userData.name}
+        onChange={handleChange}
+        className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
       />
 
-      {showDropdown && filteredLocations.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-auto transition-all">
-          {filteredLocations.map((city) => (
-            <div
-              key={city}
-              className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors"
-              onClick={() => handleLocationClick(city)}
-            >
-              {city}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+      <input
+        name="email"
+        type="email"
+        placeholder="כתובת מייל"
+        value={userData.email}
+        onChange={handleChange}
+        className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+      />
+
+      <input
+        name="password"
+        type="password"
+        placeholder="סיסמה"
+        value={userData.password}
+        onChange={handleChange}
+        className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+      />
+
+      <LocationPicker
+        selectedLocation={userData.location}
+        onLocationSelect={handleLocationChange}
+      />
+
+      <input
+        type="date"
+        placeholder="YYYY/MM/DD" 
+        dir="ltr"
+        className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+      />
+
+
+      <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
+        שמור שינויים
+      </button>
+    </form>
   );
 }
 
-export default LocationPicker;
+export default UserSettings;
