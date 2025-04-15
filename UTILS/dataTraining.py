@@ -1,3 +1,4 @@
+
 import pandas as pd
 import numpy as np
 import time
@@ -6,6 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.callbacks import EarlyStopping
+import joblib  # For saving scalers
 
 start_time = time.time()
 
@@ -73,6 +75,11 @@ y_train_raw = scaler_y.fit_transform(train_df[target_columns])
 y_val_raw = scaler_y.transform(val_df[target_columns])
 y_test_actual = test_df[target_columns].values
 
+# === Save scalers ===
+joblib.dump(scaler_x, "scaler_x.save")
+joblib.dump(scaler_y, "scaler_y.save")
+print("💾 Saved scaler_x.save and scaler_y.save")
+
 # === 11. Rebuild scaled DataFrames ===
 train_df_scaled = pd.DataFrame(X_train_raw, columns=features)
 train_df_scaled[target_columns] = y_train_raw
@@ -92,28 +99,12 @@ for df_name, df_part in [("train", train_df_scaled), ("val", val_df_scaled), ("t
 
 # === 13. Robust Sequence Creation ===
 def create_sequences(df, feature_cols, target_cols, seq_len=6):
-    if df is None or feature_cols is None or target_cols is None:
-        raise ValueError("Input arguments must not be None.")
-
-    if not isinstance(df, pd.DataFrame):
-        raise TypeError("`df` must be a pandas DataFrame.")
-
-    missing_features = [col for col in feature_cols if col not in df.columns]
-    missing_targets = [col for col in target_cols if col not in df.columns]
-    if missing_features or missing_targets:
-        raise ValueError(f"Missing columns in dataframe: {missing_features + missing_targets}")
-
-    if len(df) < seq_len:
-        raise ValueError(f"Not enough data to create sequences of length {seq_len}. Data length: {len(df)}")
-
     X_seq, y_seq = [], []
     feature_data = df[feature_cols].values
     target_data = df[target_cols].values
-
     for i in range(seq_len, len(df)):
         X_seq.append(feature_data[i-seq_len:i])
         y_seq.append(target_data[i])
-
     return np.array(X_seq), np.array(y_seq)
 
 # === 14. Generate Sequences ===
@@ -121,11 +112,6 @@ SEQUENCE_LENGTH = 6
 X_train, y_train = create_sequences(train_df_scaled, features, target_columns, SEQUENCE_LENGTH)
 X_val, y_val = create_sequences(val_df_scaled, features, target_columns, SEQUENCE_LENGTH)
 X_test, y_test_actual_seq = create_sequences(test_df_scaled, features, target_columns, SEQUENCE_LENGTH)
-
-print("✅ Created sequences:")
-print(f"  X_train: {X_train.shape}, y_train: {y_train.shape}")
-print(f"  X_val: {X_val.shape}, y_val: {y_val.shape}")
-print(f"  X_test: {X_test.shape}, y_test_actual_seq: {y_test_actual_seq.shape}")
 
 # === 15. Build and train model ===
 model = Sequential([
