@@ -1,44 +1,82 @@
 import React from 'react';
+import iconRainy from '../../components/icons/icon_rainy.png';
+import iconCloudy from '../../components/icons/icon_cloudy.png'; 
+import iconSunny from '../../components/icons/icon_sunny.png';
+import iconDefaultWeather from '../../components/icons/icon_default_weather.png';
 
-function BoilerStatus({ isOn, predictedTemp, toggleBoiler }) {
-  const getTempColorClass = () => {
-    if (predictedTemp >= 45) return 'bg-gradient-to-br from-red-500 to-red-700';
-    if (predictedTemp >= 40) return 'bg-gradient-to-br from-orange-500 to-orange-700';
-    if (predictedTemp >= 35) return 'bg-gradient-to-br from-yellow-500 to-yellow-700';
-    return 'bg-gradient-to-br from-blue-500 to-blue-700';
+function WeatherForecast({ forecast }) {
+  // Default forecast data if none provided
+  const defaultForecast = [
+    { day: 'יום ראשון', condition: 'rainy', temp: 18, icon: 'droplets' },
+    { day: 'יום שני', condition: 'cloudy', temp: 22, icon: 'cloud' },
+    { day: 'יום שלישי', condition: 'sunny', temp: 27, icon: 'sun' },
+    { day: 'יום רביעי', condition: 'partly-cloudy', temp: 24, icon: 'cloud' }
+  ];
+
+  const weatherData = forecast || defaultForecast;
+
+  // Weather icon mapping
+  const getWeatherIcon = (icon) => {
+    const iconMap = {
+      'droplets': iconRainy,
+      'cloud': iconCloudy,
+      'sun': iconSunny,
+      };
+    
+    if (iconMap[icon]) {
+      return (
+        <img 
+          src={iconMap[icon]} 
+          alt={icon} 
+          className="w-16 h-16 object-contain" 
+        />
+      );
+    }
+    else{// Fallback icons if image not found
+      return (
+        <img 
+          src={iconDefaultWeather}
+          alt={icon} 
+          className="w-16 h-16 object-contain" 
+        />
+      );
+    }
+  };
+    
+
+  // Styling based on weather condition
+  const getWeatherColor = (condition) => {
+    switch(condition) {
+      case 'rainy': return 'bg-blue-100';
+      case 'cloudy': return 'bg-gray-100';
+      case 'sunny': return 'bg-yellow-100';
+      case 'partly-cloudy': return 'bg-blue-50';
+      default: return 'bg-gray-50';
+    }
   };
 
   return (
-    <div className="card flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className={`p-8 rounded-full mb-4 flex items-center justify-center ${isOn ? 'bg-green-200' : 'bg-gray-300'}`}>
-        <div className={`p-12 rounded-full ${getTempColorClass()} shadow-md hover:shadow-xl transition-all duration-300`}>
-          <p className="text-3xl font-bold text-white">{predictedTemp}°C</p>
-        </div>
-      </div>
-
-      <p className="text-lg mb-4 text-center">
-        סטטוס הדוד: <span className={`font-bold ${isOn ? 'text-green-500' : 'text-red-500'}`}>
-          {isOn ? 'פועל' : 'כבוי'}
-        </span>
-      </p>
-
-      <button
-        onClick={toggleBoiler}
-        className={`py-2 px-6 rounded-xl text-white font-semibold transition-all duration-300 ${isOn ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
-      >
-        {isOn ? 'כבה דוד' : 'הפעל דוד'}
-      </button>
-
-      <div className="mt-4 bg-slate-100 dark:bg-slate-800 text-right p-4 rounded-xl w-full text-sm">
-        <p className="font-medium">המלצת מערכת:</p>
-        {predictedTemp < 38 ? (
-          <p>מומלץ להפעיל את הדוד כעת לקראת המקלחת המתוכננת.</p>
-        ) : (
-          <p>טמפרטורת המים מספקת, אין צורך להפעיל את הדוד.</p>
-        )}
+    <div className="font-sans inline-block" dir="rtl">  
+      <div className="flex space-x-4 space-x-reverse overflow-x-auto">
+        {weatherData.map((day, index) => (
+          <div
+            key={index}
+            className={`flex-shrink-0 w-32 h-52 border-4 border-black-800 rounded-lg ${getWeatherColor(day.condition)} flex flex-col items-center justify-between p-4`}
+          >
+            <div className="text-lg font-semibold text-gray-800">{day.day}</div>
+            
+            <div className="my-4 flex items-center justify-center h-20">
+              {getWeatherIcon(day.icon)}
+            </div>
+            
+            <div className="text-xl font-bold">{day.temp}°C</div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-export default BoilerStatus;
+
+
+export default WeatherForecast;
