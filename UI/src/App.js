@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
 import Layout from './components/Layout/Layout';
 import UserSettings from './components/Settings/UserSettings';
+import Devices from './components/Devices/Devices';
+import Profile from './components/Profile/Profile';
+import Statistics from './components/Statistics/Statistics.jsx';
+import Boiler from './components/Devices/Boiler.jsx'
 import { AppContext } from './context/AppContext';
 
 const defaultSettings = {
@@ -70,6 +74,11 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/settings" element={<UserSettings />} />
+              <Route path="/devices" element={<Devices />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/statistics" element={<Statistics />} />
+              <Route path="/devices/boiler" element={<Boiler />} />
+
             </Routes>
           </Layout>
         </Router>
