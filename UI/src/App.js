@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/Auth/HomePage';
 import Dashboard from './components/Dashboard/Dashboard';
 import Layout from './components/Layout/Layout';
-import UserSettings from './components/Settings/UserSettings';
-import Devices from './components/Devices/Devices';
+import UserSettings from './components/Settings/AppSettings.jsx';
 import Profile from './components/Profile/Profile';
 import Statistics from './components/Statistics/Statistics.jsx';
-import Boiler from './components/Devices/Boiler.jsx'
+import Boiler from './components/Devices/Boiler.jsx';
 import { AppContext } from './context/AppContext';
+import Login from './components/Auth/Login.jsx';
+import Register from './components/Auth/Register.jsx';
 
 const defaultSettings = {
   location: 'תל אביב',
@@ -17,24 +19,36 @@ const defaultSettings = {
   boilerStatus: false,
 };
 
-const initialWeatherData = [
-  { date: '2025-04-05', temp: 24, humidity: 65, description: 'בהיר' },
-  { date: '2025-04-06', temp: 26, humidity: 70, description: 'מעונן חלקית' },
-  { date: '2025-04-07', temp: 23, humidity: 75, description: 'גשם קל' },
-];
-
 function App() {
   const [userSettings, setUserSettings] = useState(defaultSettings);
-  const [weatherData] = useState(initialWeatherData);
+  const [weatherData, setWeatherData] = useState([]); // ✅ dynamic now
   const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(35);
-  const [theme, setTheme] = useState('light'); // מצב ברירת מחדל
+  const [theme, setTheme] = useState('light');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // ✅ Fetch weather from Flask backend
   useEffect(() => {
-    console.log('Weather data loaded');
+    console.log("🌍 Fetching weather...");
+    fetch('http://localhost:5000/openmeteo/32.0853/34.7818')
+      .then(res => res.json())
+      .then(data => {
+        console.log("🌤️ Got weather data:", data);
+        const parsed = data.forecast.map(item => ({
+          day: new Date(item.date).toLocaleDateString('he-IL', { weekday: 'long' }),
+          hour: new Date(item.date).getHours(),
+          temp: item.temperature_2m,
+          humidity: item.relative_humidity_2m,
+          condition: item.description,  // temporary until we re-map
+          icon: item.description
+        }));
+        setWeatherData(parsed);
+      })
+      .catch(err => console.error("❌ Failed to load weather data:", err));
   }, []);
 
+
   useEffect(() => {
-    const outsideTemp = weatherData[0].temp;
+    const outsideTemp = weatherData[0]?.temp || 0;
     const simulatedPrediction = outsideTemp > 25 ? 42 : outsideTemp > 20 ? 38 : 35;
     setPredictedBoilerTemp(simulatedPrediction);
   }, [weatherData]);
@@ -57,6 +71,9 @@ function App() {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
+  const login = () => setIsLoggedIn(true);
+  const logout = () => setIsLoggedIn(false);
+
   const contextValue = {
     userSettings,
     updateSettings,
@@ -64,6 +81,9 @@ function App() {
     predictedBoilerTemp,
     toggleBoilerStatus,
     toggleTheme,
+    isLoggedIn,
+    login,
+    logout,
   };
 
   return (
@@ -72,13 +92,14 @@ function App() {
         <Router>
           <Layout>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/dashbord" element={<Dashboard />} />
               <Route path="/settings" element={<UserSettings />} />
-              <Route path="/devices" element={<Devices />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/statistics" element={<Statistics />} />
               <Route path="/devices/boiler" element={<Boiler />} />
-
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </Layout>
         </Router>
