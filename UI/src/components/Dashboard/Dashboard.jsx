@@ -3,14 +3,15 @@ import { AppContext } from '../../context/AppContext';
 import WeatherForecast from './WeatherForecast';
 import BoilerStatus from './BoilerStatus';
 import TemperatureChart from './TemperatureChart';
-
+import logo from '../icons/brightNest_logo.png';
 function Dashboard() {
   const { userSettings, weatherData, predictedBoilerTemp, toggleBoilerStatus, toggleTheme } = useContext(AppContext);
 
   return (
     <div className="app-wrapper container mx-auto px-6 sm:px-8 md:px-12 py-6">
-      <h1 className="text-3xl font-semibold mb-8 text-center text-gray-800 dark:text-gray-100">לוח בקרה - דוד חכם</h1>
-
+    <div className="flex justify-center mb-8">
+      <img src={logo} alt="BrightNest Logo" className="h-24" />
+    </div>
       <button 
         className="theme-toggle p-3 bg-gray-200 rounded-full dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300"
         onClick={toggleTheme}
@@ -22,7 +23,7 @@ function Dashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8">
         <div className="card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">סטטוס הדוד</h2>
+          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-center">boiler staus</h2>
           <BoilerStatus 
             isOn={userSettings.boilerStatus}
             predictedTemp={predictedBoilerTemp}
@@ -31,7 +32,7 @@ function Dashboard() {
         </div>
 
         <div className="card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">תחזית מזג אוויר</h2>
+          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-center">weather forecast</h2>
           <WeatherForecast weatherData={weatherData} />
         </div>
       </div>
