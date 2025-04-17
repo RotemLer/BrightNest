@@ -45,7 +45,7 @@ function App() {
       })
       .catch(err => console.error("❌ Failed to load weather data:", err));
   }, []);
-
+  
 
   useEffect(() => {
     const outsideTemp = weatherData[0]?.temp || 0;

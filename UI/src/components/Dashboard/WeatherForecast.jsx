@@ -69,7 +69,7 @@ function WeatherForecast({ forecast }) {
             <div className="my-4 flex items-center justify-center h-20">
               {getWeatherIcon(day.icon)}
             </div>
-
+            
             <div className="text-xl font-bold">{Math.round(day.temp)}°C</div>
             </div>
         ))}
