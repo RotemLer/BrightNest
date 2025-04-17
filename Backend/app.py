@@ -6,7 +6,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-from utils.weatherAPIRequest import get_forecast_dataframe_for_model
+from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 app = Flask(__name__)
 CORS(app)
