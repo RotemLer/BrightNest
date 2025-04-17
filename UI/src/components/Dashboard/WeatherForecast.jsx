@@ -58,19 +58,20 @@ function WeatherForecast({ forecast }) {
   return (
     <div className="font-sans inline-block" dir="rtl">  
       <div className="flex space-x-4 space-x-reverse overflow-x-auto">
-        {weatherData.map((day, index) => (
+      {weatherData.slice(0, 4).map((day, index) => (
           <div
             key={index}
             className={`flex-shrink-0 w-32 h-52 border-4 border-black-800 rounded-lg ${getWeatherColor(day.condition)} flex flex-col items-center justify-between p-4`}
           >
             <div className="text-lg font-semibold text-gray-800">{day.day}</div>
-            
+            <div className="text-sm text-gray-500">{day.hour}:00</div>  {/* New line */}
+
             <div className="my-4 flex items-center justify-center h-20">
               {getWeatherIcon(day.icon)}
             </div>
-            
-            <div className="text-xl font-bold">{day.temp}°C</div>
-          </div>
+
+            <div className="text-xl font-bold">{Math.round(day.temp)}°C</div>
+            </div>
         ))}
       </div>
     </div>
