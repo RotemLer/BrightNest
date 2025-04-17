@@ -11,14 +11,14 @@ function Navbar() {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/dashbord" className="flex items-center space-x-2">
             <img src={logo} alt="Logo" className="h-10 w-auto" />
           </Link>
           </div>
           
           <div className="flex space-x-6">
             <Link 
-              to="/" 
+              to="/dashbord" 
               className={`py-2 px-5 rounded-lg transition-all duration-300 ${
                 location.pathname === '/' ? 'bg-blue-700 dark:bg-blue-500' : 'hover:bg-blue-700 dark:hover:bg-blue-600'
               }`}
@@ -32,14 +32,6 @@ function Navbar() {
               }`}
             >
               הגדרות
-            </Link>
-            <Link 
-              to="/devices" 
-              className={`py-2 px-5 rounded-lg transition-all duration-300 ${
-                location.pathname === '/devices' ? 'bg-blue-700 dark:bg-blue-500' : 'hover:bg-blue-700 dark:hover:bg-blue-600'
-              }`}
-            >
-              מכשירים
             </Link>
             <Link 
               to="/profile" 
