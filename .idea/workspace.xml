@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1ad2031-5600-4d13-9148-1ac237121e61" name="Changes" comment="Rotem commit and push - data training - part the data to train, validation, test">
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/dataTraining.py" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/dataTraining.py" afterDir="false" />
+    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="dvir commit and push - update the dataTraining.py added save the normal values &#10;new folder of devices &#10;updated the weatherAPIRequest.py now is fit for the modle">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Dashboard/WeatherForecast.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Dashboard/WeatherForecast.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Settings/LocationPicker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Settings/LocationPicker.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +39,40 @@
     &quot;assignee&quot;: &quot;RotemLer&quot;
   }
 }</component>
+  <component name="GitToolBoxStore">
+    <option name="largeFiles">
+      <LargeFiles>
+        <option name="unlockedFilePaths">
+          <set>
+            <option value="$PROJECT_DIR$/get-pip.py" />
+          </set>
+        </option>
+      </LargeFiles>
+    </option>
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="DVIR-branch" />
+                    <option name="lastUsedInstant" value="1743868308" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1743868135" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/RotemLer/BrightNest.git&quot;,
@@ -60,17 +99,58 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.HistoricalWeatherAPI.executor": "Run",
+    "Python.Run Weather API.executor": "Profiler",
     "Python.app.executor": "Run",
     "Python.dataGenerator.executor": "Run",
     "Python.dataTraining.executor": "Run",
-    "Python.generateToHourly.executor": "Debug",
+    "Python.finalProject .executor": "Run",
+    "Python.get-pip.executor": "Run",
+    "Python.main.executor": "Run",
     "Python.modifyData.executor": "Run",
+    "Python.test_load_data.executor": "Run",
+    "Python.weatherAPIRequest (2).executor": "ConcurrencyExecutor",
+    "Python.weatherAPIRequest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Rebasing Rotem-branch",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "DVIR-branch",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo"
+    ]
   }
 }]]></component>
   <component name="RunManager">
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <module name="BrightNest - final project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="BrightNest - final project" />
       <option name="ENV_FILES" value="" />
@@ -84,6 +164,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -91,6 +172,43 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_load_data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="FinalProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_load_data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="BrightNest - final project" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
@@ -103,29 +221,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="ccruntests" factoryName="Run Study Tests">
-      <module name="BrightNest - final project" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <option name="studyTest" value="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
@@ -172,6 +268,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
@@ -187,6 +284,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
@@ -196,64 +294,167 @@
       <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test_load_data" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
+        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e1ad2031-5600-4d13-9148-1ac237121e61" name="Changes" comment="" />
-      <created>1743680296284</created>
+      <changelist id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="" />
+      <created>1742912664573</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1743680296284</updated>
+      <updated>1742912664573</updated>
+      <workItem from="1742912666173" duration="4630000" />
+      <workItem from="1742917411751" duration="3060000" />
+      <workItem from="1743151290637" duration="2107000" />
+      <workItem from="1743677183103" duration="1089000" />
+      <workItem from="1743752181680" duration="25363000" />
+      <workItem from="1743844915418" duration="1632000" />
+      <workItem from="1743846572202" duration="7962000" />
+      <workItem from="1743862346797" duration="7799000" />
+      <workItem from="1743876853215" duration="1000" />
+      <workItem from="1743939006476" duration="1560000" />
+      <workItem from="1744287854948" duration="802000" />
+      <workItem from="1744288662202" duration="5131000" />
+      <workItem from="1744455364720" duration="7728000" />
+      <workItem from="1744547674717" duration="66000" />
+      <workItem from="1744547810055" duration="10759000" />
+      <workItem from="1744720818841" duration="1738000" />
+      <workItem from="1745575941505" duration="5905000" />
     </task>
-    <task id="LOCAL‎-00001" summary="Rotem commit and push - added to Utils: generate the data from seconds into hours, train the model with the new data">
+    <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
-      <created>1743684705472</created>
+      <created>1742912917552</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL‎-00001" />
       <option name="project" value="LOCAL‎" />
-      <updated>1743684705472</updated>
+      <updated>1742912917552</updated>
     </task>
-    <task id="LOCAL‎-00002" summary="Rotem commit and push - data training for new data">
+    <task id="LOCAL‎-00002" summary="try - dvir siksik">
       <option name="closed" value="true" />
-      <created>1743778846385</created>
+      <created>1742913019378</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL‎-00002" />
       <option name="project" value="LOCAL‎" />
-      <updated>1743778846385</updated>
+      <updated>1742913019378</updated>
     </task>
-    <task id="LOCAL‎-00003" summary="Rotem commit and push - data training for new data containing updated data from 2024 Tel-Aviv">
+    <task id="LOCAL‎-00003" summary="dvir commit and push - &#10;weather data API call. &#10;&#10;note: this is the first step only get the weather data. the next step is to use this data with the LSTM model.">
       <option name="closed" value="true" />
-      <created>1743848048778</created>
+      <created>1742919001340</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL‎-00003" />
       <option name="project" value="LOCAL‎" />
-      <updated>1743848048778</updated>
+      <updated>1742919001340</updated>
     </task>
-    <task id="LOCAL‎-00004" summary="Rotem commit and push - data training update with saving to h5 file.">
+    <task id="LOCAL‎-00004" summary="dvir commit and push - &#10;weather data API call. &#10;&#10;note: this is the first step only get the weather data. the next step is to use this data with the LSTM model.">
       <option name="closed" value="true" />
-      <created>1743851276522</created>
+      <created>1742919991209</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL‎-00004" />
       <option name="project" value="LOCAL‎" />
-      <updated>1743851276522</updated>
+      <updated>1742919991209</updated>
     </task>
-    <task id="LOCAL‎-00005" summary="Rotem commit and push - data training - part the data to train, validation, test">
+    <task id="LOCAL‎-00005" summary="dvir commit and push - added dataGenerator.py">
       <option name="closed" value="true" />
-      <created>1744037654861</created>
+      <created>1743755147389</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL‎-00005" />
       <option name="project" value="LOCAL‎" />
-      <updated>1744037654861</updated>
+      <updated>1743755147389</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL‎-00006" summary="dvir commit and push - added dataGenerator.py updated">
+      <option name="closed" value="true" />
+      <created>1743757752470</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL‎-00006" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743757752470</updated>
+    </task>
+    <task id="LOCAL‎-00007" summary="dvir commit and push - added dataGenerator.py updated">
+      <option name="closed" value="true" />
+      <created>1743759023265</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743759023265</updated>
+    </task>
+    <task id="LOCAL‎-00008" summary="dvir commit and push - modify the modifyData.py file to fit the new data file(now we have only weather data file and we calculate the boilers data)&#10;added a new api call to get historical weather informtion &#10;about the dataTraining.py file we need to see how to chahnge it to fit the new data file (i Believe that should be essy).&#10;now we have also dataGenerator.py file working.&#10;Good Shabbos">
+      <option name="closed" value="true" />
+      <created>1743787223142</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743787223142</updated>
+    </task>
+    <task id="LOCAL‎-00009" summary="dvir commit and push - modifyData.py updated.">
+      <option name="closed" value="true" />
+      <created>1743846877552</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL‎-00009" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743846877552</updated>
+    </task>
+    <task id="LOCAL‎-00010" summary="dvir commit and push - modifyData.py updated TEST.">
+      <option name="closed" value="true" />
+      <created>1743854147766</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL‎-00010" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743854147766</updated>
+    </task>
+    <task id="LOCAL‎-00011" summary="dvir commit and push - modifyData.py updated TEST.">
+      <option name="closed" value="true" />
+      <created>1743854223547</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL‎-00011" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743854223547</updated>
+    </task>
+    <task id="LOCAL‎-00012" summary="dvir commit and push - modifyData.py updated TEST.">
+      <option name="closed" value="true" />
+      <created>1743854275812</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL‎-00012" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1743854275812</updated>
+    </task>
+    <task id="LOCAL‎-00013" summary="dvir commit and push - update the dataTraining.py now the model take the 6 hour before the time of prediction and make the learning deeper.">
+      <option name="closed" value="true" />
+      <created>1744297955375</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL‎-00013" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1744297955375</updated>
+    </task>
+    <task id="LOCAL‎-00014" summary="dvir commit and push - update the dataTraining.py">
+      <option name="closed" value="true" />
+      <created>1744456027515</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL‎-00014" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1744456027515</updated>
+    </task>
+    <task id="LOCAL-00015" summary="dvir commit and push - update the dataTraining.py added save the normal values &#10;new folder of devices &#10;updated the weatherAPIRequest.py now is fit for the modle">
+      <option name="closed" value="true" />
+      <created>1744714651490</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1744714651491</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -266,12 +467,103 @@
       </list>
     </option>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="974f0812-4668-4e3c-9da4-0fa28ec7f56c" value="TOOL_WINDOW" />
+        <entry key="5c7f7d82-d74c-4f4f-ab58-72a0c3194c72" value="TOOL_WINDOW" />
+        <entry key="3f28ba8f-fbcd-4d55-8d94-eab9b4956190" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="3f28ba8f-fbcd-4d55-8d94-eab9b4956190">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:/Users/dvirsiksik/מסמכים/FinalProject/smart-home/smart-home" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="5c7f7d82-d74c-4f4f-ab58-72a0c3194c72">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:/Users/dvirsiksik/מסמכים/FinalProject/smart-home/smart-home" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+            </State>
+          </value>
+        </entry>
+        <entry key="974f0812-4668-4e3c-9da4-0fa28ec7f56c">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rotem commit and push - added to Utils: generate the data from seconds into hours, train the model with the new data" />
-    <MESSAGE value="Rotem commit and push - data training for new data" />
-    <MESSAGE value="Rotem commit and push - data training for new data containing updated data from 2024 Tel-Aviv" />
-    <MESSAGE value="Rotem commit and push - data training update with saving to h5 file." />
-    <MESSAGE value="Rotem commit and push - data training - part the data to train, validation, test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rotem commit and push - data training - part the data to train, validation, test" />
+    <MESSAGE value="try - dvir siksik" />
+    <MESSAGE value="dvir commit and push - &#10;weather data API call. &#10;&#10;note: this is the first step only get the weather data. the next step is to use this data with the LSTM model." />
+    <MESSAGE value="dvir commit and push - added dataGenerator.py" />
+    <MESSAGE value="dvir commit and push - added dataGenerator.py updated" />
+    <MESSAGE value="dvir commit and push - modify the modifyData.py file to fit the new data file(now we have only weather data file and we calculate the boilers data)&#10;added a new api call to get historical weather informtion &#10;about the dataTraining.py file we need to see how to chahnge it to fit the new data file (i Believe that should be essy).&#10;now we have also dataGenerator.py file working.&#10;Good Shabbos" />
+    <MESSAGE value="dvir commit and push - modifyData.py updated." />
+    <MESSAGE value="dvir commit and push - modifyData.py updated TEST." />
+    <MESSAGE value="dvir commit and push - update the dataTraining.py now the model take the 6 hour before the time of prediction and make the learning deeper." />
+    <MESSAGE value="dvir commit and push - update the dataTraining.py" />
+    <MESSAGE value="dvir commit and push - update the dataTraining.py added save the normal values &#10;new folder of devices &#10;updated the weatherAPIRequest.py now is fit for the modle" />
+    <option name="LAST_COMMIT_MESSAGE" value="dvir commit and push - update the dataTraining.py added save the normal values &#10;new folder of devices &#10;updated the weatherAPIRequest.py now is fit for the modle" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1745586887323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>

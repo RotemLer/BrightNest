@@ -4,8 +4,9 @@ import { AppContext } from '../../context/AppContext';
 import LocationPicker from '../Settings/LocationPicker';
 
 function Profile() {
+  // Move all hooks to the top, before any conditional return
   const navigate = useNavigate();
-  const { userName, setUserName } = useContext(AppContext);
+  const { userName, setUserName, updateSettings, isLoadingSettings, userSettings } = useContext(AppContext);
 
   const [userData, setUserData] = useState({
     name: '',
@@ -13,18 +14,28 @@ function Profile() {
     location: '',
     password: '',
     confirmPassword: '',
+    lat: null,
+    lon: null,
   });
 
   const [showPasswordResetFields, setShowPasswordResetFields] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
-  // ✅ טען את השם מהקונטקסט כשנכנסים לעמוד
   useEffect(() => {
     setUserData((prev) => ({
       ...prev,
       name: userName || '',
+      location: userSettings.location || '',
+      lat: userSettings.lat || null,
+      lon: userSettings.lon || null,
+      email: userSettings.email || '',
     }));
-  }, [userName]);
+  }, [userName, userSettings]);
+
+  if (isLoadingSettings) {
+    return <div className="text-center p-10">טוען נתונים...</div>;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,10 +43,6 @@ function Profile() {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleLocationChange = (city) => {
-    setUserData((prev) => ({ ...prev, location: city }));
   };
 
   const handleResetPasswordClick = () => {
@@ -56,6 +63,13 @@ function Profile() {
 
     // 🔄 עדכון השם בקונטקסט
     setUserName(userData.name);
+
+    updateSettings({
+      location: userData.location,
+      lat: userData.lat,
+      lon: userData.lon,
+      email: userData.email,
+    });
 
     console.log('✅ נשמר:', userData);
 
@@ -130,10 +144,32 @@ function Profile() {
 
       <div>
         <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">עיר</label>
-        <LocationPicker
-          selectedLocation={userData.location}
-          onLocationSelect={handleLocationChange}
-        />
+
+        {userData.location && !showLocationPicker ? (
+          <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white">
+            <span>{userData.location}</span>
+            <button
+              type="button"
+              onClick={() => setShowLocationPicker(true)}
+              className="text-blue-600 hover:underline text-sm"
+            >
+              שנה מיקום
+            </button>
+          </div>
+        ) : (
+          <LocationPicker
+            selectedLocation={userData.location}
+            onLocationSelect={(place) => {
+              setUserData((prev) => ({
+                ...prev,
+                location: place.display_name,
+                lat: place.lat,
+                lon: place.lon,
+              }));
+              setShowLocationPicker(false);
+            }}
+          />
+        )}
       </div>
 
       <button

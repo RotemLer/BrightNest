@@ -1,8 +1,10 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext({
   userSettings: {
     location: '',
+    lat: null,
+    lon: null,
     showerDuration: 0,
     preferredShowerTime: '',
     boilerStatus: false,
@@ -28,16 +30,32 @@ export const AppContext = createContext({
 
 export const AppProvider = ({ children }) => {
   // הגדרות משתמש
-  const [userSettings, setUserSettings] = useState({
-    location: '',
-    showerDuration: 0,
-    preferredShowerTime: '',
-    boilerStatus: false,
+  const [userSettings, setUserSettings] = useState(() => {
+    const savedSettings = localStorage.getItem('userSettings');
+    return savedSettings ? JSON.parse(savedSettings) : {
+      location: '',
+      lat: null,
+      lon: null,
+      email: '',
+      showerDuration: 0,
+      preferredShowerTime: '',
+      boilerStatus: false,
+    };
   });
 
-  const [userName, setUserName] = useState('רותם לר');
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem('userName') || '';
+  });
   const [weatherData, setWeatherData] = useState([]);
   const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('userSettings', JSON.stringify(userSettings));
+  }, [userSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('userName', userName);
+  }, [userName]);
 
   const updateSettings = (newSettings) => {
     setUserSettings((prev) => ({ ...prev, ...newSettings }));
