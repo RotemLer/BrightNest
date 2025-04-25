@@ -17,10 +17,10 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         "longitude": lon,
         "hourly": [
             "temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature",
-            "precipitation", "cloud_cover", "wind_speed_10m", "is_day"
+            "precipitation", "cloud_cover", "wind_speed_10m", "is_day", "weather_code"
         ],
         "minutely_15": ["direct_radiation"],
-        "current": ["surface_pressure", "weather_code"],
+        "current": ["surface_pressure"],
         "timezone": "auto"
     }
 
@@ -30,8 +30,6 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
     # === Extract current values (static)
     current = response.Current()
     surface_pressure = current.Variables(0).Value()
-    weather_code = current.Variables(1).Value()
-    description = _map_weather_code_to_description(weather_code)
 
     # === Extract radiation and average to hourly
     minutely = response.Minutely15()
@@ -65,9 +63,11 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         "wind_speed_10m": hourly.Variables(6).ValuesAsNumpy(),
         "is_day": hourly.Variables(7).ValuesAsNumpy(),
         "surface_pressure": surface_pressure,
-        "weather_code": weather_code,
-        "weather_description": description
+        "weather_code": hourly.Variables(8).ValuesAsNumpy()
     })
+
+    # Map weather_code to description for each hour
+    df["weather_description"] = df["weather_code"].apply(_map_weather_code_to_description)
 
     df = pd.merge(df, rad_df, on="date", how="left")
 
@@ -126,9 +126,33 @@ def _map_weather_code_to_description(code):
     Map Open-Meteo weather_code to text description (simplified).
     """
     mapping = {
-        0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
-        45: "Fog", 48: "Fog", 51: "Light drizzle", 53: "Modדerate drizzle", 55: "Dense drizzle",
-        61: "Light drizzle", 63: "Moderate rain", 65: "Heavy rain",
-        80: "Slight rain", 81: "Moderate rain", 82: "Heavy rain", 95: "Thunderstorm"
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Depositing rime fog",
+        51: "Light drizzle",
+        53: "Moderate drizzle",
+        55: "Dense drizzle",
+        56: "Light freezing drizzle",
+        57: "Dense freezing drizzle",
+        61: "Slight rain",
+        63: "Moderate rain",
+        65: "Heavy rain",
+        66: "Light freezing rain",
+        67: "Heavy freezing rain",
+        71: "Slight snow fall",
+        73: "Moderate snow fall",
+        75: "Heavy snow fall",
+        77: "Snow grains",
+        80: "Slight rain showers",
+        81: "Moderate rain showers",
+        82: "Violent rain showers",
+        85: "Slight snow showers",
+        86: "Heavy snow showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with slight hail",
+        99: "Thunderstorm with heavy hail"
     }
     return mapping.get(int(code), "Clear sky")
