@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 import WeatherForecast from './WeatherForecast';
-import TemperatureChart from './TemperatureChart';
+//import TemperatureChart from './TemperatureChart';
 import { Plus } from 'lucide-react';
 
 function Dashboard() {
   const {
     userSettings,
-    weatherData,
-    predictedBoilerTemp,
+    //weatherData,
+  //predictedBoilerTemp,
     toggleBoilerStatus,
     toggleTheme,
     boilerHours,
@@ -101,18 +101,22 @@ function Dashboard() {
       </div>
 
       {/* תחזית מזג אוויר */}
-      <div className="mt-12">
+      <div className="mt-6">
         <div className="card w-full max-w-full mx-auto p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
           <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-center">weather forecast</h2>
-          <WeatherForecast forecast={weatherData} />
+          <WeatherForecast selectedLocation={{
+            display_name: userSettings.location,
+            lat: userSettings.lat,
+            lon: userSettings.lon,
+          }} />
         </div>
       </div>
 
-      {/* טמפרטורה חזויה */}
-      <div className="mt-8 card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-        <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">טמפרטורה חזויה</h2>
-        <TemperatureChart weatherData={weatherData} predictedBoilerTemp={predictedBoilerTemp} />
-      </div>
+        {/* טמפרטורה חזויה
+        <div className="mt-8 card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">טמפרטורה חזויה</h2>
+          <TemperatureChart weatherData={weatherData} predictedBoilerTemp={predictedBoilerTemp} />
+        </div> */}
 
       {/* הגדרות נוכחיות */}
       <div className="mt-8 card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">

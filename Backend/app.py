@@ -1,15 +1,21 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from datetime import datetime, timedelta
+from datetime import datetime
 import pandas as pd
 import sys
 import os
 
+# Adjust path and import your weather API logic
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# === Caching global variables
+cached_forecast = None
+cached_location = None
+last_fetch_time = None
 
 @app.route("/")
 def home():
@@ -17,43 +23,47 @@ def home():
 
 @app.route("/openmeteo/<lat>/<lon>")
 def get_forecast(lat, lon):
+    global cached_forecast, cached_location, last_fetch_time
+
     try:
         latitude = float(lat)
         longitude = float(lon)
+        now = datetime.utcnow()
 
-        # Load full 96-hour forecast
+        if (cached_forecast is not None and
+                cached_location == (latitude, longitude) and
+                last_fetch_time is not None and
+                now.date() == last_fetch_time.date()):
+            print("✅ Using cached forecast.")
+            return jsonify({
+                "location": {
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "requested_at": now.isoformat() + "Z",
+                    "cached": True
+                },
+                "forecast": cached_forecast
+            })
+
         forecast_df, X_input = get_forecast_dataframe_for_model(latitude, longitude, hours_ahead=96)
         full_df = pd.concat([forecast_df, X_input], axis=1)
         full_df["date"] = pd.to_datetime(full_df["date"])
-
-        # === Get the first row (first forecast hour available)
-        first_row = full_df.head(1)
-
-        # === Get 13:00 rows for next 3 days
-        rows_13pm = []
-        base_time = full_df["date"].min()  # Use forecast time as reference
-
-        for i in range(1, 4):
-            target = (base_time + timedelta(days=i)).replace(hour=13, minute=0, second=0, microsecond=0)
-            match = full_df[
-                (full_df["date"].dt.date == target.date()) &
-                (full_df["date"].dt.hour == 13)
-            ]
-            if not match.empty:
-                rows_13pm.append(match)
-
-        # Combine rows
-        selected_rows = [first_row] + rows_13pm
-        result_df = pd.concat(selected_rows).reset_index(drop=True)
-
-        # === Convert to JSON-safe output
+        result_df = full_df.reset_index(drop=True)
+        result_df["date"] = result_df["date"].astype(str)
         forecast_data = result_df.fillna(0).to_dict(orient="records")
+
+        cached_forecast = forecast_data
+        cached_location = (latitude, longitude)
+        last_fetch_time = now
+
+        print("🌐 Fetched new forecast.")
 
         return jsonify({
             "location": {
                 "latitude": latitude,
                 "longitude": longitude,
-                "requested_at": datetime.utcnow().isoformat() + "Z"
+                "requested_at": now.isoformat() + "Z",
+                "cached": False
             },
             "forecast": forecast_data
         })
@@ -61,7 +71,6 @@ def get_forecast(lat, lon):
     except Exception as e:
         print("❌ Backend Error:", e)
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
