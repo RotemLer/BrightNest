@@ -1,28 +1,38 @@
-import React, { useState } from 'react';
-
-// רשימה של מיקומים לדוגמה
-const israelCities = [
-  'ירושלים', 'תל אביב', 'חיפה', 'באר שבע', 'אילת', 'נתניה', 
-  'אשדוד', 'ראשון לציון', 'פתח תקווה', 'חולון', 'בני ברק'
-];
+import React, { useState, useEffect } from 'react';
 
 function LocationPicker({ selectedLocation, onLocationSelect }) {
   const [searchTerm, setSearchTerm] = useState(selectedLocation);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
-  // סינון המיקומים לפי מה שהמשתמש הקליד
-  const filteredLocations = israelCities.filter(city => 
-    city.includes(searchTerm)
-  );
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchTerm)}&limit=5&addressdetails=1&accept-language=he`)
+        .then(res => res.json())
+        .then(data => setSuggestions(data))
+        .catch(() => setSuggestions([]));
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
     setShowDropdown(true);
   };
 
-  const handleLocationClick = (city) => {
-    setSearchTerm(city);
-    onLocationSelect(city);
+  const handleLocationClick = (place) => {
+    setSearchTerm(place.display_name);
+    onLocationSelect({
+      display_name: place.display_name,
+      lat: place.lat,
+      lon: place.lon,
+    });
     setShowDropdown(false);
   };
 
@@ -38,15 +48,15 @@ function LocationPicker({ selectedLocation, onLocationSelect }) {
         placeholder="הקלד עיר..."
       />
 
-      {showDropdown && filteredLocations.length > 0 && (
+      {showDropdown && suggestions.length > 0 && (
         <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-auto transition-all">
-          {filteredLocations.map((city) => (
+          {suggestions.map((place) => (
             <div
-              key={city}
+              key={place.place_id}
               className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors"
-              onClick={() => handleLocationClick(city)}
+              onClick={() => handleLocationClick(place)}
             >
-              {city}
+              {place.display_name}
             </div>
           ))}
         </div>
