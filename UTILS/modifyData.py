@@ -10,8 +10,6 @@ output_file = "Updated_With_Boiler_Hourly_Realistic_v4.csv.gz"
 BOILER_SIZES = [50, 100, 150]
 ENERGY_PER_DEGREE_PER_LITER = 1.16 / 1000  # kWh per liter per °C
 MAX_RADIATION = 1000  # radiation normalizations
-HEATING_START = time(18, 0)
-HEATING_END = time(21, 0)
 MAX_TEMP_SOLAR = 60
 MAX_TEMP_NO_SOLAR = 50
 
@@ -40,7 +38,6 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
         cloud_cover = row.get("cloud_cover", 0.0) / 100
         radiation_norm = min(radiation / MAX_RADIATION, 1.0)
         current_time = row["date"].time()
-        is_heating_time = HEATING_START <= current_time < HEATING_END
         is_day = row.get("is_day", 0) == 1
 
         for size in BOILER_SIZES:
