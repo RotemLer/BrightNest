@@ -6,11 +6,15 @@ import sys
 import os
 
 # Adjust path and import your weather API logic
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
+# from routes.boiler_routes import boiler_bp
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+# app.register_blueprint(boiler_bp)
 
 # === Caching global variables
 cached_forecast = None
@@ -72,5 +76,5 @@ def get_forecast(lat, lon):
         print("❌ Backend Error:", e)
         return jsonify({"error": str(e)}), 500
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+if __name__ == '__main__':
+    app.run(host="127.0.0.1", port=5000, debug=True)
