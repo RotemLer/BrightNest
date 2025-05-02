@@ -28,11 +28,16 @@ env = BoilerSimulator(
 
 state_size = env._get_state().shape[0]
 action_size = 2
-
 agent = DQLAgent(state_size=state_size, action_size=action_size)
 
 model_path = 'dql_boiler_model.h5'
 training_state_path = 'training_state.json'
+
+# --- Force fresh start (optional) ---
+for f in [model_path, training_state_path]:
+    if os.path.exists(f):
+        os.remove(f)
+
 
 start_episode = 0
 best_reward = -np.inf
@@ -53,17 +58,17 @@ if os.path.exists(model_path):
             agent.epsilon = state_data.get('epsilon', 1.0)
         print(f"↺ Continuing training from episode {start_episode} with epsilon {agent.epsilon:.2f}")
 else:
-    print("🆕 Starting fresh training.")
+    print("🔎 Starting fresh training.")
 
 # --- Training settings ---
-n_episodes = 300
-episode_length = 24*3  # רק 3 ימים לפרק במקום 7 ימים (האצה!)
+n_episodes = 50  # 🔽 קיצור מספר אפיזודות
+episode_length = 24  # 🔽 רק יום אחד
 batch_size = 32
 rewards_per_episode = []
 
 # --- Training loop ---
 for e in trange(start_episode, n_episodes, desc="Training episodes"):
-    random_target_temp = np.random.randint(60, 70)  # יותר וריאציה בטמפ'
+    random_target_temp = np.random.randint(60, 70)
     state = env.reset(target_temp=random_target_temp)
     total_episode_reward = 0
 
@@ -74,7 +79,7 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
         state = next_state
         total_episode_reward += reward
 
-        if time % 10 == 0:  # Replay רק כל 10 צעדים
+        if time % 20 == 0:  # 🔽 Replay פחות תדיר
             agent.replay(batch_size)
 
     if e % 5 == 0:
@@ -82,7 +87,7 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
 
     rewards_per_episode.append(total_episode_reward)
 
-    if (e + 1) % 10 == 0:  # Save model and training state רק כל 10 אפיזודות
+    if (e + 1) % 10 == 0:
         agent.model.save(model_path)
         with open(training_state_path, 'w') as f:
             json.dump({
@@ -90,7 +95,6 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
                 "epsilon": agent.epsilon
             }, f)
 
-    # Track best reward
     if total_episode_reward > best_reward:
         best_reward = total_episode_reward
         no_improvement_counter = 0
@@ -105,7 +109,9 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
     if (e + 1) % 5 == 0:
         print(f"Episode {e+1}/{n_episodes} - Total Reward: {total_episode_reward:.2f} - Epsilon: {agent.epsilon:.2f}")
 
-print(f"✅ Training finished successfully at episode {e+1}!")
+# ✅ תיקון: שימוש בחישוב מפורש כי e כבר לא מוגדר מחוץ ללולאה
+final_episode = start_episode + len(rewards_per_episode)
+print(f"✅ Training finished successfully at episode {final_episode}!")
 
 # --- Plot rewards ---
 plt.plot(rewards_per_episode)
