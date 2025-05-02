@@ -20,7 +20,6 @@ class BoilerSimulator:
         return self._get_state()
 
     def step(self, action):
-        # Simulate environment step
         outside_temp = self.weather_forecast[self.hour]
 
         # Simulate solar effect
@@ -29,7 +28,7 @@ class BoilerSimulator:
 
         # Simulate heater
         if action == 1:
-            self.boiler_temp += self.heater_power_kw * 0.5  # Heating effect
+            self.boiler_temp += self.heater_power_kw * 0.5
 
         # Cooling
         self.boiler_temp += 0.02 * (outside_temp - self.boiler_temp)
@@ -60,19 +59,31 @@ class BoilerSimulator:
 
     def _calculate_reward(self, action):
         reward = 0
+        temp_diff = self.boiler_temp - self.target_temp
 
-        # Basic penalty for turning heater on
+        # ענישה על טמפרטורה נמוכה מדי
+        if temp_diff < 0:
+            reward -= abs(temp_diff) * 0.3
+
+        # תגמול קטן אם בטווח הרצוי
+        elif 0 <= temp_diff <= 3:
+            reward += 2
+
+        # ענישה על חימום יתר
+        elif temp_diff > 10:
+            reward -= 3
+        else:
+            reward -= 0.5
+
+        # ענישה קלה על הדלקת גוף החימום
         if action == 1:
-            reward -= 1
+            reward -= 0.5
 
-        # Reward for reaching target during peak hours
+        # בונוס נוסף לשעות שיא (אם חם מספיק)
         if 18 <= (self.hour % 24) <= 21:
             if self.boiler_temp >= self.target_temp:
-                reward += 5
+                reward += 3
             else:
-                reward -= (self.target_temp - self.boiler_temp) * 0.2
-
-        if self.boiler_temp >= self.target_temp + 10:
-            reward -= 2  # Overheating penalty
+                reward -= 1  # עונש אם לא הספיק להתחמם
 
         return reward
