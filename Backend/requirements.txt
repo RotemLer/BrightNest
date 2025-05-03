@@ -1,0 +1,8 @@
+flask
+flask-cors
+pandas
+openmeteo-requests
+requests-cache
+retry_requests
+PyJWT
+pymongo

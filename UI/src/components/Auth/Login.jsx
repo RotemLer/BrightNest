@@ -1,7 +1,8 @@
-// src/components/Auth/Login.jsx
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,12 +10,35 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AppContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', { email, password });
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
 
-    login(); // עדכון סטטוס התחברות
-    navigate('/dashbord'); // ניווט לדשבורד
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('התחברת בהצלחה!');
+        setTimeout(() => {
+          login(data.token);
+          console.log(localStorage.getItem("token")); // should log the JWT
+          navigate('/dashbord');
+        }, 1200);
+      } else {
+        toast.error("אימייל או סיסמה לא נכונים");
+      }
+      
+    } catch (error) {
+      console.error('❌ Error during login:', error);
+      toast.error('בעיה בשרת. נסה שוב מאוחר יותר.');
+    }
   };
 
   return (

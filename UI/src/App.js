@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './components/Auth/HomePage';
 import Dashboard from './components/Dashboard/Dashboard';
 import Layout from './components/Layout/Layout';
@@ -11,13 +11,53 @@ import Boiler from './components/Devices/Boiler.jsx';
 import Login from './components/Auth/Login.jsx';
 import Register from './components/Auth/Register.jsx';
 import { AppContext } from './context/AppContext';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import { ToastContainer } from 'react-toastify';
+import AddDevice from './components/Devices/AddDevice';
+import 'react-toastify/dist/ReactToastify.css';
+
+function AppRoutes() {
+  const location = useLocation();
+  const hideLayout = location.pathname === '/login' || location.pathname === '/register';
+
+  const routes = (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/dashbord" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><UserSettings /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
+      <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
+      <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
+      <Route path="/devices/addDevice" element={<ProtectedRoute><AddDevice /></ProtectedRoute>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
+
+  return (
+    <>
+      {hideLayout ? routes : <Layout>{routes}</Layout>}
+
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+    </>
+  );
+}
+
 
 function App() {
-  const {
-    setWeatherData,
-    setPredictedBoilerTemp
-  } = useContext(AppContext);
-
+  const { setWeatherData, setPredictedBoilerTemp } = useContext(AppContext);
   const [theme] = useState('light');
 
   const extractWeatherDescriptionKey = (item) => {
@@ -26,28 +66,6 @@ function App() {
     );
     return descKey || '';
   };
-
-  useEffect(() => {
-    console.log("🌍 Fetching weather...");
-    fetch('http://localhost:5000/openmeteo/32.0853/34.7818')
-      .then(res => res.json())
-      .then(data => {
-        console.log("🌤️ Got weather data:", data);
-        const parsed = data.forecast.map(item => {
-          const descriptionKey = extractWeatherDescriptionKey(item);
-          return {
-            day: new Date(item.date).toLocaleDateString('he-IL', { weekday: 'long' }),
-            hour: new Date(item.date).getHours(),
-            temp: item.temperature_2m,
-            humidity: item.relative_humidity_2m,
-            condition: descriptionKey.replace('weather_description_', ''),
-            icon: descriptionKey
-          };
-        });
-        setWeatherData(parsed);
-      })
-      .catch(err => console.error("❌ Failed to load weather data:", err));
-  }, [setWeatherData]);
 
   useEffect(() => {
     setPredictedBoilerTemp(prev => {
@@ -59,18 +77,7 @@ function App() {
   return (
     <div className={theme === 'dark' ? 'dark' : ''}>
       <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/dashbord" element={<Dashboard />} />
-            <Route path="/settings" element={<UserSettings />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/statistics" element={<Statistics />} />
-            <Route path="/devices/boiler" element={<Boiler />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </Layout>
+        <AppRoutes />
       </Router>
     </div>
   );

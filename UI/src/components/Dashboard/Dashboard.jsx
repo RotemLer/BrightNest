@@ -42,10 +42,10 @@ function Dashboard() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-right text-gray-800 dark:text-gray-100">המכשירים שלי</h2>
           <button
-            onClick={() => navigate('/add-device')}
+            onClick={() => navigate('/devices/addDevice')}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-6 h-6" />
           </button>
         </div>
 
