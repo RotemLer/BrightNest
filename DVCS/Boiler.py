@@ -2,29 +2,17 @@ import numpy as np
 import pandas as pd
 import joblib
 from tensorflow.keras.models import load_model
-from datetime import datetime
+from datetime import datetime, timedelta
+import os
 import UTILS.weatherAPIRequest as weather
 from DVCS.Device import Device
 
 
 class Boiler(Device):
     def __init__(self, name: str, capacity_liters: int, power_usage: float = None, has_solar: bool = True):
-        """
-        :param name: Boiler name
-        :param capacity_liters: Boiler size in liters (50, 100, 150)
-        :param power_usage: Power in kW (default chosen by size if not provided)
-        :param has_solar: Whether the boiler has a solar system
-        """
-        # Assign default power usage based on capacity if not provided
         if power_usage is None:
-            if capacity_liters == 50:
-                power_usage = 2.0
-            elif capacity_liters == 100:
-                power_usage = 3.0
-            elif capacity_liters == 150:
-                power_usage = 4.0
-            else:
-                power_usage = 3.0  # general fallback
+            power_map = {50: 2.0, 100: 3.0, 150: 4.0}
+            power_usage = power_map.get(capacity_liters, 3.0)
 
         super().__init__(name, power_usage)
         self.capacity_liters = capacity_liters
@@ -32,7 +20,6 @@ class Boiler(Device):
         self.temperature = 25
         self.last_forecast_df = None
 
-        # Load model and scalers
         self.model = load_model("boiler_temperature_multitarget_lstm6h.h5", compile=False)
         self.scaler_x = joblib.load("scaler_x.save")
         self.scaler_y = joblib.load("scaler_y.save")
@@ -62,7 +49,6 @@ class Boiler(Device):
         return f"Boiler '{self.name}' ({self.capacity_liters}L, {solar}) - {self.get_status()}, {self.temperature:.1f}°C"
 
     def CalcHeatingTime(self):
-        # 1. Retrieve forecast input data
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
             lat=32.0853, lon=34.7818, hours_ahead=48
         )
@@ -71,18 +57,32 @@ class Boiler(Device):
             print("❗ Not enough data for a 6-hour sequence.")
             return None
 
-        # 2. Align input columns with model expectations
+        # === ✅ Add seasonal and hourly features from datetime ===
+        if "date" in l_forecast.columns:
+            l_input["month"] = l_forecast["date"].dt.month
+            l_input["dayofyear"] = l_forecast["date"].dt.dayofyear
+            l_input["hour"] = l_forecast["date"].dt.hour
+
+            l_input["month_sin"] = np.sin(2 * np.pi * l_input["month"] / 12)
+            l_input["month_cos"] = np.cos(2 * np.pi * l_input["month"] / 12)
+            l_input["day_sin"] = np.sin(2 * np.pi * l_input["dayofyear"] / 365)
+            l_input["day_cos"] = np.cos(2 * np.pi * l_input["dayofyear"] / 365)
+            l_input["hour_sin"] = np.sin(2 * np.pi * l_input["hour"] / 24)
+            l_input["hour_cos"] = np.cos(2 * np.pi * l_input["hour"] / 24)
+        else:
+            print("❌ Forecast data missing 'date' column.")
+            return None
+
+        # === Ensure all expected features exist ===
         for col in self.expected_features:
             if col not in l_input.columns:
+                print(f"⚠️ Missing feature: {col} — filling with 0")
                 l_input[col] = 0.0
-        l_input = l_input[self.expected_features]
 
-        # 3. Normalize and reshape input
-        l_input = l_input.astype(np.float32)
-        forecast_temps = []
-        time_stamps = []
+        # === Select and scale input ===
+        l_input = l_input[self.expected_features].astype(np.float32)
 
-        # 4. Rolling prediction every hour using a 6-hour window
+        forecast_temps, time_stamps = [], []
         for i in range(len(l_input) - 5):
             sequence = l_input.iloc[i:i + 6]
             X = np.expand_dims(self.scaler_x.transform(sequence), axis=0)
@@ -91,67 +91,87 @@ class Boiler(Device):
             forecast_temps.append(y_pred)
             time_stamps.append(l_forecast["date"].iloc[i])
 
-        # 5. Save the full forecast
         df_result = pd.DataFrame(forecast_temps, columns=self.target_columns)
         df_result.insert(0, "time", time_stamps)
         self.last_forecast_df = df_result
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
         df_result.to_csv(f"boiler_forecast_{timestamp}.csv", index=False)
-
         print(f"✅ Full forecast saved to boiler_forecast_{timestamp}.csv")
         return df_result
 
-    def estimate_heating_time(self, start_time: str, target_temp: float = 50.0):
-        """
-        Estimate heating time (in minutes) from predicted temperature at given time
-        to the desired target temperature, using physical energy formula.
-        """
+    def simulate_day_usage_with_custom_temps(self, schedule: dict, cold_temp: float = 20.0,
+                                             liters_per_shower: float = 40.0,
+                                             export_csv: bool = True,
+                                             filename: str = "daily_usage_log_custom_temp.csv"):
         if self.last_forecast_df is None:
             print("❌ No forecast data available. Please run CalcHeatingTime() first.")
-            return None
-
-        try:
-            start_dt = pd.to_datetime(start_time).tz_localize(None)
-        except Exception as e:
-            print(f"❌ Invalid time format: {e}")
-            return None
+            return
 
         df = self.last_forecast_df.copy()
         df["time"] = pd.to_datetime(df["time"]).dt.tz_localize(None)
-
-        # Find closest forecast row to the requested time
-        row = df.iloc[(df["time"] - start_dt).abs().argsort()[:1]]
-        forecast_time = row["time"].iloc[0]
-
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
-        if key not in row.columns:
-            print(f"❌ Forecast column not found for: {key}")
-            return None
+        effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
 
-        predicted_start_temp = row[key].iloc[0]
-        delta_temp = max(0, target_temp - predicted_start_temp)
+        log = []
+        print(f"\n📅 Simulating daily usage with per-user temperatures: {schedule}")
 
-        # === Physics-based heating time ===
-        mass_kg = self.capacity_liters  # Assume 1L = 1kg of water
-        specific_heat = 4.186  # kJ/(kg·°C)
-        power_kw = self.power_usage  # Power in kW
+        for time_str, details in schedule.items():
+            try:
+                num_users = details.get("users", 1)
+                shower_temp = details.get("shower_temp", 40.0)
+                target_time = pd.to_datetime(df["time"].dt.strftime("%Y-%m-%d")[0] + " " + time_str)
+            except Exception as e:
+                print(f"❌ Error in schedule format at {time_str}: {e}")
+                continue
 
-        energy_needed_kj = mass_kg * specific_heat * delta_temp
-        power_kj_per_min = power_kw * 1000 / 60  # Convert kW to kJ/min
+            row = df.iloc[(df["time"] - target_time).abs().argsort()[:1]]
+            forecast_temp = row[key].iloc[0]
+            time_actual = row["time"].iloc[0]
 
-        if power_kj_per_min <= 0:
-            print("❌ Power too low to calculate heating time.")
-            return None
+            needed_liters = num_users * liters_per_shower * 1.1  # Add 10% safety margin
 
-        estimated_minutes = energy_needed_kj / power_kj_per_min
-        estimated_hours = estimated_minutes / 60
-        estimated_end_time = forecast_time + pd.Timedelta(minutes=estimated_minutes)
+            if forecast_temp < shower_temp:
+                usable_liters = 0
+                delta_temp = max(0, shower_temp - forecast_temp)  # ✅ עדכון חשוב כאן
+                mass_kg = self.capacity_liters
+                specific_heat = 4.186
+                power_kj_per_min = self.power_usage * 1000 / 60
+                energy_needed_kj = mass_kg * specific_heat * delta_temp
+                heating_minutes = energy_needed_kj / power_kj_per_min
+                start_heating_time = time_actual - pd.Timedelta(minutes=heating_minutes)
+                status = f"Forecast too cold | Start heating at: {start_heating_time.strftime('%H:%M')} (~{heating_minutes:.1f} min)"
+            else:
+                usable_liters = effective_volume * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
 
-        print(f"📅 Forecast time selected: {forecast_time}")
-        print(f"📈 Forecasted temperature: {predicted_start_temp:.1f}°C")
-        print(f"🎯 Target temperature: {target_temp:.1f}°C")
-        print(f"🔥 Estimated heating time: {estimated_minutes:.1f} minutes (~{estimated_hours:.2f} hours)")
-        print(f"⏱ Expected end time: {estimated_end_time.strftime('%Y-%m-%d %H:%M')}")
+                if usable_liters >= needed_liters:
+                    status = "Sufficient - no heating"
+                    effective_volume -= needed_liters
+                else:
+                    delta_temp = max(0, shower_temp - forecast_temp)
+                    mass_kg = self.capacity_liters
+                    specific_heat = 4.186
+                    power_kj_per_min = self.power_usage * 1000 / 60
+                    energy_needed_kj = mass_kg * specific_heat * delta_temp
+                    heating_minutes = energy_needed_kj / power_kj_per_min
+                    start_heating_time = time_actual - pd.Timedelta(minutes=heating_minutes)
+                    status = f"Insufficient - heating needed | Start heating at: {start_heating_time.strftime('%H:%M')} (~{heating_minutes:.1f} min)"
+                    effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
 
-        return estimated_minutes
+            log.append({
+                "Time": time_actual.strftime("%Y-%m-%d %H:%M"),
+                "Users": num_users,
+                "ShowerTemp": shower_temp,
+                "ForecastTemp": forecast_temp,
+                "UsableLiters": usable_liters,
+                "NeededLiters": needed_liters,
+                "Status": status
+            })
+
+        log_df = pd.DataFrame(log)
+        if export_csv:
+            output_path = os.path.join(os.getcwd(), filename)
+            log_df.to_csv(output_path, index=False)
+            print(f"\n📄 Usage log exported to: {output_path}")
+
+        return log_df
