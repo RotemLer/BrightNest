@@ -4,7 +4,6 @@ import subprocess
 import time
 import platform
 
-# --- הגדרות בסיס ---
 backend_dir = os.path.join(os.getcwd(), "Backend")
 frontend_dir = os.path.join(os.getcwd(), "UI")
 venv_dir = os.path.join(backend_dir, "venv")
@@ -12,7 +11,6 @@ flask_host = "127.0.0.1"
 flask_port = "5000"
 
 
-# --- פונקציות עזר ---
 
 def run_command(command, cwd=None, shell=False):
     print(f"👉 Running: {command}")
@@ -92,7 +90,6 @@ def start_frontend():
     run_command(["npm", "start"], cwd=frontend_dir, shell=is_windows())
 
 
-# --- ריצה עיקרית ---
 def main():
     create_virtualenv()
     install_requirements()

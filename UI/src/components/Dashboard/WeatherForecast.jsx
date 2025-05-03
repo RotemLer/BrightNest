@@ -39,7 +39,7 @@ function WeatherForecast({ selectedLocation }) {
         return;
       }
       try {
-        const response = await fetch(`http://localhost:5000/openmeteo/${selectedLocation.lat}/${selectedLocation.lon}`);
+        const response = await fetch(`http://127.0.0.1:5000/openmeteo/${selectedLocation.lat}/${selectedLocation.lon}`);
         const data = await response.json();
         console.log("📦 Forecast data:", data);
 
