@@ -29,7 +29,6 @@ export const AppContext = createContext({
 });
 
 export const AppProvider = ({ children }) => {
-  // הגדרות משתמש
   const [userSettings, setUserSettings] = useState(() => {
     const savedSettings = localStorage.getItem('userSettings');
     return savedSettings ? JSON.parse(savedSettings) : {
@@ -43,9 +42,24 @@ export const AppProvider = ({ children }) => {
     };
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('token') ? true : false;
+  });
+
+  const login = (token) => {
+    localStorage.setItem('token', token);
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
+
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem('userName') || '';
   });
+
   const [weatherData, setWeatherData] = useState([]);
   const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(0);
 
@@ -56,6 +70,13 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('userName', userName);
   }, [userName]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);  
 
   const updateSettings = (newSettings) => {
     setUserSettings((prev) => ({ ...prev, ...newSettings }));
@@ -72,23 +93,18 @@ export const AppProvider = ({ children }) => {
     document.documentElement.classList.toggle('dark');
   };
 
-  // מצב חימום ושעות
   const [autoStart] = useState('19:00');
   const [autoEnd] = useState('21:00');
   const [startHour, setStartHour] = useState('');
   const [endHour, setEndHour] = useState('');
   const [heatingMode, setHeatingMode] = useState('manual');
 
-  // חישוב שעות הדוד בפועל
   const getBoilerHours = () => {
     return heatingMode === 'auto'
       ? { start: autoStart, end: autoEnd }
       : { start: startHour, end: endHour };
   };
-  
-  
 
-  // הדפסת בדיקה
   console.log("✅ boilerHours calculated:", getBoilerHours());
 
   return (
@@ -109,14 +125,14 @@ export const AppProvider = ({ children }) => {
         setHeatingMode,
         startHour,
         setStartHour,
-
         endHour,
         setEndHour,
-
-        boilerHours: getBoilerHours(), // ⬅️ מועבר בוודאות
-
+        boilerHours: getBoilerHours(),
         autoStart,
         autoEnd,
+        isAuthenticated,
+        login,
+        logout,
       }}
     >
       {children}

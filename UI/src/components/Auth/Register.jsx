@@ -10,13 +10,36 @@ function Register() {
   const navigate = useNavigate();
   const { login } = useContext(AppContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Registering user:', { name, email, password });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+        full_name: name
+      }),
+    });
 
-    login(); // התחברות אוטומטית לאחר הרשמה
-    navigate('/dashbord'); // ניווט לדשבורד
-  };
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log('Registration successful:', data);
+      alert('נרשמת בהצלחה!');
+      navigate('/login');
+
+
+    } else {
+      console.error('Registration failed:', data.error);
+      alert(data.error);
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
