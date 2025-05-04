@@ -112,6 +112,8 @@ def get_profile():
     return jsonify(user), 200
 
 
+
+
 @userApi.route('/profile/update', methods=['PUT'])
 @token_required
 def update_profile():
