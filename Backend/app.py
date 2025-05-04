@@ -1,16 +1,22 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from datetime import datetime
+from Backend.userRoutes import userApi
 import pandas as pd
 import sys
 import os
+
+
 
 # Adjust path and import your weather API logic
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['SECRET_KEY'] = 'your_super_secret_key_here'
+CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
+
+app.register_blueprint(userApi)
 
 # === Caching global variables
 cached_forecast = None
