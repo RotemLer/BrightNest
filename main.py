@@ -12,12 +12,12 @@ def main():
         power_usage=3.0  # kW
     )
 
-    # === הגדרת לו״ז מקלחות לדוגמה ===
+    # === הגדרת לו״ז מקלחות עם תאריכים מלאים ידניים ===
     schedule = {
-        "06:30": {"users": 2, "shower_temp": 39.0},
-        "07:45": {"users": 1, "shower_temp": 40.0},
-        "18:00": {"users": 3, "shower_temp": 41.0},
-        "21:30": {"users": 1, "shower_temp": 38.0}
+        datetime(2025, 5, 8, 6, 30): {"users": 2, "shower_temp": 39.0},
+        datetime(2025, 5, 8, 7, 45): {"users": 1, "shower_temp": 40.0},
+        datetime(2025, 5, 8, 18, 0): {"users": 3, "shower_temp": 41.0},
+        datetime(2025, 5, 8, 21, 30): {"users": 1, "shower_temp": 38.0}
     }
 
     # === הרצת הסימולציה (כוללת חיזוי מודל) ===
