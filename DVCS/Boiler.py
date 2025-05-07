@@ -208,6 +208,11 @@ class BoilerManager(Device):
                                              liters_per_shower: float = 40.0,
                                              export_csv: bool = True,
                                              filename: str = "daily_usage_log_custom_temp.csv"):
+        import numpy as np
+        import os
+        import pandas as pd
+        from datetime import datetime
+
         # === חיזוי תחזית מהמודל ===
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
             lat=32.0853, lon=34.7818, hours_ahead=48
@@ -258,57 +263,54 @@ class BoilerManager(Device):
         log = []
         print(f"\n📅 Simulating daily usage with per-user temperatures: {schedule}")
 
-        base_date = df_forecast["time"].iloc[0].date()
+        for target_time, details in schedule.items():
+            if not isinstance(target_time, datetime):
+                print(f"❌ שגיאה: מפתח בלו״ז אינו מסוג datetime: {target_time}")
+                continue
 
-        for time_str, details in schedule.items():
             try:
                 num_users = details.get("users", 1)
                 shower_temp = details.get("shower_temp", 40.0)
 
-                hour, minute = map(int, time_str.split(":"))
-                target_time = datetime.combine(base_date, datetime.min.time()).replace(hour=hour, minute=minute)
-            except Exception as e:
-                print(f"❌ Error in schedule format at {time_str}: {e}")
-                continue
+                # חישוב התחלת חימום
+                heating_time, temp_at_start = self.calc_start_heating_time(
+                    forecast_df=df_forecast,
+                    boiler_key=key,
+                    target_time=target_time,
+                    target_temp=shower_temp
+                )
 
-            # מציאת זמן התחלת חימום + טמפ התחלתית
-            heating_time, temp_at_start = self.calc_start_heating_time(
-                forecast_df=df_forecast,
-                boiler_key=key,
-                target_time=target_time,
-                target_temp=shower_temp
-            )
+                needed_liters = num_users * liters_per_shower * 1.1
 
-            needed_liters = num_users * liters_per_shower * 1.1
-
-            if temp_at_start is None:
-                usable_liters = 0
-                status = "Forecast too cold - can't heat in time"
-                time_actual = target_time
-                forecast_temp = 0.0
-            else:
-                forecast_temp = temp_at_start
-                time_actual = target_time
-
-                delta_temp = max(0, shower_temp - forecast_temp)
-                usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
-
-                if usable_liters >= needed_liters:
-                    status = "Sufficient - no heating"
-                    effective_volume -= needed_liters
+                if temp_at_start is None:
+                    usable_liters = 0
+                    status = "Forecast too cold - can't heat in time"
+                    forecast_temp = 0.0
                 else:
-                    status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')}"
-                    effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
+                    forecast_temp = temp_at_start
+                    delta_temp = max(0, shower_temp - forecast_temp)
+                    usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
 
-            log.append({
-                "Time": time_actual.strftime("%Y-%m-%d %H:%M"),
-                "Users": num_users,
-                "ShowerTemp": shower_temp,
-                "ForecastTemp": forecast_temp,
-                "UsableLiters": usable_liters,
-                "NeededLiters": needed_liters,
-                "Status": status
-            })
+                    if usable_liters >= needed_liters:
+                        status = "Sufficient - no heating"
+                        effective_volume -= needed_liters
+                    else:
+                        status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')}"
+                        effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
+
+                log.append({
+                    "Time": target_time.strftime("%Y-%m-%d %H:%M"),
+                    "Users": num_users,
+                    "ShowerTemp": shower_temp,
+                    "ForecastTemp": forecast_temp,
+                    "UsableLiters": usable_liters,
+                    "NeededLiters": needed_liters,
+                    "Status": status
+                })
+
+            except Exception as e:
+                print(f"❌ שגיאה כללית בטיפול בזמן {target_time}: {e}")
+                continue
 
         log_df = pd.DataFrame(log)
         if export_csv:
