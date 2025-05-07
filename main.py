@@ -8,7 +8,7 @@ def main():
     boiler = BoilerManager(
         name="Boiler_100L_NoSolar",
         capacity_liters=100,
-        has_solar=False,
+        has_solar=True,
         power_usage=3.0  # kW
     )
 
