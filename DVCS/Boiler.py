@@ -166,11 +166,49 @@ class BoilerManager(Device):
 
         return new_temp
 
+    def calc_start_heating_time(
+            self,
+            forecast_df: pd.DataFrame,
+            boiler_key: str,
+            target_time: datetime,
+            target_temp: float
+    ):
+        """
+        מחשב את הזמן המוקדם ביותר להתחלת חימום כדי להגיע לטמפרטורת יעד עד זמן מקלחת.
+
+        Returns:
+            (datetime | None, float | None): זמן התחלה לחימום, טמפ' התחלתית בפועל
+        """
+        c = 4.186  # קיבול חום, kJ/kg°C
+        mass_kg = self.capacity_liters
+        power_kj_per_min = self.power_usage * 1000 / 60
+        efficiency = 0.9
+
+        relevant_forecast = forecast_df[
+            (forecast_df["time"] <= target_time)
+        ].sort_values("time", ascending=False)
+
+        for _, row in relevant_forecast.iterrows():
+            temp_now = row[boiler_key]
+            delta_T = target_temp - temp_now
+
+            if delta_T <= 0:
+                return None, temp_now  # אין צורך בחימום
+
+            energy_needed_kj = mass_kg * c * delta_T
+            time_needed_minutes = energy_needed_kj / (power_kj_per_min * efficiency)
+            heating_start_time = target_time - timedelta(minutes=time_needed_minutes)
+
+            if heating_start_time >= row["time"]:
+                return heating_start_time, temp_now
+
+        return None, None  # לא ניתן לחמם בזמן
+
     def simulate_day_usage_with_custom_temps(self, schedule: dict, cold_temp: float = 20.0,
                                              liters_per_shower: float = 40.0,
                                              export_csv: bool = True,
                                              filename: str = "daily_usage_log_custom_temp.csv"):
-        # === חיזוי תחזית מהמודל, במקום להשתמש בקובץ קודם ===
+        # === חיזוי תחזית מהמודל ===
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
             lat=32.0853, lon=34.7818, hours_ahead=48
         )
@@ -194,14 +232,13 @@ class BoilerManager(Device):
             print("❌ Forecast data missing 'date' column.")
             return
 
-        # השלמת פיצ'רים חסרים
         for col in self.expected_features:
             if col not in l_input.columns:
                 print(f"⚠ Missing feature: {col} — filling with 0")
                 l_input[col] = 0.0
 
-        # חיזוי התחזית בפועל
         l_input = l_input[self.expected_features].astype(np.float32)
+
         forecast_temps, time_stamps = [], []
         for i in range(len(l_input) - 5):
             sequence = l_input.iloc[i:i + 6]
@@ -211,58 +248,56 @@ class BoilerManager(Device):
             forecast_temps.append(y_pred)
             time_stamps.append(l_forecast["date"].iloc[i])
 
-        # בניית df לתחזית מלאה
         df_forecast = pd.DataFrame(forecast_temps, columns=self.target_columns)
         df_forecast.insert(0, "time", time_stamps)
         df_forecast["time"] = pd.to_datetime(df_forecast["time"]).dt.tz_localize(None)
 
-        # קביעת הטור המתאים לדוד
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
         effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
 
         log = []
         print(f"\n📅 Simulating daily usage with per-user temperatures: {schedule}")
 
+        base_date = df_forecast["time"].iloc[0].date()
+
         for time_str, details in schedule.items():
             try:
                 num_users = details.get("users", 1)
                 shower_temp = details.get("shower_temp", 40.0)
-                target_time = pd.to_datetime(df_forecast["time"].dt.strftime("%Y-%m-%d")[0] + " " + time_str)
+
+                hour, minute = map(int, time_str.split(":"))
+                target_time = datetime.combine(base_date, datetime.min.time()).replace(hour=hour, minute=minute)
             except Exception as e:
                 print(f"❌ Error in schedule format at {time_str}: {e}")
                 continue
 
-            row = df_forecast.iloc[(df_forecast["time"] - target_time).abs().argsort()[:1]]
-            forecast_temp = row[key].iloc[0]
-            time_actual = row["time"].iloc[0]
+            # מציאת זמן התחלת חימום + טמפ התחלתית
+            heating_time, temp_at_start = self.calc_start_heating_time(
+                forecast_df=df_forecast,
+                boiler_key=key,
+                target_time=target_time,
+                target_temp=shower_temp
+            )
 
-            needed_liters = num_users * liters_per_shower * 1.1  # 10% ביטחון
+            needed_liters = num_users * liters_per_shower * 1.1
 
-            if forecast_temp < shower_temp:
+            if temp_at_start is None:
                 usable_liters = 0
-                delta_temp = max(0, shower_temp - forecast_temp)
-                mass_kg = self.capacity_liters
-                specific_heat = 4.186
-                power_kj_per_min = self.power_usage * 1000 / 60
-                energy_needed_kj = mass_kg * specific_heat * delta_temp
-                heating_minutes = energy_needed_kj / power_kj_per_min
-                start_heating_time = time_actual - pd.Timedelta(minutes=heating_minutes)
-                status = f"Forecast too cold | Start heating at: {start_heating_time.strftime('%H:%M')} (~{heating_minutes:.1f} min)"
+                status = "Forecast too cold - can't heat in time"
+                time_actual = target_time
+                forecast_temp = 0.0
             else:
-                usable_liters = effective_volume * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
+                forecast_temp = temp_at_start
+                time_actual = target_time
+
+                delta_temp = max(0, shower_temp - forecast_temp)
+                usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
 
                 if usable_liters >= needed_liters:
                     status = "Sufficient - no heating"
                     effective_volume -= needed_liters
                 else:
-                    delta_temp = max(0, shower_temp - forecast_temp)
-                    mass_kg = self.capacity_liters
-                    specific_heat = 4.186
-                    power_kj_per_min = self.power_usage * 1000 / 60
-                    energy_needed_kj = mass_kg * specific_heat * delta_temp
-                    heating_minutes = energy_needed_kj / power_kj_per_min
-                    start_heating_time = time_actual - pd.Timedelta(minutes=heating_minutes)
-                    status = f"Insufficient - heating needed | Start heating at: {start_heating_time.strftime('%H:%M')} (~{heating_minutes:.1f} min)"
+                    status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')}"
                     effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
 
             log.append({
@@ -336,3 +371,4 @@ class BoilerManager(Device):
 
         joblib.dump(scale, scale_path)
         print(f"📈 Updated scale with {scale_temperature:.2f}°C")
+
