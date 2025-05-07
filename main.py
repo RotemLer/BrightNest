@@ -1,42 +1,33 @@
-from DVCS.Boiler import Boiler  # Make sure this matches your actual file structure
+from DVCS.Boiler import BoilerManager
+from datetime import datetime
 
 def main():
-    """
-    Simulates boiler initialization, forecasting, and hourly feedback simulation based on schedule.
-    """
+    print("🚿 התחלת סימולציית יום מקלחות בדוד")
 
-    # === Initialize boiler ===
-    boiler = Boiler(
-        name="Smart Boiler",
-        capacity_liters=50,
-        has_solar=True
+    # === יצירת אובייקט של הדוד ===
+    boiler = BoilerManager(
+        name="Boiler_100L_NoSolar",
+        capacity_liters=100,
+        has_solar=False,
+        power_usage=3.0  # kW
     )
 
-    print(f"⚙️ Boiler initialized with power: {boiler.power_usage:.1f} kW")
-
-    # === Turn on the boiler ===
-    boiler.turn_on()
-
-    # === Shower schedule ===
-    shower_schedule = {
-        "18:00": {"users": 1, "shower_temp": 40.0},
-        "21:00": {"users": 1, "shower_temp": 51.0}
+    # === הגדרת לו״ז מקלחות לדוגמה ===
+    schedule = {
+        "06:30": {"users": 2, "shower_temp": 39.0},
+        "07:45": {"users": 1, "shower_temp": 40.0},
+        "18:00": {"users": 3, "shower_temp": 41.0},
+        "21:30": {"users": 1, "shower_temp": 38.0}
     }
 
-    # === Simulate feedback loop ===
-    print("\n🔁 Running hourly feedback loop simulation...")
-    feedback_df = boiler.simulate_hourly_feedback_loop(
-        schedule=shower_schedule,
-        hours=24  # You can change this to simulate a full day or more
-    )
+    # === הרצת הסימולציה (כוללת חיזוי מודל) ===
+    usage_df = boiler.simulate_day_usage_with_custom_temps(schedule)
 
-    # === Turn off boiler ===
-    boiler.turn_off()
-
-    # === Print final state ===
-    print("\n📦 Final boiler status:")
-    print(boiler)
-
+    if usage_df is not None:
+        print("\n📊 תוצאות הסימולציה:")
+        print(usage_df.to_string(index=False))
+    else:
+        print("❌ הסימולציה נכשלה – ייתכן ואין מספיק נתונים.")
 
 if __name__ == "__main__":
     main()
