@@ -142,7 +142,7 @@ class BoilerManager(Device):
             print("⚠️ Used more water than boiler capacity.")
             remaining_liters = 0
 
-        # חוק שימור חום - ערבוב בין מים חמים למים קרים
+        # Law of Conservation of Heat - Mixing Hot Water with Cold Water
         new_temp = (
                            (remaining_liters * current_temp) + (used_liters * cold_water_temp)
                    ) / total_liters
@@ -150,7 +150,7 @@ class BoilerManager(Device):
         new_temp = round(new_temp, 2)
         self.temperature = new_temp
 
-        # עדכון scale
+        # update scale
         scale_path = "scale_temperature_list.save"
         if os.path.exists(scale_path):
             scale = joblib.load(scale_path)
@@ -174,12 +174,12 @@ class BoilerManager(Device):
             target_temp: float
     ):
         """
-        מחשב את הזמן המוקדם ביותר להתחלת חימום כדי להגיע לטמפרטורת יעד עד זמן מקלחת.
+        Calculates the earliest time to start heating to reach a target temperature by shower time.
 
         Returns:
-            (datetime | None, float | None): זמן התחלה לחימום, טמפ' התחלתית בפועל
+        (datetime | None, float | None): heating start time, actual starting temp
         """
-        c = 4.186  # קיבול חום, kJ/kg°C
+        c = 4.186  # Heat capacity, kJ/kg°C
         mass_kg = self.capacity_liters
         power_kj_per_min = self.power_usage * 1000 / 60
         efficiency = 0.9
@@ -193,7 +193,7 @@ class BoilerManager(Device):
             delta_T = target_temp - temp_now
 
             if delta_T <= 0:
-                return None, temp_now  # אין צורך בחימום
+                return None, temp_now  # No heating required
 
             energy_needed_kj = mass_kg * c * delta_T
             time_needed_minutes = energy_needed_kj / (power_kj_per_min * efficiency)
@@ -202,7 +202,7 @@ class BoilerManager(Device):
             if heating_start_time >= row["time"]:
                 return heating_start_time, temp_now
 
-        return None, None  # לא ניתן לחמם בזמן
+        return None, None  # Unable to heat in time
 
     def simulate_day_usage_with_custom_temps(self, schedule: dict, cold_temp: float = 20.0,
                                              liters_per_shower: float = 40.0,
@@ -213,7 +213,7 @@ class BoilerManager(Device):
         import pandas as pd
         from datetime import datetime
 
-        # === חיזוי תחזית מהמודל ===
+        # === Forecast prediction from the model ===
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
             lat=32.0853, lon=34.7818, hours_ahead=48
         )
@@ -272,7 +272,7 @@ class BoilerManager(Device):
                 num_users = details.get("users", 1)
                 shower_temp = details.get("shower_temp", 40.0)
 
-                # חישוב התחלת חימום
+                # Calculation of heating start
                 heating_time, temp_at_start = self.calc_start_heating_time(
                     forecast_df=df_forecast,
                     boiler_key=key,
@@ -309,7 +309,7 @@ class BoilerManager(Device):
                 })
 
             except Exception as e:
-                print(f"❌ שגיאה כללית בטיפול בזמן {target_time}: {e}")
+                print(f"❌ General error in time handling {target_time}: {e}")
                 continue
 
         log_df = pd.DataFrame(log)
@@ -337,22 +337,22 @@ class BoilerManager(Device):
         """
         print(f"🕒 OnTimer Tick at {now}")
 
-        # 1. תחזית מז"א
+        # 1.weather forecast
         weather_df = forecast_api_func()
 
-        # 2. חיזוי טמפ בדוד
+        # 2. Boiler temperature prediction
         forecasted_temps = run_model_func(weather_df)  # returns list[float]
 
-        # 3. אתחול Scale_temperature (ברירת מחדל – טמפ' לשעה הנוכחית)
+        # 3. Initialize Scale_temperature (default – temp for the current hour)
         current_hour = now.hour
         scale_temperature = forecasted_temps[current_hour]
 
-        # 4. בדיקת צורך בחימום
+        # 4. Heating requirement check
         minutes_to_heat = self.calc_turn_on_boiler(forecasted_temps, shower_hour)
         if minutes_to_heat:
             scale_temperature = self.heat(duration_minutes=minutes_to_heat, start_temperature=scale_temperature)
 
-        # 5. אם הגענו לזמן המקלחת – נפעיל time_showering
+        # 5.If we have reached shower time – we will activate time_showering
         if now.hour == shower_hour:
             scale_temperature = self.time_showering(
                 forecast=forecasted_temps,
@@ -360,7 +360,7 @@ class BoilerManager(Device):
                 num_users=num_users
             )
 
-        # 6. עדכון scale
+        # 6. update scale
         scale_path = "scale_temperature_list.save"
         if os.path.exists(scale_path):
             scale = joblib.load(scale_path)
