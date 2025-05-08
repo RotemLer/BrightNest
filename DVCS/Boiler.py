@@ -1,13 +1,14 @@
 # ==== Imports ====
-import numpy as np
-import pandas as pd
+
 import joblib
 from tensorflow.keras.models import load_model
 from datetime import datetime, timedelta
-import os
-import matplotlib.pyplot as plt
 import UTILS.weatherAPIRequest as weather
 from DVCS.Device import Device
+import numpy as np
+import os
+import pandas as pd
+from datetime import datetime
 
 
 # ==== Boiler Initialization ====
@@ -174,44 +175,53 @@ class BoilerManager(Device):
             target_temp: float
     ):
         """
-        Calculates the earliest time to start heating to reach a target temperature by shower time.
+        Calculates the earliest time to start heating in order to reach a target boiler temperature
+        by the specified target_time (e.g., shower time). If heating is unnecessary (already hot enough),
+        returns None and the forecasted temperature.
 
         Returns:
-        (datetime | None, float | None): heating start time, actual starting temp
+            (datetime | None, float | None):
+                - datetime to begin heating (or None if not required / not possible)
+                - forecasted boiler temp at that time
         """
-        c = 4.186  # Heat capacity, kJ/kg°C
+        c = 4.186  # Specific heat capacity of water (kJ/kg°C)
         mass_kg = self.capacity_liters
-        power_kj_per_min = self.power_usage * 1000 / 60
-        efficiency = 0.9
+        power_kj_per_min = self.power_usage * 1000 / 60  # kW to kJ/min
+        efficiency = 0.9  # Heating efficiency
 
+        # Filter forecast only for times before the shower
         relevant_forecast = forecast_df[
             (forecast_df["time"] <= target_time)
         ].sort_values("time", ascending=False)
 
         for _, row in relevant_forecast.iterrows():
+            forecast_time = row["time"]
             temp_now = row[boiler_key]
+
             delta_T = target_temp - temp_now
 
             if delta_T <= 0:
-                return None, temp_now  # No heating required
+                # Already hot enough – no heating required
+                return None, temp_now
 
+            # Compute energy and time required to heat from temp_now to target_temp
             energy_needed_kj = mass_kg * c * delta_T
             time_needed_minutes = energy_needed_kj / (power_kj_per_min * efficiency)
+
             heating_start_time = target_time - timedelta(minutes=time_needed_minutes)
 
-            if heating_start_time >= row["time"]:
+            # Check if there is enough time before the forecast_time to heat
+            if heating_start_time >= forecast_time:
                 return heating_start_time, temp_now
 
-        return None, None  # Unable to heat in time
+        # No time window in the forecast allows to reach target temperature
+        return None, None
 
     def simulate_day_usage_with_custom_temps(self, schedule: dict, cold_temp: float = 20.0,
                                              liters_per_shower: float = 40.0,
                                              export_csv: bool = True,
                                              filename: str = "daily_usage_log_custom_temp.csv"):
-        import numpy as np
-        import os
-        import pandas as pd
-        from datetime import datetime
+
 
         # === Forecast prediction from the model ===
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
@@ -271,8 +281,14 @@ class BoilerManager(Device):
             try:
                 num_users = details.get("users", 1)
                 shower_temp = details.get("shower_temp", 40.0)
+                needed_liters = num_users * liters_per_shower * 1.1
 
-                # Calculation of heating start
+                # Init values
+                usable_liters = 0
+                heating_duration = None
+                forecast_temp = 0.0
+
+                # Try to find when to start heating
                 heating_time, temp_at_start = self.calc_start_heating_time(
                     forecast_df=df_forecast,
                     boiler_key=key,
@@ -280,31 +296,57 @@ class BoilerManager(Device):
                     target_temp=shower_temp
                 )
 
-                needed_liters = num_users * liters_per_shower * 1.1
-
                 if temp_at_start is None:
-                    usable_liters = 0
-                    status = "Forecast too cold - can't heat in time"
-                    forecast_temp = 0.0
+                    status = "Insufficient - not enough time to heat"
                 else:
                     forecast_temp = temp_at_start
-                    delta_temp = max(0, shower_temp - forecast_temp)
-                    usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
 
-                    if usable_liters >= needed_liters:
-                        status = "Sufficient - no heating"
-                        effective_volume -= needed_liters
+                    if forecast_temp < shower_temp:
+                        # compute heating duration
+                        delta_T = shower_temp - forecast_temp
+                        c = 4.186
+                        mass_kg = self.capacity_liters
+                        power_kj_per_min = self.power_usage * 1000 / 60
+                        efficiency = 0.9
+
+                        energy_needed_kj = mass_kg * c * delta_T
+                        heating_duration = energy_needed_kj / (power_kj_per_min * efficiency)
+                        heating_duration = round(heating_duration, 1)
+
+                        if heating_time:
+                            status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')} (need {heating_duration} min)"
+                        else:
+                            status = f"Insufficient - forecast too cold ({forecast_temp:.1f}°C < {shower_temp}°C)"
                     else:
-                        status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')}"
-                        effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
+                        usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
+                        if usable_liters >= needed_liters:
+                            status = "Sufficient - no heating"
+                            heating_duration = 0
+                            effective_volume -= needed_liters
+                        else:
+                            delta_T = shower_temp - forecast_temp
+                            c = 4.186
+                            mass_kg = self.capacity_liters
+                            power_kj_per_min = self.power_usage * 1000 / 60
+                            efficiency = 0.9
+
+                            energy_needed_kj = mass_kg * c * delta_T
+                            heating_duration = energy_needed_kj / (power_kj_per_min * efficiency)
+                            heating_duration = round(heating_duration, 1)
+
+                            if heating_time:
+                                status = f"Insufficient - start heating at: {heating_time.strftime('%H:%M')} (need {heating_duration} min)"
+                            else:
+                                status = f"Insufficient - forecast too cold ({forecast_temp:.1f}°C < {shower_temp}°C)"
 
                 log.append({
                     "Time": target_time.strftime("%Y-%m-%d %H:%M"),
                     "Users": num_users,
                     "ShowerTemp": shower_temp,
-                    "ForecastTemp": forecast_temp,
-                    "UsableLiters": usable_liters,
-                    "NeededLiters": needed_liters,
+                    "ForecastTemp": round(forecast_temp, 2),
+                    "UsableLiters": round(usable_liters, 2),
+                    "NeededLiters": round(needed_liters, 2),
+                    "HeatingMinutes": heating_duration,
                     "Status": status
                 })
 
@@ -319,6 +361,7 @@ class BoilerManager(Device):
             print(f"\n📄 Usage log exported to: {output_path}")
 
         return log_df
+
     def OnTimer(self, now: datetime, forecast_api_func, run_model_func, shower_hour: int, num_users: int):
         """
         Runs once every X minutes/hours as main loop tick:
