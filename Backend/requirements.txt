@@ -1,6 +1,14 @@
-flask
+Flask
 flask-cors
 pandas
 openmeteo-requests
 requests-cache
 retry_requests
+matplotlib
+scikit-learn
+keras
+joblib
+werkzeug
+pymongo
+PyJWT
+numpy

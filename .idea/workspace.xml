@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="addDevice page and db integration with user and family of user">
+      <change beforePath="$PROJECT_DIR$/.idea/BrightNest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BrightNest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/userRoutes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/userRoutes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DVCS/Boiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/DVCS/Boiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/Updated_With_Boiler_Hourly_Realistic_v4.csv" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/Updated_With_Boiler_Hourly_Realistic_v4.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/boiler_temperature_multitarget.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/training_loss_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/training_loss_plot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Auth/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Auth/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Auth/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Auth/Register.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +25,24 @@
       <list>
         <option value="Python Script" />
       </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="OPTIONS">
+      <set>
+        <option value="REBASE" />
+      </set>
     </option>
   </component>
   <component name="Git.Settings">
@@ -75,22 +93,22 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/RotemLer/BrightNest.git&quot;,
-    &quot;accountId&quot;: &quot;a2e999f8-83b1-4456-91f5-e280c852bce1&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/RotemLer/BrightNest.git",
+    "accountId": "6c6e2e2a-949e-429c-8082-2471c9fd0f19"
   },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
     },
-    &quot;owner&quot;: &quot;RotemLer&quot;,
-    &quot;repository&quot;: &quot;BrightNest&quot;
+    "owner": "RotemLer",
+    "repository": "BrightNest"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -99,41 +117,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.HistoricalWeatherAPI.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Run Weather API.executor&quot;: &quot;Profiler&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dataGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dataTraining.executor&quot;: &quot;Run&quot;,
-    &quot;Python.finalProject .executor&quot;: &quot;Run&quot;,
-    &quot;Python.get-pip.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.modifyData.executor&quot;: &quot;Run&quot;,
-    &quot;Python.selectors.executor&quot;: &quot;Run&quot;,
-    &quot;Python.start-all.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_load_data.executor&quot;: &quot;Run&quot;,
-    &quot;Python.weatherAPIRequest (2).executor&quot;: &quot;ConcurrencyExecutor&quot;,
-    &quot;Python.weatherAPIRequest.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;DAN-branch&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.HistoricalWeatherAPI.executor": "Run",
+    "Python.Run Weather API.executor": "Profiler",
+    "Python.app.executor": "Run",
+    "Python.dataGenerator.executor": "Run",
+    "Python.dataTraining.executor": "Run",
+    "Python.finalProject .executor": "Run",
+    "Python.get-pip.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.modifyData.executor": "Run",
+    "Python.selectors.executor": "Run",
+    "Python.start-all.executor": "Run",
+    "Python.test_load_data.executor": "Run",
+    "Python.userRoutes.executor": "Run",
+    "Python.weatherAPIRequest (2).executor": "ConcurrencyExecutor",
+    "Python.weatherAPIRequest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "DVIR-branch",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="BrightNest - final project" />
@@ -340,6 +359,7 @@
       <workItem from="1746174975122" duration="14470000" />
       <workItem from="1746254661608" duration="4504000" />
       <workItem from="1746263359821" duration="9246000" />
+      <workItem from="1747234352457" duration="4502000" />
     </task>
     <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
@@ -600,13 +620,15 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1745596562874" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
-    <SUITE FILE_PATH="coverage/FinalProject$weatherAPIRequest.coverage" NAME="weatherAPIRequest Coverage Results" MODIFIED="1745596547068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
-    <SUITE FILE_PATH="coverage/BrightNest$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1746260659288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747228619894" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1747240773507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
     <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1747241218219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/FinalProject$weatherAPIRequest.coverage" NAME="weatherAPIRequest Coverage Results" MODIFIED="1747239927069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1746260659288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
   </component>
 </project>
