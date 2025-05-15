@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="addDevice page and db integration with user and family of user">
-      <change beforePath="$PROJECT_DIR$/.idea/BrightNest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BrightNest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/userRoutes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/userRoutes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Auth/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Auth/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Auth/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Auth/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UTILS/training_loss_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/training_loss_plot.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -359,7 +353,7 @@
       <workItem from="1746174975122" duration="14470000" />
       <workItem from="1746254661608" duration="4504000" />
       <workItem from="1746263359821" duration="9246000" />
-      <workItem from="1747234352457" duration="4502000" />
+      <workItem from="1747234352457" duration="5609000" />
     </task>
     <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
@@ -505,7 +499,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746259293945</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer">
+      <option name="closed" value="true" />
+      <created>1747241779176</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1747241779176</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -606,7 +608,8 @@
     <MESSAGE value="dvir commit and push - update the dataTraining.py added save the normal values &#10;new folder of devices &#10;updated the weatherAPIRequest.py now is fit for the modle" />
     <MESSAGE value="dvir commit and push - now the forcast show on the dashbord and take the kocation from the user profile in the location picker now there is autocomplete and return the name and the lat long" />
     <MESSAGE value="addDevice page and db integration with user and family of user" />
-    <option name="LAST_COMMIT_MESSAGE" value="addDevice page and db integration with user and family of user" />
+    <MESSAGE value="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer" />
+    <option name="LAST_COMMIT_MESSAGE" value="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -624,6 +627,7 @@
     <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1747240773507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/FinalProject$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1747241739709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
     <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
