@@ -13,7 +13,12 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_super_secret_key_here'
 
 
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app,
+     supports_credentials=True,
+     origins=["http://localhost:3000"],
+     methods=["GET", "POST", "PUT", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"]
+)
 
 app.register_blueprint(userApi)
 
