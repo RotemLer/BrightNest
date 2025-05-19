@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer">
+    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="added logo to the tab">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/userRoutes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/userRoutes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/AddDevice.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/AddDevice.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Profile/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Profile/Profile.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/boiler_prediction_error_distribution.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UTILS/training_loss_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/UTILS/training_loss_plot.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -362,7 +354,8 @@
       <workItem from="1746263359821" duration="9246000" />
       <workItem from="1747234352457" duration="5609000" />
       <workItem from="1747318305932" duration="3410000" />
-      <workItem from="1747491933121" duration="12184000" />
+      <workItem from="1747491933121" duration="13679000" />
+      <workItem from="1747675833942" duration="887000" />
     </task>
     <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
@@ -524,7 +517,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747318770210</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="fixed the get and save dat from and to th data base.&#10;update the boiler page and add new window to add the boiler">
+      <option name="closed" value="true" />
+      <created>1747511200430</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1747511200431</updated>
+    </task>
+    <task id="LOCAL-00022" summary="added logo to the tab">
+      <option name="closed" value="true" />
+      <created>1747677142373</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1747677142373</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -626,7 +635,9 @@
     <MESSAGE value="dvir commit and push - now the forcast show on the dashbord and take the kocation from the user profile in the location picker now there is autocomplete and return the name and the lat long" />
     <MESSAGE value="addDevice page and db integration with user and family of user" />
     <MESSAGE value="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer" />
-    <option name="LAST_COMMIT_MESSAGE" value="addDevice page and fixes the db integration with user and family of user. now the login and the register working well and fits for python 3.10 and newer" />
+    <MESSAGE value="fixed the get and save dat from and to th data base.&#10;update the boiler page and add new window to add the boiler" />
+    <MESSAGE value="added logo to the tab" />
+    <option name="LAST_COMMIT_MESSAGE" value="added logo to the tab" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -648,7 +659,7 @@
     <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
     <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1747497492816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1747675848644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FinalProject$weatherAPIRequest.coverage" NAME="weatherAPIRequest Coverage Results" MODIFIED="1747239927069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1746260659288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
   </component>
