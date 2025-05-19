@@ -75,7 +75,7 @@ function Dashboard() {
                     >
                       <span
                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-                          userSettings.boilerStatus ? 'translate-x-5' : 'translate-x-1'
+                          userSettings.boilerStatus ? 'translate-x-0' : 'translate-x-3.5'
                         }`}
                       />
                     </button>
