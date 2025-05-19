@@ -4,18 +4,23 @@ import { AppContext } from '../../context/AppContext';
 import LocationPicker from '../Settings/LocationPicker';
 
 function Profile() {
-  // Move all hooks to the top, before any conditional return
   const navigate = useNavigate();
-  const { userName, setUserName, updateSettings, isLoadingSettings, userSettings } = useContext(AppContext);
+  const {
+    userName,
+    setUserName,
+    updateSettings,
+    saveSettingsToServer,
+    userSettings
+  } = useContext(AppContext);
 
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     location: '',
-    password: '',
-    confirmPassword: '',
     lat: null,
     lon: null,
+    password: '',
+    confirmPassword: ''
   });
 
   const [showPasswordResetFields, setShowPasswordResetFields] = useState(false);
@@ -26,23 +31,16 @@ function Profile() {
     setUserData((prev) => ({
       ...prev,
       name: userName || '',
+      email: userSettings.email || '',  // מוצג אך לא נשלח
       location: userSettings.location || '',
       lat: userSettings.lat || null,
-      lon: userSettings.lon || null,
-      email: userSettings.email || '',
+      lon: userSettings.lon || null
     }));
   }, [userName, userSettings]);
 
-  if (isLoadingSettings) {
-    return <div className="text-center p-10">טוען נתונים...</div>;
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleResetPasswordClick = () => {
@@ -53,7 +51,7 @@ function Profile() {
     navigate('/settings');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (showPasswordResetFields && userData.password !== userData.confirmPassword) {
@@ -61,17 +59,19 @@ function Profile() {
       return;
     }
 
-    // 🔄 עדכון השם בקונטקסט
-    setUserName(userData.name);
-
-    updateSettings({
+    const preferences = {
       location: userData.location,
       lat: userData.lat,
-      lon: userData.lon,
-      email: userData.email,
-    });
+      lon: userData.lon
+    };
 
-    console.log('✅ נשמר:', userData);
+    updateSettings({ ...preferences, email: userData.email });  // רק ל־UI
+    setUserName(userData.name);
+
+    await saveSettingsToServer({
+      full_name: userData.name,
+      preferences
+    });
 
     setShowConfirmation(true);
     setTimeout(() => setShowConfirmation(false), 3000);
@@ -86,30 +86,32 @@ function Profile() {
         {userData.name || 'הפרופיל שלי'}
       </h1>
 
+      {/* שם */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">שם מלא</label>
         <input
           name="name"
           type="text"
-          placeholder="הכנס שם"
           value={userData.name}
           onChange={handleChange}
           className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          placeholder="הכנס שם"
         />
       </div>
 
+      {/* מייל (לקריאה בלבד) */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">כתובת מייל</label>
         <input
           name="email"
           type="email"
-          placeholder="example@email.com"
           value={userData.email}
-          onChange={handleChange}
-          className="w-full p-3 border rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          disabled
+          className="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
         />
       </div>
 
+      {/* סיסמה (לא פעיל בפועל, תצטרך endpoint נפרד לשינוי סיסמה) */}
       <p
         onClick={handleResetPasswordClick}
         className="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-blue-500 hover:underline text-start"
@@ -142,9 +144,9 @@ function Profile() {
         </div>
       )}
 
+      {/* מיקום */}
       <div>
         <label className="block mb-1 text-sm text-gray-700 dark:text-gray-300">עיר</label>
-
         {userData.location && !showLocationPicker ? (
           <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white">
             <span>{userData.location}</span>
@@ -164,7 +166,7 @@ function Profile() {
                 ...prev,
                 location: place.display_name,
                 lat: place.lat,
-                lon: place.lon,
+                lon: place.lon
               }));
               setShowLocationPicker(false);
             }}
@@ -172,6 +174,7 @@ function Profile() {
         )}
       </div>
 
+      {/* כפתורי פעולה */}
       <button
         type="button"
         onClick={handleAppSettingsClick}
