@@ -39,13 +39,8 @@ function WeatherForecast({ selectedLocation }) {
         return;
       }
       try {
-        let url = `http://127.0.0.1:5000/openmeteo/${selectedLocation.lat}/${selectedLocation.lon}`;
-
-        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-          url += `?cacheBust=${Date.now()}`;
-        }
-        
-        const response = await fetch(url);        const data = await response.json();
+        const response = await fetch(`http://127.0.0.1:5000/openmeteo/${selectedLocation.lat}/${selectedLocation.lon}`);
+        const data = await response.json();
         console.log("📦 Forecast data:", data);
 
         if (Array.isArray(data.forecast)) {

@@ -4,13 +4,11 @@ import subprocess
 import time
 import platform
 
-
 backend_dir = os.path.join(os.getcwd(), "Backend")
 frontend_dir = os.path.join(os.getcwd(), "UI")
 venv_dir = os.path.join(backend_dir, "venv")
 flask_host = "127.0.0.1"
 flask_port = "5000"
-
 
 
 
@@ -90,7 +88,6 @@ def start_frontend():
     print("🚀 Starting React frontend...")
     run_command(["npm", "install"], cwd=frontend_dir, shell=is_windows())
     run_command(["npm", "start"], cwd=frontend_dir, shell=is_windows())
-
 
 
 def main():
