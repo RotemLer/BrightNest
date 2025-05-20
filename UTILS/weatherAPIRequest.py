@@ -5,6 +5,12 @@ from retry_requests import retry
 from datetime import datetime, timezone
 
 def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
+    import openmeteo_requests
+    import requests_cache
+    import pandas as pd
+    from retry_requests import retry
+    from datetime import datetime, timezone
+
     # === Setup API client
     cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
     retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
@@ -27,11 +33,11 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
 
-    # === Extract current values (static)
+    # === Extract current surface pressure
     current = response.Current()
     surface_pressure = current.Variables(0).Value()
 
-    # === Extract radiation and average to hourly
+    # === Extract and average radiation
     minutely = response.Minutely15()
     rad_values = minutely.Variables(0).ValuesAsNumpy()
     rad_times = pd.date_range(
@@ -41,6 +47,7 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         inclusive="left"
     )
     rad_df = pd.DataFrame({"date": rad_times, "direct_radiation": rad_values})
+    rad_df["date"] = rad_df["date"].dt.tz_convert("Asia/Jerusalem")  # ✅ convert to local
     rad_df = rad_df.resample("1h", on="date").mean().reset_index()
 
     # === Extract hourly weather data
@@ -50,7 +57,7 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         end=pd.to_datetime(hourly.TimeEnd(), unit="s", utc=True),
         freq=pd.Timedelta(seconds=hourly.Interval()),
         inclusive="left"
-    )
+    ).tz_convert("Asia/Jerusalem")  # ✅ convert to local time
 
     df = pd.DataFrame({
         "date": times,
@@ -66,33 +73,27 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         "weather_code": hourly.Variables(8).ValuesAsNumpy()
     })
 
-    # Map weather_code to description for each hour
     df["weather_description"] = df["weather_code"].apply(_map_weather_code_to_description)
 
+    # === Merge radiation
     df = pd.merge(df, rad_df, on="date", how="left")
 
-    # === One-hot encode weather_description
+    # === One-hot encode weather description
     df = pd.get_dummies(df, columns=["weather_description"])
 
-    # === Add missing one-hot columns
+    # === Ensure fixed one-hot columns
     required_weather_desc = [
-        'weather_description_Clear sky',
-        'weather_description_Dense drizzle',
-        'weather_description_Heavy rain',
-        'weather_description_Light drizzle',
-        'weather_description_Mainly clear',
-        'weather_description_Moderate drizzle',
-        'weather_description_Moderate rain',
-        'weather_description_Overcast',
-        'weather_description_Partly cloudy',
-        'weather_description_Slight rain'
+        'weather_description_Clear sky', 'weather_description_Dense drizzle',
+        'weather_description_Heavy rain', 'weather_description_Light drizzle',
+        'weather_description_Mainly clear', 'weather_description_Moderate drizzle',
+        'weather_description_Moderate rain', 'weather_description_Overcast',
+        'weather_description_Partly cloudy', 'weather_description_Slight rain'
     ]
-
     for col in required_weather_desc:
         if col not in df.columns:
             df[col] = 0.0
 
-    # === Add energy consumption columns as 0.0
+    # === Energy dummy features
     energy_cols = [
         'energy consumption for 50L boiler with solar system',
         'energy consumption for 50L boiler without solar system',
@@ -104,22 +105,21 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
     for col in energy_cols:
         df[col] = 0.0
 
-    # === Final column order
+    # === Final column list
     final_columns = [
         'temperature_2m', 'relative_humidity_2m', 'dew_point_2m', 'apparent_temperature',
         'precipitation', 'cloud_cover', 'wind_speed_10m', 'is_day', 'direct_radiation',
         'surface_pressure', 'weather_code'
     ] + energy_cols + required_weather_desc
 
-    # === Filter from now and slice to 6 hours
+    # === Filter from now and limit
     df = df.sort_values("date").reset_index(drop=True)
-    df = df[df["date"] >= datetime.now(timezone.utc)].head(hours_ahead)
+    df = df[df["date"] >= datetime.now().astimezone()].head(hours_ahead)
 
     forecast_df = df[["date"]].copy()
     X_input = df[final_columns].copy()
 
     return forecast_df, X_input
-
 
 def _map_weather_code_to_description(code):
     """

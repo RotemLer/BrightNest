@@ -1,45 +1,33 @@
-from DVCS.BoilerManager import BoilerManager
-import UTILS.weatherAPIRequest as weather
+from DVCS.Boiler import BoilerManager
 from datetime import datetime
-import matplotlib.pyplot as plt
-import pandas as pd
 
 def main():
-    # אתחול הדוד
-    boiler = BoilerManager(name="Smart Boiler", capacity_liters=50, has_solar=True)
-    boiler.turn_on()
-    print("✅ Boiler initialized")
+    print("🚿 Starting a simulation day of showers in the boiler")
 
-    # שליפת תחזית מזג אוויר
-    forecast_df, _ = weather.get_forecast_dataframe_for_model(
-        lat=32.0853, lon=34.7818, hours_ahead=24
+
+    boiler = BoilerManager(
+        name="Boiler_100L_NoSolar",
+        capacity_liters=100,
+        has_solar=True,
+        power_usage=3.0  # kW
     )
 
-    # חיזוי טמפרטורת הדוד ל־6 שעות קדימה
-    predicted_temps = boiler.forecast_6h(forecast_df)
 
-    # הדפסת תחזית
-    now = datetime.now()
-    for i, temp in enumerate(predicted_temps):
-        hour = (now + pd.Timedelta(hours=i + 1)).strftime('%H:%M')
-        print(f"🕒 {hour} → 🌡️ {temp:.2f}°C")
+    schedule = {
+        datetime(2025, 5, 9, 6, 30): {"users": 2, "shower_temp": 39.0},
+        datetime(2025, 5, 8, 21, 30): {"users": 1, "shower_temp": 38.0},
+        datetime(2025, 5, 9, 7, 45): {"users": 1, "shower_temp": 40.0},
+        datetime(2025, 5, 8, 18, 0): {"users": 3, "shower_temp": 41.0}
+    }
 
-    # ציור גרף
-    times = [now + pd.Timedelta(hours=i + 1) for i in range(len(predicted_temps))]
-    plt.figure(figsize=(10, 5))
-    plt.plot(times, predicted_temps, marker='o', label="Forecasted Boiler Temp")
-    plt.xlabel("Time")
-    plt.ylabel("Temperature (°C)")
-    plt.title("6-Hour Boiler Temperature Forecast")
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig("6h_forecast_plot.png")
-    plt.show()
-    print("📊 Forecast plot saved as 6h_forecast_plot.png")
 
-    boiler.turn_off()
-    print("🛑 Boiler turned off.")
+    usage_df = boiler.simulate_day_usage_with_custom_temps(schedule)
+
+    if usage_df is not None:
+        print("\n📊 Simulation results:")
+        print(usage_df.to_string(index=False))
+    else:
+        print("❌Simulation failed - not enough data.")
 
 if __name__ == "__main__":
     main()

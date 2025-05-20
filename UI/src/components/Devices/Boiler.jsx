@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
 import HourWheel from '../common/HourWheel';
+import { ThermometerSun, Clock, Pencil, Users } from 'lucide-react';
+import EditBoilerModal from './EditBoilerModal';
 
 function Boiler() {
   const {
@@ -15,11 +17,37 @@ function Boiler() {
     setEndHour,
     autoStart,
     autoEnd,
+    fetchUserSettings
   } = useContext(AppContext);
 
-  const targetTemp = 75;
+  const [family, setFamily] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
+  // ✅ טעינת נתונים ראשונית
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const fetchFamilyData = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok && data.family) {
+          setFamily(data.family);
+        }
+      } catch (err) {
+        console.error("שגיאה בטעינת בני משפחה:", err);
+      }
+    };
+
+    fetchUserSettings();      // טוען את devices + preferences
+    fetchFamilyData();        // טוען רק את המשפחה
+  }, [fetchUserSettings]);
+
   const currentTemp = predictedBoilerTemp;
-  const progress = Math.min((currentTemp / targetTemp) * 100, 100);
+  const progress = Math.min((currentTemp / 75) * 100, 100);
 
   const getHourRange = () => {
     const start = heatingMode === 'auto' ? autoStart : startHour;
@@ -27,28 +55,50 @@ function Boiler() {
     return `${start}–${end}`;
   };
 
+  const getBoilerTypeText = () => userSettings.withSolar ? 'חשמל + סולארי' : 'חשמל בלבד';
+
+  const getBoilerSizeText = () => {
+    if (!userSettings.boilerSize) return 'לא הוגדר';
+    const match = userSettings.boilerSize.match(/\d+/);
+    return match ? `${match[0]} ליטר` : userSettings.boilerSize;
+  };
+
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-3xl mx-auto text-gray-800 dark:text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">שליטה בדוד</h1>
 
-      {/* סטטוס דוד */}
+      {/* סטטוס הדוד */}
       <div className="mb-6 text-center">
         <p className="text-xl">
-          סטטוס דוד: <span className={userSettings.boilerStatus ? 'text-green-600' : 'text-red-600'}>
-            {userSettings.boilerStatus ? 'דולק' : 'כבוי'}
+          סטטוס דוד:
+          <span className={userSettings.boilerStatus ? 'text-green-600' : 'text-red-600'}>
+            {userSettings.boilerStatus ? ' ✅ פועל' : ' ⛔️ כבוי'}
           </span>
         </p>
-        <button
-          onClick={toggleBoilerStatus}
-          className="mt-3 px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-        >
-          {userSettings.boilerStatus ? 'כבה' : 'הדלק'} את הדוד
-        </button>
+        <p className="text-sm text-gray-500 mt-1">
+          סוג: {getBoilerTypeText()} | נפח: {getBoilerSizeText()}
+        </p>
+        <div className="flex justify-center gap-4 mt-3">
+          <button
+            onClick={toggleBoilerStatus}
+            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+          >
+            {userSettings.boilerStatus ? 'כבה' : 'הדלק'} את הדוד
+          </button>
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-5 py-2 border border-gray-300 hover:bg-teal-500 dark:hover:bg-gray-700 rounded-full text-sm"
+          >
+            <Pencil size={18} /> ערוך הגדרות דוד
+          </button>
+        </div>
       </div>
 
-      {/* טמפרטורה */}
+      {/* טמפרטורה נוכחית */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold mb-2 text-center">טמפרטורה נוכחית</h2>
+        <h2 className="text-xl font-bold mb-2 text-center flex items-center justify-center gap-2">
+          <ThermometerSun /> טמפרטורה נוכחית
+        </h2>
         <div className="relative w-40 h-40 mx-auto">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="45" stroke="#ddd" strokeWidth="10" fill="none" />
@@ -60,7 +110,6 @@ function Boiler() {
             {currentTemp}°C
           </div>
         </div>
-        <p className="text-center mt-2 text-sm text-gray-600">יעד: {targetTemp}°C</p>
       </div>
 
       {/* מצב חימום */}
@@ -68,15 +117,13 @@ function Boiler() {
         <h2 className="text-xl font-bold mb-3">מצב חימום</h2>
         <div className="flex justify-center gap-4">
           <button
-            className={`px-5 py-2 rounded-full border transition font-medium 
-              ${heatingMode === 'auto' ? 'bg-blue-500 text-white' : 'border-gray-300 hover:bg-gray-100'}`}
+            className={`px-5 py-2 rounded-full font-medium transition duration-200 shadow-sm ${heatingMode === 'auto' ? 'bg-green-600 text-white' : 'bg-blue-600 border border-gray-300 hover:bg-teal-500'}`}
             onClick={() => setHeatingMode('auto')}
           >
             אוטומטי
           </button>
           <button
-            className={`px-5 py-2 rounded-full border transition font-medium 
-              ${heatingMode === 'manual' ? 'bg-blue-500 text-white' : 'border-gray-300 hover:bg-gray-100'}`}
+            className={`px-5 py-2 rounded-full font-medium transition duration-200 shadow-sm ${heatingMode === 'manual' ? 'bg-green-600 text-white' : 'bg-blue-600 border border-gray-300 hover:bg-teal-500'}`}
             onClick={() => setHeatingMode('manual')}
           >
             ידני
@@ -84,7 +131,7 @@ function Boiler() {
         </div>
       </div>
 
-      {/* גלגלים לבחירת שעות */}
+      {/* שעות חימום ידני */}
       {heatingMode === 'manual' && (
         <div className="mb-10">
           <h2 className="text-lg font-semibold mb-4 text-center">בחר טווח שעות להפעלה</h2>
@@ -101,18 +148,38 @@ function Boiler() {
         </div>
       )}
 
-      {/* תצוגת שעות פעילות */}
+      {/* שעות פעילות */}
       <div className="mb-10">
-        <h2 className="text-xl font-bold mb-3 text-center">שעות פעילות היום</h2>
+        <h2 className="text-xl font-bold mb-3 text-center flex justify-center items-center gap-2">
+          <Clock /> שעות פעילות היום
+        </h2>
         <div className="flex justify-center text-blue-800 text-lg font-semibold" dir="ltr">
           {getHourRange()}
         </div>
       </div>
 
-      {/* פרטי מערכת */}
-      <div className="text-sm text-gray-600 border-t pt-4 text-center">
-        <p>מערכת: חשמל + סולארי | נפח: 80 ליטר</p>
+      {/* בני משפחה */}
+      <div className="mb-10">
+        <h2 className="text-xl font-bold mb-4 text-center flex justify-center gap-2">
+          <Users /> לוח זמנים מועדף
+        </h2>
+        {family.length === 0 ? (
+          <p className="text-center text-gray-500">אין משתמשים עדיין.</p>
+        ) : (
+          <ul className="space-y-2">
+            {family.map((member, index) => (
+              <li key={index} className="bg-gray-100 p-3 rounded-md dark:bg-gray-700">
+                <p className="text-gray-800 dark:text-white font-bold">👤 {member.name}</p>
+                <p className="text-gray-600 dark:text-gray-300">🕒 שעה: {member.showerTime || 'לא הוגדר'}</p>
+                <p className="text-gray-600 dark:text-gray-300">🌡️ טמפ' מועדפת: {member.preferredTemp || 'לא הוגדר'}°C</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
+
+      {/* חלון עריכה */}
+      {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
     </div>
   );
 }
