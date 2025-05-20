@@ -1,20 +1,20 @@
-import jwt
-from functools import wraps
-from flask import request, jsonify, current_app
-from datetime import datetime, timedelta
-from flask import Blueprint
+from flask import Blueprint, request, jsonify, current_app, g
+from flask_cors import CORS
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
+from datetime import datetime, timedelta
+import jwt
 
-# Create Blueprint
 userApi = Blueprint('userApi', __name__)
+CORS(userApi, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# Connect to MongoDB
-client = MongoClient("mongodb+srv://Dan1234:12341234@smarthouseoptimizationd.thazr.mongodb.net/?retryWrites=true&w=majority&appName=SmartHouseOptimizationDB")
+# חיבור למונגו
+client = MongoClient("mongodb+srv://Dvir1234:12341234@smarthouseoptimizationd.thazr.mongodb.net/?retryWrites=true&w=majority&appName=SmartHouseOptimizationDB")
 db = client["SmartHouseOptimizationDB"]
 users_collection = db["users"]
 
-# Token checker decorator
+# אימות טוקן
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -29,7 +29,7 @@ def token_required(f):
 
         try:
             decoded = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
-            request.user = decoded
+            g.user = decoded
         except jwt.ExpiredSignatureError:
             return jsonify({"error": "Token expired!"}), 401
         except jwt.InvalidTokenError:
@@ -38,7 +38,7 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# Registration route
+# הרשמה
 @userApi.route('/register', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -53,20 +53,19 @@ def signup():
         return jsonify({"error": "Username already exists"}), 409
 
     hashed_password = generate_password_hash(password)
-
     user_data = {
         "username": username,
         "password": hashed_password,
         "full_name": full_name,
         "preferences": {},
-        "devices": []
+        "devices": [],
+        "family": []
     }
-
     users_collection.insert_one(user_data)
 
     return jsonify({"message": "User created successfully!"}), 201
 
-# Login route
+# התחברות
 @userApi.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -77,7 +76,6 @@ def login():
         return jsonify({"error": "Username and password are required"}), 400
 
     user = users_collection.find_one({"username": username})
-
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -88,83 +86,90 @@ def login():
             "exp": datetime.utcnow() + timedelta(hours=1)
         }
         token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm="HS256")
-
         return jsonify({"message": "Login successful!", "token": token}), 200
-    else:
-        return jsonify({"error": "Invalid password"}), 401
 
+    return jsonify({"error": "Invalid password"}), 401
 
-
+# שליפת פרופיל
 @userApi.route('/profile', methods=['GET'])
 @token_required
 def get_profile():
-    username = request.user['username']  # Extract from JWT
-
-    # Find the user, hide sensitive fields (_id, password)
-    user = users_collection.find_one(
-        {"username": username},
-        {"_id": 0, "password": 0}
-    )
-
+    username = g.user['username']
+    user = users_collection.find_one({"username": username}, {"_id": 0, "password": 0})
     if not user:
         return jsonify({"error": "User not found"}), 404
 
+    user.setdefault("preferences", {})
+    user.setdefault("devices", [])
+    user.setdefault("family", [])
+
     return jsonify(user), 200
 
-
-
-
+# עדכון פרופיל (preferences, devices, full_name)
 @userApi.route('/profile/update', methods=['PUT'])
 @token_required
 def update_profile():
-    username = request.user['username']
+    username = g.user['username']
     data = request.get_json()
 
-    # Extract the fields we want to update
-    preferences = {
-        "boilerSize": data.get("boilerSize"),
-        "boilerType": data.get("boilerType"),
-        "showerTime": data.get("showerTime"),
-        "showerCount": data.get("showerCount")
-    }
+    updates = {}
+    if "preferences" in data:
+        updates["preferences"] = data["preferences"]
+    if "devices" in data:
+        updates["devices"] = data["devices"]
+    if "full_name" in data:
+        updates["full_name"] = data["full_name"]
 
-    # Update the preferences field
-    result = users_collection.update_one(
-        {"username": username},
-        {"$set": {"preferences": preferences}}
-    )
+    if not updates:
+        return jsonify({"error": "No data to update"}), 400
 
+    result = users_collection.update_one({"username": username}, {"$set": updates})
     if result.matched_count == 0:
         return jsonify({"error": "User not found"}), 404
 
     return jsonify({"message": "Profile updated successfully"}), 200
 
+# שליפת בני משפחה
+@userApi.route('/family', methods=['GET'])
+@token_required
+def get_family():
+    username = g.user['username']
+    user = users_collection.find_one({"username": username}, {"_id": 0, "family": 1})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user.setdefault("family", [])
+    return jsonify(user), 200
+
+# עדכון בני משפחה
+@userApi.route('/family/update', methods=['PUT'])
+@token_required
+def update_family():
+    username = g.user['username']
+    data = request.get_json()
+    family = data.get("family", [])
+    result = users_collection.update_one({"username": username}, {"$set": {"family": family}})
+    if result.matched_count == 0:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify({"message": "Family updated successfully"}), 200
+
+# ✅ שליפת device-data (devices + family)
 @userApi.route('/device-data', methods=['GET'])
 @token_required
 def get_device_data():
-    username = request.user['username']
-
-    user = users_collection.find_one(
-        {"username": username},
-        {"_id": 0, "devices": 1, "family": 1}
-    )
-
+    username = g.user['username']
+    user = users_collection.find_one({"username": username}, {"_id": 0, "devices": 1, "family": 1})
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Ensure both fields exist
-    if "devices" not in user:
-        user["devices"] = []
-    if "family" not in user:
-        user["family"] = []
-
+    user.setdefault("devices", [])
+    user.setdefault("family", [])
     return jsonify(user), 200
 
-
+# ✅ עדכון device-data (devices + family)
 @userApi.route('/device-data/update', methods=['PUT'])
 @token_required
 def update_device_data():
-    username = request.user['username']
+    username = g.user['username']
     data = request.get_json()
 
     devices = data.get("devices", [])
@@ -181,12 +186,10 @@ def update_device_data():
     if result.matched_count == 0:
         return jsonify({"error": "User not found"}), 404
 
-    return jsonify({"message": "Device and family data updated successfully"}), 200
+    return jsonify({"message": "Device data updated successfully"}), 200
 
-
-
-# Protected route
+# בדיקת טוקן
 @userApi.route('/protected', methods=['GET'])
 @token_required
 def protected():
-    return jsonify({"message": "You accessed a protected route!"})
+    return jsonify({"message": f"You accessed a protected route as {g.user['username']}!"})
