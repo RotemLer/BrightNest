@@ -23,6 +23,20 @@ target_columns = [
     "boiler temp for 150 L without solar system"
 ]
 
+# נניח שזו הטמפרטורה שתרצי שהמודל יידע עליה מהעבר (שעה אחורה):
+reference_column = "boiler temp for 100 L without solar system"
+
+# יוצרים עמודה חדשה שמכילה את הטמפ בשעה הקודמת
+# === Add previous boiler temperatures for each configuration ===
+df["prev_boiler_temp_50_solar"]       = df["boiler temp for 50 L with solar system"].shift(1)
+df["prev_boiler_temp_50_no_solar"]    = df["boiler temp for 50 L without solar system"].shift(1)
+df["prev_boiler_temp_100_solar"]      = df["boiler temp for 100 L with solar system"].shift(1)
+df["prev_boiler_temp_100_no_solar"]   = df["boiler temp for 100 L without solar system"].shift(1)
+df["prev_boiler_temp_150_solar"]      = df["boiler temp for 150 L with solar system"].shift(1)
+df["prev_boiler_temp_150_no_solar"]   = df["boiler temp for 150 L without solar system"].shift(1)
+
+
+
 # === 3. Add seasonal + hourly features ===
 df["month"] = df["date"].dt.month
 df["dayofyear"] = df["date"].dt.dayofyear
@@ -45,7 +59,16 @@ base_features = [
 ]
 
 # === 5. Drop NaNs ===
-df = df.dropna(subset=base_features + target_columns).reset_index(drop=True)
+prev_temp_cols = [
+    "prev_boiler_temp_50_solar",
+    "prev_boiler_temp_50_no_solar",
+    "prev_boiler_temp_100_solar",
+    "prev_boiler_temp_100_no_solar",
+    "prev_boiler_temp_150_solar",
+    "prev_boiler_temp_150_no_solar"
+]
+
+df = df.dropna(subset=base_features + target_columns + prev_temp_cols).reset_index(drop=True)
 
 # === 6. Limit weather_description to top 10 ===
 top_k = 10
@@ -70,6 +93,8 @@ test_df = df[df["day"].isin(test_days)].drop(columns="day")
 # === 9. Create consistent feature list from TRAIN only ===
 columns_to_exclude = target_columns + ["date"]
 features = sorted([col for col in train_df.columns if col not in columns_to_exclude])
+features += prev_temp_cols
+
 
 # === 10. Add missing feature columns to val/test (with 0s) ===
 for col in features:
@@ -89,19 +114,31 @@ y_val_raw = scaler_y.transform(val_df[target_columns])
 y_test_actual = test_df[target_columns].values
 
 # === Save scalers ===
-joblib.dump(scaler_x, "scaler_x.save")
-joblib.dump(scaler_y, "scaler_y.save")
+joblib.dump(scaler_x, "../scaler_x.save")
+joblib.dump(scaler_y, "../scaler_y.save")
 print("💾 Saved scaler_x.save and scaler_y.save")
 
 # === 12. Rebuild scaled DataFrames ===
 train_df_scaled = pd.DataFrame(X_train_raw, columns=features)
-train_df_scaled[target_columns] = y_train_raw
-
 val_df_scaled = pd.DataFrame(X_val_raw, columns=features)
-val_df_scaled[target_columns] = y_val_raw
-
 test_df_scaled = pd.DataFrame(X_test_raw, columns=features)
-test_df_scaled[target_columns] = y_test_actual
+
+# הוספת עמודות היעד (y) בצורה בטוחה ומדויקת
+train_df_scaled = pd.concat([
+    train_df_scaled,
+    pd.DataFrame(y_train_raw, columns=target_columns, index=train_df_scaled.index)
+], axis=1)
+
+val_df_scaled = pd.concat([
+    val_df_scaled,
+    pd.DataFrame(y_val_raw, columns=target_columns, index=val_df_scaled.index)
+], axis=1)
+
+test_df_scaled = pd.concat([
+    test_df_scaled,
+    pd.DataFrame(y_test_actual, columns=target_columns, index=test_df_scaled.index)
+], axis=1)
+
 
 # === ✅ 13. DEBUG: check alignment ===
 for df_name, df_part in [("train", train_df_scaled), ("val", val_df_scaled), ("test", test_df_scaled)]:
