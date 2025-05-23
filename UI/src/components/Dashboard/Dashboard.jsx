@@ -20,8 +20,6 @@ function Dashboard() {
 
   const devices = [
     { id: 'boiler', name: 'דוד חשמלי', icon: '💡', path: '/devices/boiler' },
-    { id: 'ac', name: 'מזגן', icon: '❄️', path: '/devices/ac' },
-    { id: 'irrigation', name: 'השקיה', icon: '💧', path: '/devices/irrigation' },
   ];
 
   return (
@@ -49,56 +47,58 @@ function Dashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {devices.map(device => (
-            <div
-              key={device.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition text-center"
-            >
-              <Link to={device.path}>
-                <div className="text-4xl mb-2">{device.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{device.name}</h3>
-              </Link>
+        <div className="flex justify-center">
+            <div className="flex flex-col gap-4 items-center w-full">
+              {devices.map(device => (
+                <div
+                  key={device.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition text-center"
+                >
+                  <Link to={device.path}>
+                    <div className="text-4xl mb-2">{device.icon}</div>
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{device.name}</h3>
+                  </Link>
 
-              {device.id === 'boiler' && (
-                <div className="mt-4 space-y-4">
-                  {/* כפתור הדלקה */}
-                  <div className="flex justify-center">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleBoilerStatus();
-                      }}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
-                        userSettings.boilerStatus ? 'bg-green-500' : 'bg-gray-300'
-                      } overflow-hidden`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-                          userSettings.boilerStatus ? 'translate-x-0' : 'translate-x-3.5'
-                        }`}
-                      />
-                    </button>
-                  </div>
+                  {device.id === 'boiler' && (
+                    <div className="mt-4 space-y-4">
+                      {/* כפתור הדלקה */}
+                      <div className="flex justify-center">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleBoilerStatus();
+                          }}
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+                            userSettings.boilerStatus ? 'bg-green-500' : 'bg-gray-300'
+                          } overflow-hidden`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                              userSettings.boilerStatus ? 'translate-x-0' : 'translate-x-3.5'
+                            }`}
+                          />
+                        </button>
+                      </div>
 
-                  {/* שעות פעילות */}
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <p className="font-semibold">שעות פעילות היום:</p>
-                    <p className="text-blue-600 dark:text-blue-400">
-                      {boilerHours?.start && boilerHours?.end
-                        ? `${boilerHours.end}–${boilerHours.start}`
-                        : 'לא הוגדרו שעות'}
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      מצב הפעלה: {heatingMode === 'auto' ? 'אוטומטי לפי תחזית' : 'ידני (נקבע על־ידך)'}
-                    </p>
-                  </div>
+                      {/* שעות פעילות */}
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
+                        <p className="font-semibold">שעות פעילות היום:</p>
+                        <p className="text-blue-600 dark:text-blue-400">
+                          {boilerHours?.start && boilerHours?.end
+                            ? `${boilerHours.end}–${boilerHours.start}`
+                            : 'לא הוגדרו שעות'}
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          מצב הפעלה: {heatingMode === 'auto' ? 'אוטומטי לפי תחזית' : 'ידני (נקבע על־ידך)'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+     </div>
 
       {/* תחזית מזג אוויר */}
       <div className="mt-6">

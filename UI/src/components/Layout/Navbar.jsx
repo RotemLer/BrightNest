@@ -43,14 +43,6 @@ function Navbar() {
             >
               הגדרות
             </Link>
-            <Link
-              to="/statistics"
-              className={`py-2 px-5 rounded-lg transition-all duration-300 ${
-                location.pathname === '/statistics' ? 'bg-blue-700 dark:bg-blue-500' : 'hover:bg-blue-700 dark:hover:bg-blue-600'
-              }`}
-            >
-              סטטיסטיקות
-            </Link>
           </div>
 
           {/* LEFT */}

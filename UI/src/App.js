@@ -6,7 +6,6 @@ import Dashboard from './components/Dashboard/Dashboard';
 import Layout from './components/Layout/Layout';
 import UserSettings from './components/Settings/AppSettings.jsx';
 import Profile from './components/Profile/Profile';
-import Statistics from './components/Statistics/Statistics.jsx';
 import Boiler from './components/Devices/Boiler.jsx';
 import Login from './components/Auth/Login.jsx';
 import Register from './components/Auth/Register.jsx';
@@ -26,7 +25,6 @@ function AppRoutes() {
       <Route path="/dashbord" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><UserSettings /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
       <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
       <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
       <Route path="/devices/addDevice" element={<ProtectedRoute><AddDevice /></ProtectedRoute>} />
@@ -57,15 +55,8 @@ function AppRoutes() {
 
 
 function App() {
-  const { setWeatherData, setPredictedBoilerTemp } = useContext(AppContext);
+  const { setPredictedBoilerTemp } = useContext(AppContext);
   const [theme] = useState('light');
-
-  const extractWeatherDescriptionKey = (item) => {
-    const descKey = Object.keys(item).find(key =>
-      key.startsWith('weather_description_') && item[key] === true
-    );
-    return descKey || '';
-  };
 
   useEffect(() => {
     setPredictedBoilerTemp(prev => {
