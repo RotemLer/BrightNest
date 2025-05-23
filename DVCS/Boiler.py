@@ -10,6 +10,7 @@ import os
 import pandas as pd
 from datetime import datetime
 
+
 # ==== Boiler Initialization ====
 class BoilerManager(Device):
     def __init__(self, name: str, capacity_liters: int, power_usage: float = None, has_solar: bool = True):
@@ -37,7 +38,6 @@ class BoilerManager(Device):
             "boiler temp for 150 L without solar system"
         ]
 
-
     def heat(self, duration_minutes: float, start_temperature: float):
         """
         Heat the boiler water for a given duration. Does NOT calculate duration – that should be done in calc_turn_on_boiler().
@@ -45,12 +45,10 @@ class BoilerManager(Device):
         Args:
             duration_minutes (float): how long to heat (already pre-computed)
             start_temperature (float): current boiler temperature before heating
-
         """
         if not self.status:
             print(f"{self.name} is OFF. Can't heat.")
             return
-
 
         MAX_TEMP = 68.0
         mass_kg = self.capacity_liters
@@ -109,16 +107,16 @@ class BoilerManager(Device):
                     df.to_csv(csv_path, index=False)
                     print(f"✅ Updated {column} in real-time CSV.")
                 else:
-                    print(f"⚠️ Column for {key} not found in CSV.")
+                    print(f"⚠ Column for {key} not found in CSV.")
         except Exception as e:
-            print(f"⚠️ Failed to update CSV with real-time temp: {e}")
+            print(f"⚠ Failed to update CSV with real-time temp: {e}")
 
         return current_temp
 
     def get_temperature(self):
         return self.temperature
 
-    def _str_(self):
+    def str(self):
         solar = "with solar" if self.has_solar else "without solar"
         return f"Boiler '{self.name}' ({self.capacity_liters}L, {solar}) - {self.get_status()}, {self.temperature:.1f}°C"
 
@@ -142,7 +140,7 @@ class BoilerManager(Device):
         remaining_liters = total_liters - used_liters
 
         if remaining_liters < 0:
-            print("⚠️ Used more water than boiler capacity.")
+            print("⚠ Used more water than boiler capacity.")
             remaining_liters = 0
 
         # Law of Conservation of Heat - Mixing Hot Water with Cold Water
@@ -270,14 +268,10 @@ class BoilerManager(Device):
         df_forecast["time"] = pd.to_datetime(df_forecast["time"]).dt.tz_localize(None)
 
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
-
-        closest_row = df.iloc[(df["time"] - time).abs().argsort()[:1]]
-        return float(closest_row[key].iloc[0])
-    def monitor_real_time_usage(self, schedule: dict, cold_temp=20.0, liters_per_shower=40.0, interval_sec=60):
-        from time import sleep
-        print("\n🚿 Starting real-time boiler control loop...")
         effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
-        self.last_known_temp = self.get_temperature()
+
+        log = []
+        print(f"\n📅 Simulating daily usage with per-user temperatures: {schedule}")
 
         for target_time, details in schedule.items():
             if not isinstance(target_time, datetime):
@@ -422,4 +416,3 @@ class BoilerManager(Device):
 
         joblib.dump(scale, scale_path)
         print(f"📈 Updated scale with {scale_temperature:.2f}°C")
-
