@@ -107,16 +107,16 @@ class BoilerManager(Device):
                     df.to_csv(csv_path, index=False)
                     print(f"✅ Updated {column} in real-time CSV.")
                 else:
-                    print(f"⚠️ Column for {key} not found in CSV.")
+                    print(f"⚠ Column for {key} not found in CSV.")
         except Exception as e:
-            print(f"⚠️ Failed to update CSV with real-time temp: {e}")
+            print(f"⚠ Failed to update CSV with real-time temp: {e}")
 
         return current_temp
 
     def get_temperature(self):
         return self.temperature
 
-    def _str_(self):
+    def str(self):
         solar = "with solar" if self.has_solar else "without solar"
         return f"Boiler '{self.name}' ({self.capacity_liters}L, {solar}) - {self.get_status()}, {self.temperature:.1f}°C"
 
@@ -140,7 +140,7 @@ class BoilerManager(Device):
         remaining_liters = total_liters - used_liters
 
         if remaining_liters < 0:
-            print("⚠️ Used more water than boiler capacity.")
+            print("⚠ Used more water than boiler capacity.")
             remaining_liters = 0
 
         # Law of Conservation of Heat - Mixing Hot Water with Cold Water
@@ -416,4 +416,3 @@ class BoilerManager(Device):
 
         joblib.dump(scale, scale_path)
         print(f"📈 Updated scale with {scale_temperature:.2f}°C")
-
