@@ -285,7 +285,7 @@ class BoilerManager(Device):
 
                 # Init values
                 usable_liters = 0
-                heating_duration = None
+                heating_duration = 0
                 forecast_temp = 0.0
 
                 # Try to find when to start heating
@@ -359,6 +359,14 @@ class BoilerManager(Device):
             output_path = os.path.join(os.getcwd(), filename)
             log_df.to_csv(output_path, index=False)
             print(f"\n📄 Usage log exported to: {output_path}")
+
+        # שמירת התחזית המלאה לקובץ JSON לשימוש חיצוני
+        try:
+            forecast_json_path = os.path.join(os.getcwd(), "forecast_prediction.json")
+            df_forecast.to_json(forecast_json_path, orient="records", force_ascii=False, indent=2, date_format="iso")
+            print(f"📄 תחזית נשמרה בקובץ: {forecast_json_path}")
+        except Exception as e:
+            print(f"❌ שגיאה בשמירת תחזית לדוד:", e)
 
         return log_df
 

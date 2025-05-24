@@ -58,52 +58,6 @@ function App() {
   const { setPredictedBoilerTemp } = useContext(AppContext);
   const [theme] = useState('light');
 
-useEffect(() => {
-  const fetchForecastTemp = async () => {
-    const token = localStorage.getItem('token'); // שליפת הטוקן מה־localStorage
-    if (!token) {
-      console.warn("🔒 לא נמצא טוקן, לא נשלחת בקשה לתחזית");
-      return;
-    }
-
-    try {
-      const res = await fetch("http://127.0.0.1:5000/boiler/recommendations", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (Array.isArray(data) && data.length > 0) {
-        const now = new Date();
-
-        // מוצאת את הרשומה הקרובה ביותר לזמן נוכחי
-        const closest = data.reduce((prev, curr) => {
-          const prevTime = new Date(prev.Time);
-          const currTime = new Date(curr.Time);
-          return Math.abs(currTime - now) < Math.abs(prevTime - now) ? curr : prev;
-        });
-
-        if (closest?.ForecastTemp) {
-          console.log("🔮 תחזית טמפ׳ מהשרת:", closest.ForecastTemp);
-          setPredictedBoilerTemp(closest.ForecastTemp);
-        } else {
-          console.warn("⚠️ לא נמצאה תחזית טמפ' תקפה ברשומות");
-        }
-      } else {
-        console.warn("⚠️ לא התקבלו רשומות תחזית");
-      }
-    } catch (err) {
-      console.error("❌ שגיאה בקבלת תחזית הדוד:", err);
-    }
-  };
-
-  fetchForecastTemp();
-}, [setPredictedBoilerTemp]);
-
-
-
   return (
     <div className={theme === 'dark' ? 'dark' : ''}>
       <Router>

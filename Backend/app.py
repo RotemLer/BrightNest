@@ -107,7 +107,7 @@ def receive_schedule_and_respond():
             }
 
         boiler = BoilerManager(name="UserBoiler", capacity_liters=capacity, has_solar=has_solar)
-        df = boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False)
+        df= boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False) #df=recommendation, forecast=predicted boiler temp
         df["Time"] = df["Time"].astype(str)
 
         with open("latest_recommendations.json", "w") as f:
@@ -131,6 +131,20 @@ def get_latest_recommendations():
     except Exception as e:
         print(f"\u274c Error reading recommendations:", e)
         return jsonify({"error": str(e)}), 500
+
+@app.route("/boiler/forecast", methods=["GET"])
+def get_forecast_prediction():
+    try:
+        forecast_path = os.path.join(os.getcwd(), "forecast_prediction.json")
+        if os.path.exists(forecast_path):
+            with open(forecast_path, "r") as f:
+                data = json.load(f)
+            return jsonify(data)
+        else:
+            return jsonify([])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 # === Login Simulation Endpoint ===
 @app.route("/login", methods=["POST"])
