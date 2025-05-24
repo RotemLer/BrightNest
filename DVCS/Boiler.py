@@ -13,7 +13,7 @@ from datetime import datetime
 
 # ==== Boiler Initialization ====
 class BoilerManager(Device):
-    def __init__(self, name: str, capacity_liters: int, power_usage: float = None, has_solar: bool = True):
+    def __init__(self, name: str, capacity_liters: int,  has_solar: bool = True, power_usage: float = None):
         if power_usage is None:
             power_map = {50: 2.0, 100: 3.0, 150: 4.0}
             power_usage = power_map.get(capacity_liters, 3.0)
