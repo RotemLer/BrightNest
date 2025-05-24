@@ -4,6 +4,31 @@ import HourWheel from '../common/HourWheel';
 import { ThermometerSun, Clock, Pencil, Users } from 'lucide-react';
 import EditBoilerModal from './EditBoilerModal';
 
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+dayjs.extend(isSameOrAfter)
+
+
+// חילוץ שעת התחלה מהטקסט של הסטטוס
+function getHeatingTimeFromStatus(status) {
+  const match = status.match(/start heating at: (\d{2}:\d{2})/);
+  return match ? match[1] : null;
+}
+
+// בדיקה אם עכשיו צריך להדליק את הדוד
+function shouldBoilerBeOnNow(rec) {
+  const heatingTimeStr = getHeatingTimeFromStatus(rec.Status);
+  if (!heatingTimeStr) return false;
+
+  const now = dayjs();
+  const heatingTime = dayjs(rec.Time)
+    .hour(Number(heatingTimeStr.split(":")[0]))
+    .minute(Number(heatingTimeStr.split(":")[1]));
+
+  return now.isSameOrAfter(heatingTime) && now.isBefore(dayjs(rec.Time));
+}
+
+
 function Boiler() {
   const {
     userSettings,
@@ -85,6 +110,35 @@ useEffect(() => {
         });
         const recData = await recRes.json();
         setRecommendedBoilerHours(recData); // כאן את שומרת את ההמלצות להצגה ב-UI
+
+        const activeRec = recData.find((rec) => shouldBoilerBeOnNow(rec));
+
+        if (activeRec && userSettings.boilerStatus !== ' ✅ פועל') {
+          const duration = activeRec.HeatingMinutes;
+          const startTemp = activeRec.ForecastTemp;
+
+          userSettings.boilerStatus = ' ✅ פועל'
+
+          fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/heat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              duration_minutes: duration,
+              start_temperature: startTemp
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log('🔥 הדוד הופעל בפועל עם חישוב האלגוריתם:', data))
+            .catch((err) => console.error('❌ שגיאה בהפעלת הדוד:', err));
+        }
+
+
+
+         console.log("שעות מומלצות להפעלת הדוד:", recommendedBoilerHours);
+
       }
     } catch (err) {
       console.error("שגיאה בטעינת בני משפחה או המלצות:", err);
@@ -215,13 +269,17 @@ useEffect(() => {
       {recommendedBoilerHours.length > 0 && (
       <div className="text-center mt-8">
         <h2 className="text-xl font-bold mb-3">⏱️ מתי להפעיל את הדוד</h2>
-        <ul className="space-y-1">
-          {recommendedBoilerHours.map((rec, index) => (
-            <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
-              🕒 {rec.Time} – {rec.Status}
-            </li>
-          ))}
+        <ul>
+          {recommendedBoilerHours.map((rec, index) => {
+            const active = shouldBoilerBeOnNow(rec);
+            return (
+              <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
+                🕒 {rec.Time} – {active ? "פעיל 🔥" : rec.Status}
+              </li>
+            );
+          })}
         </ul>
+
       </div>
     )}
 

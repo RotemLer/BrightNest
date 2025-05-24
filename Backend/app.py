@@ -11,12 +11,29 @@ import requests
 
 from Backend.userRoutes import userApi, users_collection  # ← החזרת גם את userApi המלא
 from DVCS.Boiler import BoilerManager
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))  #MUST! DO NOT REMOVE! FOR SERVER USE
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import jwt
 import datetime as dt
+
+
+import jwt
+from flask import request
+
+def get_user_id_from_token(request):
+    token = request.headers.get('Authorization', '').replace("Bearer ", "")
+    try:
+        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        return payload.get("user_id")
+    except:
+        return None
+
+
+
 
 # === Flask App Initialization ===
 app = Flask(__name__)
@@ -35,6 +52,10 @@ app.register_blueprint(userApi)  # ← החזרת ה-Blueprint של היוזרי
 cached_forecast = None
 cached_location = None
 last_fetch_time = None
+
+
+boiler = None
+
 
 @app.route("/")
 def home():
@@ -88,14 +109,16 @@ def get_forecast(lat, lon):
 # === Boiler Schedule Endpoint ===
 @app.route("/boiler/schedule", methods=["POST"])
 def receive_schedule_and_respond():
+    global boiler
+    user_id = get_user_id_from_token(request)
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
     try:
         data = request.get_json()
         schedule_data = data.get("schedule", [])
         capacity = int(data.get("boilerSize", 100))
         has_solar = bool(data.get("hasSolar", True))
-
-        print("📥 קיבלתי בקשה לחישוב:")
-        print(json.dumps(data, indent=2, ensure_ascii=False))
 
         schedule = {}
         for item in schedule_data:
@@ -105,31 +128,35 @@ def receive_schedule_and_respond():
                 "users": 1
             }
 
-        boiler = BoilerManager(name="UserBoiler", capacity_liters=capacity, has_solar=has_solar)
+        boiler = BoilerManager(name=f"Boiler_{user_id}", capacity_liters=capacity, has_solar=has_solar)
         df = boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False)
         df["Time"] = df["Time"].astype(str)
 
-        with open("latest_recommendations.json", "w") as f:
+        # שומר קובץ נפרד לפי מזהה המשתמש
+        with open(f"recommendations_{user_id}.json", "w") as f:
             json.dump(df.to_dict(orient="records"), f)
 
         return jsonify(df.to_dict(orient="records"))
     except Exception as e:
-        print(f"\u274c Error:", e)
+        print("❌ Error:", e)
         return jsonify({"error": str(e)}), 500
+
 
 # === Boiler Recommendations Endpoint ===
 @app.route("/boiler/recommendations", methods=["GET"])
 def get_latest_recommendations():
-    try:
-        if os.path.exists("latest_recommendations.json"):
-            with open("latest_recommendations.json", "r") as f:
-                data = json.load(f)
-            return jsonify(data)
-        else:
-            return jsonify([])
-    except Exception as e:
-        print(f"\u274c Error reading recommendations:", e)
-        return jsonify({"error": str(e)}), 500
+    user_id = get_user_id_from_token(request)
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    path = f"recommendations_{user_id}.json"
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            data = json.load(f)
+        return jsonify(data)
+    else:
+        return jsonify([])
+
 
 # === Login Simulation Endpoint ===
 @app.route("/login", methods=["POST"])
@@ -156,6 +183,23 @@ def login():
 
     return jsonify({"message": "התחברת בהצלחה", "token": token})
 
+
+@app.route('/boiler/heat', methods=['POST'])
+def trigger_boiler_heating():
+    global boiler
+    if boiler is None:
+        return jsonify({"error": "Boiler not initialized yet"}), 400
+
+    data = request.get_json()
+    duration = float(data.get("duration_minutes"))
+    start_temp = float(data.get("start_temperature"))
+
+    print(f"🔥 הדוד מופעל ל-{duration} דקות, מטמפ' התחלתית {start_temp}°C")
+    result = boiler.heat(duration, start_temp)
+
+    return jsonify({"status": "started", "final_temp": result})
+
+
 # === Background Job: Daily Forecast at Midnight ===
 def run_nightly_schedule():
     def job():
@@ -168,7 +212,7 @@ def run_nightly_schedule():
                     print("\u2705 Response:", response.status_code)
                 except Exception as e:
                     print("\u274c Midnight job failed:", e)
-            time.sleep(60)
+            time.sleep(12000)
 
     thread = threading.Thread(target=job, daemon=True)
     thread.start()

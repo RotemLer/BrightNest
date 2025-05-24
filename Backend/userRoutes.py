@@ -10,7 +10,7 @@ userApi = Blueprint('userApi', __name__)
 CORS(userApi, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # חיבור למונגו
-client = MongoClient("mongodb+srv://Dvir1234:12341234@smarthouseoptimizationd.thazr.mongodb.net/?retryWrites=true&w=majority&appName=SmartHouseOptimizationDB")
+client = MongoClient("mongodb+srv://Rotem1234:12341234@smarthouseoptimizationd.thazr.mongodb.net/?retryWrites=true&w=majority&appName=SmartHouseOptimizationDB")
 db = client["SmartHouseOptimizationDB"]
 users_collection = db["users"]
 
