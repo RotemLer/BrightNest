@@ -11,6 +11,7 @@ import requests
 
 from Backend.userRoutes import userApi, users_collection  # ← החזרת גם את userApi המלא
 from DVCS.Boiler import BoilerManager
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 from pymongo import MongoClient
