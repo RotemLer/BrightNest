@@ -17,7 +17,7 @@ def main():
         datetime(2025, 5, 24, 6, 30): {"users": 2, "shower_temp": 39.0},
         datetime(2025, 5, 23, 21, 30): {"users": 1, "shower_temp": 38.0},
         datetime(2025, 5, 29, 7, 45): {"users": 1, "shower_temp": 40.0},
-        datetime(2025, 5, 23, 18, 0): {"users": 3, "shower_temp": 41.0}
+        datetime(2025, 5, 23, 18, 30): {"users": 3, "shower_temp": 41.0}
     }
 
 
