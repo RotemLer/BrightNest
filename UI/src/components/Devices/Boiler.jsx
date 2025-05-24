@@ -22,29 +22,81 @@ function Boiler() {
 
   const [family, setFamily] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [recommendedBoilerHours, setRecommendedBoilerHours] = useState([]);
+
 
   // ✅ טעינת נתונים ראשונית
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (!token) return;
 
-    const fetchFamilyData = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
+  const fetchFamilyData = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const data = await res.json();
+
+      if (res.ok && data.family) {
+        setFamily(data.family);
+
+        const schedule = data.family
+          .filter(m => m.showerTime)
+          .map(m => {
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+            const timeStr = m.showerTime.trim(); // לדוגמה: "18:30"
+            const isoDateTime = `${todayStr} ${timeStr}:00`;  // "2025-05-23 18:30:00"
+
+            console.log("📥 קיבלתי בקשה לחישוב:")
+            console.log(todayStr)
+            console.log(timeStr)
+            console.log(isoDateTime)
+
+            return {
+              //name: m.name,
+              datetime: isoDateTime,
+              preferredTemp: Number(m.preferredTemp || 38)
+            };
+          });
+
+
+        if (schedule.length > 0 && userSettings.boilerSize) {
+          const body = {
+            schedule,
+            boilerSize: parseInt(userSettings.boilerSize),
+            hasSolar: userSettings.withSolar || false
+          };
+
+          // שולחים את ההגדרות לשרת
+          await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/schedule`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(body),
+          });
+        }
+
+        // ואחר כך שואלים את השרת מה השעות שהומלצו
+        const recRes = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-        const data = await res.json();
-        if (res.ok && data.family) {
-          setFamily(data.family);
-        }
-      } catch (err) {
-        console.error("שגיאה בטעינת בני משפחה:", err);
+        const recData = await recRes.json();
+        setRecommendedBoilerHours(recData); // כאן את שומרת את ההמלצות להצגה ב-UI
       }
-    };
+    } catch (err) {
+      console.error("שגיאה בטעינת בני משפחה או המלצות:", err);
+    }
+  };
 
-    fetchUserSettings();      // טוען את devices + preferences
-    fetchFamilyData();        // טוען רק את המשפחה
-  }, [fetchUserSettings]);
+  fetchUserSettings();
+  fetchFamilyData();
+}, [fetchUserSettings, userSettings]);
+
+
+
 
   const currentTemp = predictedBoilerTemp;
   const progress = Math.min((currentTemp / 75) * 100, 100);
@@ -63,6 +115,8 @@ function Boiler() {
     return match ? `${match[0]} ליטר` : userSettings.boilerSize;
   };
 
+  
+  
   return (
     <div className="p-6 max-w-3xl mx-auto text-gray-800 dark:text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">שליטה בדוד</h1>
@@ -157,6 +211,20 @@ function Boiler() {
           {getHourRange()}
         </div>
       </div>
+
+      {recommendedBoilerHours.length > 0 && (
+      <div className="text-center mt-8">
+        <h2 className="text-xl font-bold mb-3">⏱️ מתי להפעיל את הדוד</h2>
+        <ul className="space-y-1">
+          {recommendedBoilerHours.map((rec, index) => (
+            <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
+              🕒 {rec.Time} – {rec.Status}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
 
       {/* בני משפחה */}
       <div className="mb-10">
