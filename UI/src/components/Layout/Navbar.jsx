@@ -5,8 +5,7 @@ import logo from '../icons/brightNest_logo.png';
 
 function Navbar() {
   const location = useLocation();
-  const { userName } = useContext(AppContext);
-  const { logout } = useContext(AppContext);
+  const { userName, logout } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,26 +13,27 @@ function Navbar() {
   }, [userName]);
 
   return (
-    <nav className="bg-blue-600 dark:bg-gray-800 text-white shadow-lg">
+    <nav className="bg-gradient-to-r from-orange-500 via-yellow-400 to-blue-500
+                    dark:from-[#CC4B00] dark:via-[#D4A82A] dark:to-[#166DAD]
+                    text-white shadow-md">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between w-full">
 
-          {/* RIGHT */}
+          {/* RIGHT: LOGO */}
           <div className="flex-shrink-0">
-            <Link to="/dashbord" className="flex items-center space-x-2 border border-orange-500 rounded-md">
+            <Link to="/dashbord" className="flex items-center space-x-2 rounded-md p-1
+                                            bg-white/10 hover:bg-white/20
+                                            dark:bg-white/10 dark:hover:bg-white/20 transition">
               <img src={logo} alt="Logo" className="h-10 w-auto" />
             </Link>
           </div>
 
-          {/* CENTER */}
-
-
-          {/* LEFT */}
+          {/* LEFT: LINKS */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
 
             <Link
               to="/profile"
-              className="flex items-center space-x-6 rtl:space-x-reverse text-white"
+              className="flex items-center space-x-6 rtl:space-x-reverse text-white font-medium hover:underline"
             >
               {userName || 'הפרופיל שלי'}
             </Link>
@@ -42,8 +42,10 @@ function Navbar() {
 
             <Link
               to="/settings"
-              className={`py-2 px-5 rounded-lg transition-all duration-300 ${
-                location.pathname === '/settings' ? 'bg-blue-700 dark:bg-blue-500' : 'hover:bg-blue-700 dark:hover:bg-blue-600'
+              className={`py-2 px-5 rounded-lg font-medium transition-all duration-300 ${
+                location.pathname === '/settings'
+                  ? 'bg-[#166DAD] dark:bg-[#1A4C80]'
+                  : 'bg-white/10 hover:bg-[#1FA7FF] dark:bg-white/10 dark:hover:bg-[#1FA7FF]'
               }`}
             >
               הגדרות
@@ -51,13 +53,15 @@ function Navbar() {
 
             <span className="text-white text-lg">|</span>
 
-
             <button
               onClick={() => {
                 logout();
                 navigate('/login');
               }}
-              className="flex items-center space-x-6 rtl:space-x-reverse text-white"
+              className="py-2 px-5 rounded-lg font-semibold
+                         bg-orange-500 hover:bg-orange-600
+                         dark:bg-[#CC4B00] dark:hover:bg-[#FF6D2E]
+                         text-white dark:text-white transition"
             >
               יציאה
             </button>

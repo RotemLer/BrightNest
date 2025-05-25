@@ -39,7 +39,9 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen
+                    bg-gradient-to-br from-orange-100 via-yellow-50 to-blue-100
+                    dark:from-[#1A1A1A] dark:via-[#1F2A3C] dark:to-[#0F1C2E]">
       <form
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
@@ -66,16 +68,18 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-300"
+          className="w-full py-3 bg-[#1FA7FF] hover:bg-[#166DAD] text-white font-bold rounded-lg transition duration-300"
         >
           התחבר
         </button>
 
+
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           אין לך משתמש?{' '}
-          <a href="/register" className="text-blue-600 hover:underline dark:text-blue-400">
+          <a href="/register" className="text-[#FF6D2E] hover:underline">
             הרשמה
           </a>
+
         </p>
       </form>
     </div>

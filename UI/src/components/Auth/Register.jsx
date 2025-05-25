@@ -42,7 +42,9 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen
+                    bg-gradient-to-br from-orange-100 via-yellow-50 to-blue-100
+                    dark:from-[#1A1A1A] dark:via-[#1F2A3C] dark:to-[#0F1C2E]">
       <form
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md w-full max-w-md space-y-6"
@@ -78,16 +80,18 @@ const handleSubmit = async (e) => {
 
         <button
           type="submit"
-          className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition duration-300"
+          className="w-full py-3 bg-[#FF6D2E] hover:bg-[#CC4B00] text-white font-bold rounded-lg transition duration-300"
         >
           הירשם
         </button>
 
+
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           כבר יש לך חשבון?{' '}
-          <a href="/login" className="text-blue-600 hover:underline dark:text-blue-400">
+          <a href="/login" className="text-[#1FA7FF] hover:underline">
             התחבר
           </a>
+
         </p>
       </form>
     </div>
