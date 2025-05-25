@@ -171,6 +171,38 @@ useEffect(() => {
   fetchForecastTemp();
 }, [fetchUserSettings, userSettings, setPredictedBoilerTemp, setUserSettings]);
 
+const handleToggleBoilerStatus = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  const turnOn = !userSettings.boilerStatus?.includes("פועל");
+
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/toggle`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ turn_on: turnOn }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.status) {
+      const newStatus = data.status === "on" ? '✅ פועל' : '⛔️ כבוי';
+      setUserSettings(prev => ({
+        ...prev,
+        boilerStatus: newStatus
+      }));
+    }
+    console.log("🔘 נלחץ כפתור הדוד");
+
+  } catch (err) {
+    console.error("❌ שגיאה בחיבור לשרת:", err);
+  }
+};
+
 
 
   const currentTemp = predictedBoilerTemp ? Math.round(predictedBoilerTemp) : 0;
@@ -208,15 +240,17 @@ useEffect(() => {
           סוג: {getBoilerTypeText()} | נפח: {getBoilerSizeText()}
         </p>
         <div className="flex justify-center gap-4 mt-3">
-          <button
-            onClick={toggleBoilerStatus}
-            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-          >
-            {userSettings.boilerStatus ? 'כבה' : 'הדלק'} את הדוד
-          </button>
+        <button onClick={handleToggleBoilerStatus}>
+          {userSettings.boilerStatus?.includes("פועל") ? 'כבה' : 'הדלק'} את הדוד
+        </button>
+
+
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-5 py-2 border border-gray-300 hover:bg-teal-500 dark:hover:bg-gray-700 rounded-full text-sm"
+            className="flex items-center gap-2 px-5 py-2 rounded-full font-semibold
+                       bg-[#00C851] hover:bg-[#009942]
+                       dark:bg-[#00C851] dark:hover:bg-[#009942]
+                       text-white transition"
           >
             <Pencil size={18} /> ערוך הגדרות דוד
           </button>
