@@ -13,6 +13,10 @@ from Backend.userRoutes import userApi, users_collection  # ← החזרת גם 
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_cors import cross_origin
+
+
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -31,6 +35,8 @@ CORS(app,
 )
 
 app.register_blueprint(userApi)  # ← החזרת ה-Blueprint של היוזרים
+
+global boiler
 
 # === Caching for OpenMeteo ===
 cached_forecast = None
@@ -170,6 +176,38 @@ def login():
         print("⚠️ Failed to trigger boiler schedule on login:", e)
 
     return jsonify({"message": "התחברת בהצלחה", "token": token})
+
+
+##
+@app.route("/boiler/status", methods=["GET"])
+@jwt_required()
+def get_boiler_status():
+    return jsonify({
+        "status": "on" if boiler.status else "off"
+    }), 200
+
+
+
+@app.route("/boiler/toggle", methods=["POST"])
+@cross_origin(origin='http://localhost:3000', supports_credentials=True)
+@jwt_required()
+def toggle_boiler():
+    try:
+        data = request.get_json()
+        turn_on = data.get("turn_on", False)
+
+        boiler.status = turn_on
+        print(f"✅ Boiler turned {'ON' if turn_on else 'OFF'} by user request.")
+
+        return jsonify({
+            "message": "Boiler status updated.",
+            "status": "on" if boiler.status else "off"
+        }), 200
+    except Exception as e:
+        print(f"❌ Error toggling boiler:", e)
+        return jsonify({"error": "Server error while toggling boiler."}), 500
+
+
 
 # === Background Job: Daily Forecast at Midnight ===
 def run_nightly_schedule():

@@ -225,7 +225,7 @@ class BoilerManager(Device):
 
         # === Forecast prediction from the model ===
         l_forecast, l_input = weather.get_forecast_dataframe_for_model(
-            lat=32.0853, lon=34.7818, hours_ahead=48
+            lat=31.25, lon=34.79, hours_ahead=48
         )
 
         if l_input.shape[0] < 6:

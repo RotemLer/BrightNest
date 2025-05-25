@@ -1,3 +1,5 @@
+from sympy import false
+
 from DVCS.Boiler import BoilerManager
 from datetime import datetime
 
@@ -14,10 +16,10 @@ def main():
 
 
     schedule = {
-        datetime(2025, 5, 24, 6, 30): {"users": 2, "shower_temp": 39.0},
-        datetime(2025, 5, 23, 21, 30): {"users": 1, "shower_temp": 38.0},
-        datetime(2025, 5, 29, 7, 45): {"users": 1, "shower_temp": 40.0},
-        datetime(2025, 5, 23, 18, 0): {"users": 3, "shower_temp": 41.0}
+        datetime(2025, 5, 25, 23, 30): {"users": 2, "shower_temp": 39.0},
+        datetime(2025, 5, 26, 21, 30): {"users": 1, "shower_temp": 38.0},
+        datetime(2025, 5, 26, 13, 00): {"users": 1, "shower_temp": 40.0},
+        datetime(2025, 5, 26, 20, 0): {"users": 3, "shower_temp": 41.0}
     }
 
 
