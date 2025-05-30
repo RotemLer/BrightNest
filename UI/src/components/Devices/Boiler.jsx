@@ -44,9 +44,14 @@ useEffect(() => {
           .filter(m => m.showerTime)
           .map(m => {
             const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const timeStr = m.showerTime.trim();
-            const isoDateTime = `${todayStr} ${timeStr}:00`;
+            const todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+            const timeStr = m.showerTime.trim(); // לדוגמה: "18:30"
+            const isoDateTime = `${todayStr} ${timeStr}:00`;  // "2025-05-23 18:30:00"
+
+            console.log("📥 קיבלתי בקשה לחישוב:")
+            console.log(todayStr)
+            console.log(timeStr)
+            console.log(isoDateTime)
 
             return {
               datetime: isoDateTime,
@@ -55,14 +60,14 @@ useEffect(() => {
           });
 
         // ✅ בדיקה פשוטה במקום תלות עמוקה ב־userSettings
-        const boilerSize = parseInt(localStorage.getItem("boilerSize"));
-        const withSolar = localStorage.getItem("withSolar") === "true";
+       //const boilerSize = parseInt(localStorage.getItem("boilerSize"));
+       //const withSolar = localStorage.getItem("withSolar") === "true";
 
-        if (schedule.length > 0 && boilerSize) {
+        if (schedule.length > 0 && userSettings.boilerSize) {
           const body = {
             schedule,
-            boilerSize,
-            hasSolar: withSolar
+            boilerSize: parseInt(userSettings.boilerSize),
+            hasSolar: userSettings.withSolar || false
           };
 
           await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/schedule`, {
@@ -79,7 +84,7 @@ useEffect(() => {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const recData = await recRes.json();
-        setRecommendedBoilerHours(recData);
+        setRecommendedBoilerHours(recData); // כאן את שומרת את ההמלצות להצגה ב-UI
       }
     } catch (err) {
       console.error("שגיאה בטעינת בני משפחה או המלצות:", err);
