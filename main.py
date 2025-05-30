@@ -16,10 +16,10 @@ def main():
 
 
     schedule = {
-        datetime(2025, 5, 25, 23, 30): {"users": 2, "shower_temp": 39.0},
-        datetime(2025, 5, 26, 21, 30): {"users": 1, "shower_temp": 38.0},
-        datetime(2025, 5, 26, 13, 00): {"users": 1, "shower_temp": 40.0},
-        datetime(2025, 5, 26, 20, 0): {"users": 3, "shower_temp": 41.0}
+        datetime(2025, 5, 25, 4, 30): {"users": 2, "shower_temp": 39.0},
+        datetime(2025, 5, 24, 21, 30): {"users": 1, "shower_temp": 38.0},
+        datetime(2025, 5, 25, 13, 00): {"users": 1, "shower_temp": 40.0},
+        datetime(2025, 5, 24, 20, 0): {"users": 3, "shower_temp": 41.0}
     }
 
 
