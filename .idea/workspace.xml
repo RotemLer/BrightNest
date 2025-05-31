@@ -7,7 +7,11 @@
     <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="fix the modifyData.py and improve the dataTraining.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/userRoutes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/userRoutes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +118,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Node.js.App.js.executor": "Run",
+    "Node.js.Boiler.jsx.executor": "Run",
     "Python.HistoricalWeatherAPI.executor": "Run",
     "Python.Run Weather API.executor": "Profiler",
     "Python.app.executor": "Run",
@@ -131,7 +136,7 @@
     "Python.weatherAPIRequest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "DVIR-branch",
+    "git-widget-placeholder": "#29 on DVIR-branch",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -662,12 +667,13 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747497486828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1748612005390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
-    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/FinalProject$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1747241739709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
+    <SUITE FILE_PATH="coverage/FinalProject$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1748703186890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747497486828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1748713928304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1747675848644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

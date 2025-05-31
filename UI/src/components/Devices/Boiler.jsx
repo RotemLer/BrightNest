@@ -8,13 +8,11 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 dayjs.extend(isSameOrAfter);
 
-// חילוץ שעת התחלה מהטקסט של הסטטוס
 function getHeatingTimeFromStatus(status) {
   const match = status.match(/start heating at: (\d{2}:\d{2})/);
   return match ? match[1] : null;
 }
 
-// בדיקה אם עכשיו צריך להדליק את הדוד
 function shouldBoilerBeOnNow(rec) {
   const heatingTimeStr = getHeatingTimeFromStatus(rec.Status);
   if (!heatingTimeStr) return false;
@@ -26,13 +24,8 @@ function shouldBoilerBeOnNow(rec) {
   const showerTime = dayjs(rec.Time);
   const now = dayjs();
 
-  // אם עכשיו בטווח שבין זמן התחלה לזמן המקלחת
   return now.isSameOrAfter(heatingStart) && now.isSameOrBefore(showerTime);
 }
-
-
-
-
 
 function Boiler() {
   const {
@@ -57,40 +50,40 @@ function Boiler() {
   const [showModal, setShowModal] = useState(false);
   const [recommendedBoilerHours, setRecommendedBoilerHours] = useState([]);
 
-
-  // ✅ טעינת נתונים ראשונית
-useEffect(() => {
+ useEffect(() => {
   const token = localStorage.getItem('token');
   if (!token) return;
+
+  const now = Date.now();
+  const lastBoilerFetch = localStorage.getItem('lastBoilerFetch');
+  const oneHour = 1000 * 60 * 60;
+  const shouldFetchByTime = !lastBoilerFetch || now - lastBoilerFetch > oneHour;
+
+  // 🆕 תנאי – טען אם נתונים חסרים או ריקים
+  const missingData =
+    !userSettings.boilerSize ||
+    !userSettings.boilerStatus ||
+    predictedBoilerTemp === 0 ||
+    family.length === 0;
+
+  const shouldFetch = shouldFetchByTime || missingData;
 
   const fetchFamilyData = async () => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
-      const data = await res.json();
 
+      const data = await res.json();
       if (res.ok && data.family) {
         setFamily(data.family);
 
         const schedule = data.family
           .filter(m => m.showerTime)
-          .map(m => {
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const timeStr = m.showerTime.trim();
-            const isoDateTime = `${todayStr} ${timeStr}:00`;
-
-            console.log("📥 קיבלתי בקשה לחישוב:")
-            console.log(todayStr)
-            console.log(timeStr)
-            console.log(isoDateTime)
-
-            return {
-              datetime: isoDateTime,
-              preferredTemp: Number(m.preferredTemp || 38)
-            };
-          });
+          .map(m => ({
+            datetime: `${new Date().toISOString().split('T')[0]} ${m.showerTime.trim()}:00`,
+            preferredTemp: Number(m.preferredTemp || 38)
+          }));
 
         if (schedule.length > 0 && userSettings.boilerSize) {
           const body = {
@@ -107,19 +100,19 @@ useEffect(() => {
             },
             body: JSON.stringify(body),
           });
+
+          localStorage.setItem('lastBoilerFetch', now.toString());
         }
 
         const recRes = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
+
         const recData = await recRes.json();
         setRecommendedBoilerHours(recData);
 
         const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
         if (activeRec && userSettings.boilerStatus !== '✅ פועל') {
-          const duration = activeRec.HeatingMinutes;
-          const startTemp = activeRec.ForecastTemp;
-
           await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/heat`, {
             method: 'POST',
             headers: {
@@ -127,8 +120,8 @@ useEffect(() => {
               'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
-              duration_minutes: duration,
-              start_temperature: startTemp
+              duration: activeRec.HeatingMinutes,
+              start_temp: activeRec.ForecastTemp
             }),
           });
 
@@ -139,7 +132,7 @@ useEffect(() => {
         }
       }
     } catch (err) {
-      console.error("שגיאה בטעינת בני משפחה או המלצות:", err);
+      console.error("❌ שגיאה בטעינת בני משפחה או המלצות:", err);
     }
   };
 
@@ -152,21 +145,15 @@ useEffect(() => {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         const now = new Date();
-        const closest = data.reduce((prev, curr) => {
-          const prevTime = new Date(prev.time);
-          const currTime = new Date(curr.time);
-          return Math.abs(currTime - now) < Math.abs(prevTime - now) ? curr : prev;
-        });
+        const closest = data.reduce((prev, curr) =>
+          Math.abs(new Date(curr.time) - now) < Math.abs(new Date(prev.time) - now) ? curr : prev
+        );
 
         const size = parseInt(userSettings.boilerSize);
         const solar = userSettings.withSolar ? "with" : "without";
         const tempKey = `boiler temp for ${size} L ${solar} solar system`;
 
-        if (closest && closest[tempKey]) {
-          setPredictedBoilerTemp(closest[tempKey]);
-        } else {
-          console.warn("⚠️ תחזית לא זמינה עבור:", tempKey);
-        }
+        if (closest[tempKey]) setPredictedBoilerTemp(closest[tempKey]);
       }
     } catch (err) {
       console.error("❌ שגיאה בקבלת תחזית הדוד:", err);
@@ -174,43 +161,37 @@ useEffect(() => {
   };
 
   fetchUserSettings();
-  fetchBoilerStatus(); // 🟢 הוספה חשובה לעדכון סטטוס הדוד
-  fetchFamilyData();
-  fetchForecastTemp();
-}, [fetchUserSettings, fetchBoilerStatus, userSettings, setPredictedBoilerTemp, setUserSettings]);
+  fetchBoilerStatus();
+  if (shouldFetch) {
+    fetchFamilyData();
+    fetchForecastTemp();
+  } else {
+    console.log("⏱️ דילוג על שליפה – נתונים קיימים ועדכניים");
+  }
+}, [
+  fetchUserSettings,
+  fetchBoilerStatus,
+  userSettings,
+  setPredictedBoilerTemp,
+  setUserSettings,
+  predictedBoilerTemp,
+  family.length
+]);
 
 
-
-
-  const currentTemp = predictedBoilerTemp ? Math.round(predictedBoilerTemp) : 0;
-  const progress = Math.min((currentTemp / 75) * 100, 100);
-
-  const getHourRange = () => {
-    const start = heatingMode === 'auto' ? autoStart : startHour;
-    const end = heatingMode === 'auto' ? autoEnd : endHour;
-    return `${start}–${end}`;
-  };
-
+  const getHourRange = () => (heatingMode === 'auto' ? `${autoStart}–${autoEnd}` : `${startHour}–${endHour}`);
   const getBoilerTypeText = () => userSettings.withSolar ? 'חשמל + סולארי' : 'חשמל בלבד';
-
-  const getBoilerSizeText = () => {
-    if (!userSettings.boilerSize) return 'לא הוגדר';
-    const match = userSettings.boilerSize.match(/\d+/);
-    return match ? `${match[0]} ליטר` : userSettings.boilerSize;
-  };
-
-
+  const getBoilerSizeText = () => userSettings.boilerSize ? `${parseInt(userSettings.boilerSize)} ליטר` : 'לא הוגדר';
 
   return (
     <div className="p-6 max-w-3xl mx-auto text-gray-800 dark:text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">שליטה בדוד</h1>
 
-      {/* סטטוס הדוד */}
       <div className="mb-6 text-center">
         <p className="text-xl">
           סטטוס דוד:
-          <span className={userSettings.boilerStatus ? 'text-green-600' : 'text-red-600'}>
-            {userSettings.boilerStatus ? ' ✅ פועל' : ' ⛔️ כבוי'}
+          <span className={userSettings.boilerStatus === '✅ פועל' ? 'text-green-600' : 'text-red-600'}>
+            {userSettings.boilerStatus}
           </span>
         </p>
         <p className="text-sm text-gray-500 mt-1">
@@ -221,7 +202,7 @@ useEffect(() => {
             onClick={toggleBoilerStatus}
             className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
           >
-            {userSettings.boilerStatus ? 'כבה' : 'הדלק'} את הדוד
+            {userSettings.boilerStatus === '✅ פועל' ? 'כבה' : 'הדלק'} את הדוד
           </button>
           <button
             onClick={() => setShowModal(true)}
@@ -232,26 +213,22 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* טמפרטורה נוכחית */}
-        <div className="mb-8 text-center">
-          <h2 className="text-xl font-bold mb-3 flex items-center justify-center gap-2">
-            טמפרטורה חזויה של המים בדוד:
-          </h2>
-
-          <div className="flex items-center justify-center gap-2 text-2xl font-extrabold">
-            <ThermometerSun />
-            <span className={predictedBoilerTemp > 42 ? 'text-red-600' : 'text-blue-600'}>
-              {Math.round(predictedBoilerTemp)}°C
-            </span>
-            <span>{predictedBoilerTemp > 42 ? '🔥' : '💧'}</span>
-          </div>
-
-          {predictedBoilerTemp > 42 && (
-            <p className="text-sm text-red-500 mt-2">⚠️ המים עלולים להיות חמים מדי למקלחת לילדים</p>
-          )}
+      <div className="mb-8 text-center">
+        <h2 className="text-xl font-bold mb-3 flex items-center justify-center gap-2">
+          טמפרטורה חזויה של המים בדוד:
+        </h2>
+        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold">
+          <ThermometerSun />
+          <span className={predictedBoilerTemp > 42 ? 'text-red-600' : 'text-blue-600'}>
+            {Math.round(predictedBoilerTemp)}°C
+          </span>
+          <span>{predictedBoilerTemp > 42 ? '🔥' : '💧'}</span>
         </div>
+        {predictedBoilerTemp > 42 && (
+          <p className="text-sm text-red-500 mt-2">⚠️ המים עלולים להיות חמים מדי למקלחת לילדים</p>
+        )}
+      </div>
 
-      {/* מצב חימום */}
       <div className="mb-8 text-center">
         <h2 className="text-xl font-bold mb-3">מצב חימום</h2>
         <div className="flex justify-center gap-4">
@@ -270,7 +247,6 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* שעות חימום ידני */}
       {heatingMode === 'manual' && (
         <div className="mb-10">
           <h2 className="text-lg font-semibold mb-4 text-center">בחר טווח שעות להפעלה</h2>
@@ -287,7 +263,6 @@ useEffect(() => {
         </div>
       )}
 
-      {/* שעות פעילות */}
       <div className="mb-10">
         <h2 className="text-xl font-bold mb-3 text-center flex justify-center items-center gap-2">
           <Clock /> שעות פעילות היום
@@ -298,20 +273,18 @@ useEffect(() => {
       </div>
 
       {recommendedBoilerHours.length > 0 && (
-      <div className="text-center mt-8">
-        <h2 className="text-xl font-bold mb-3">⏱️ מתי להפעיל את הדוד</h2>
-        <ul className="space-y-1">
-          {recommendedBoilerHours.map((rec, index) => (
-            <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
-              🕒 {rec.Time} – {rec.Status}
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+        <div className="text-center mt-8">
+          <h2 className="text-xl font-bold mb-3">⏱️ מתי להפעיל את הדוד</h2>
+          <ul className="space-y-1">
+            {recommendedBoilerHours.map((rec, index) => (
+              <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
+                🕒 {rec.Time} – {rec.Status}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-
-      {/* בני משפחה */}
       <div className="mb-10">
         <h2 className="text-xl font-bold mb-4 text-center flex justify-center gap-2">
           <Users /> לוח זמנים מועדף
@@ -331,7 +304,6 @@ useEffect(() => {
         )}
       </div>
 
-      {/* חלון עריכה */}
       {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
     </div>
   );
