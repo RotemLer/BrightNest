@@ -104,36 +104,15 @@ function Dashboard() {
       <div className="mt-6">
         <div className="card w-full max-w-full mx-auto p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
           <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-center">weather forecast</h2>
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md">
+            <p className="font-medium text-right text-gray-800 dark:text-white">מיקום:</p>
+            <p className="text-muted text-right">{userSettings.location}</p>
+          </div>
           <WeatherForecast selectedLocation={{
             display_name: userSettings.location,
             lat: userSettings.lat,
             lon: userSettings.lon,
           }} />
-        </div>
-      </div>
-
-        {/* טמפרטורה חזויה
-        <div className="mt-8 card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">טמפרטורה חזויה</h2>
-          <TemperatureChart weatherData={weatherData} predictedBoilerTemp={predictedBoilerTemp} />
-        </div> */}
-
-      {/* הגדרות נוכחיות */}
-      <div className="mt-8 card p-6 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-        <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-right">הגדרות נוכחיות</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md">
-            <p className="font-medium text-right text-gray-800 dark:text-white">מיקום:</p>
-            <p className="text-muted text-right">{userSettings.location}</p>
-          </div>
-          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md">
-            <p className="font-medium text-right text-gray-800 dark:text-white">משך מקלחת:</p>
-            <p className="text-muted text-right">{userSettings.showerDuration} דקות</p>
-          </div>
-          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md">
-            <p className="font-medium text-right text-gray-800 dark:text-white">שעת מקלחת מועדפת:</p>
-            <p className="text-muted text-right">{userSettings.preferredShowerTime}</p>
-          </div>
         </div>
       </div>
     </div>

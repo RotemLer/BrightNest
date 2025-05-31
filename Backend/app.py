@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from datetime import datetime
 import pandas as pd
 import sys
@@ -9,14 +9,11 @@ import time
 import threading
 import requests
 
-from Backend.userRoutes import userApi, users_collection  # ← החזרת גם את userApi המלא
+from Backend.userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_cors import cross_origin
-
-
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -34,9 +31,10 @@ CORS(app,
      allow_headers=["Content-Type", "Authorization"]
 )
 
-app.register_blueprint(userApi)  # ← החזרת ה-Blueprint של היוזרים
+app.register_blueprint(userApi)
 
-global boiler
+# === הגדרת דוד גלובלית ===
+boiler = BoilerManager(name="UserBoiler", capacity_liters=100, has_solar=True)
 
 # === Caching for OpenMeteo ===
 cached_forecast = None
@@ -50,7 +48,6 @@ def home():
 @app.route("/openmeteo/<lat>/<lon>")
 def get_forecast(lat, lon):
     global cached_forecast, cached_location, last_fetch_time
-
     try:
         latitude = float(lat)
         longitude = float(lon)
@@ -92,7 +89,6 @@ def get_forecast(lat, lon):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# === Boiler Schedule Endpoint ===
 @app.route("/boiler/schedule", methods=["POST"])
 def receive_schedule_and_respond():
     try:
@@ -113,7 +109,7 @@ def receive_schedule_and_respond():
             }
 
         boiler = BoilerManager(name="UserBoiler", capacity_liters=capacity, has_solar=has_solar)
-        df= boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False) #df=recommendation, forecast=predicted boiler temp
+        df = boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False)
         df["Time"] = df["Time"].astype(str)
 
         with open("latest_recommendations.json", "w") as f:
@@ -121,10 +117,9 @@ def receive_schedule_and_respond():
 
         return jsonify(df.to_dict(orient="records"))
     except Exception as e:
-        print(f"\u274c Error:", e)
+        print(f"❌ Error:", e)
         return jsonify({"error": str(e)}), 500
 
-# === Boiler Recommendations Endpoint ===
 @app.route("/boiler/recommendations", methods=["GET"])
 def get_latest_recommendations():
     try:
@@ -135,7 +130,7 @@ def get_latest_recommendations():
         else:
             return jsonify([])
     except Exception as e:
-        print(f"\u274c Error reading recommendations:", e)
+        print(f"❌ Error reading recommendations:", e)
         return jsonify({"error": str(e)}), 500
 
 @app.route("/boiler/forecast", methods=["GET"])
@@ -151,8 +146,6 @@ def get_forecast_prediction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-# === Login Simulation Endpoint ===
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -177,16 +170,27 @@ def login():
 
     return jsonify({"message": "התחברת בהצלחה", "token": token})
 
-
-##
-@app.route("/boiler/status", methods=["GET"])
+@app.route("/boiler/status", methods=["POST", "OPTIONS"])
+@cross_origin(origin='http://localhost:3000', supports_credentials=True)
 @jwt_required()
-def get_boiler_status():
+def update_boiler_status():
+    if request.method == "OPTIONS":
+        return jsonify({}), 200
+
+    data = request.get_json() or {}
+    new_status = data.get("status")
+
+    if new_status not in ["on", "off"]:
+        return jsonify({"error": "Invalid status value"}), 400
+
+    # עדכון סטטוס הדוד
+    boiler.status = True if new_status == "on" else False
+
+    print(f"📥 סטטוס הדוד עודכן ל: {boiler.status}")
+
     return jsonify({
         "status": "on" if boiler.status else "off"
-    }), 200
-
-
+    }),200
 
 @app.route("/boiler/toggle", methods=["POST"])
 @cross_origin(origin='http://localhost:3000', supports_credentials=True)
@@ -207,26 +211,22 @@ def toggle_boiler():
         print(f"❌ Error toggling boiler:", e)
         return jsonify({"error": "Server error while toggling boiler."}), 500
 
-
-
-# === Background Job: Daily Forecast at Midnight ===
 def run_nightly_schedule():
     def job():
         while True:
             now = datetime.now()
             if now.hour == 0 and now.minute == 0:
                 try:
-                    print("\U0001f319 Midnight run: calculating recommendations")
+                    print("🌙 Midnight run: calculating recommendations")
                     response = requests.post("http://127.0.0.1:5000/boiler/schedule")
-                    print("\u2705 Response:", response.status_code)
+                    print("✅ Response:", response.status_code)
                 except Exception as e:
-                    print("\u274c Midnight job failed:", e)
+                    print("❌ Midnight job failed:", e)
             time.sleep(60)
 
     thread = threading.Thread(target=job, daemon=True)
     thread.start()
 
-# === Start Everything ===
 if __name__ == "__main__":
     run_nightly_schedule()
     app.run(debug=True, port=5000)
