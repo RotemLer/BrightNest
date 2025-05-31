@@ -2,20 +2,29 @@ import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 export const AppContext = createContext({});
 
+const shouldRefetch = (key, thresholdMs = 1000 * 60 * 60) => {
+  const lastFetch = localStorage.getItem(key);
+  const now = Date.now();
+  return !lastFetch || now - parseInt(lastFetch) > thresholdMs;
+};
+
 export const AppProvider = ({ children }) => {
-  const [userSettings, setUserSettings] = useState({
-    location: '',
-    lat: null,
-    lon: null,
-    email: '',
-    devices: [],
-    boilerSize: '',       // חשיפה ישירה
-    withSolar: false,     // חשיפה ישירה
+  const [userSettings, setUserSettings] = useState(() => {
+    const saved = localStorage.getItem('userSettings');
+    return saved ? JSON.parse(saved) : {
+      location: '',
+      lat: null,
+      lon: null,
+      email: '',
+      devices: [],
+      boilerSize: '',
+      withSolar: false,
+      boilerStatus: '⛔️ כבוי',
+    };
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
   const [userName, setUserName] = useState(() => localStorage.getItem('userName') || '');
-  const [weatherData, setWeatherData] = useState([]);
   const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(0);
 
   const [autoStart] = useState('19:00');
@@ -24,25 +33,43 @@ export const AppProvider = ({ children }) => {
   const [endHour, setEndHour] = useState('');
   const [heatingMode, setHeatingMode] = useState('manual');
 
-  // ✅ שליפת פרטי משתמש מהשרת
+  // ✅ theme loading on startup
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    const isDark = html.classList.contains('dark');
+    if (isDark) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  };
+
   const fetchUserSettings = useCallback(async () => {
+    if (!shouldRefetch('lastProfileFetch')) return;
     const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/profile`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (!res.ok) throw new Error('Failed to fetch profile');
       const data = await res.json();
-
       const prefs = data.preferences || {};
       const devices = data.devices || [];
       const boiler = devices[0] || {};
 
-      setUserSettings({
+      const updated = {
         location: prefs.location || '',
         lat: prefs.lat || null,
         lon: prefs.lon || null,
@@ -50,15 +77,66 @@ export const AppProvider = ({ children }) => {
         devices,
         boilerSize: boiler.size || '',
         withSolar: boiler.withSolar || false,
-      });
+        boilerStatus: '⛔️ כבוי',
+      };
 
+      setUserSettings(updated);
+      localStorage.setItem('userSettings', JSON.stringify(updated));
       setUserName(data.full_name || '');
+      localStorage.setItem('userName', data.full_name || '');
+      localStorage.setItem('lastProfileFetch', Date.now());
+
+      await fetchBoilerStatus();
     } catch (err) {
       console.error('❌ שגיאה בטעינת פרטי משתמש:', err);
     }
   }, []);
 
-  // ✅ שמירה לשרת
+  const fetchBoilerStatus = async (newStatus = null) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const isPost = !!newStatus;
+    const url = `${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/status`;
+
+    if (!isPost && !shouldRefetch('lastBoilerStatusFetch')) return;
+
+    const headers = { Authorization: `Bearer ${token}` };
+    if (isPost) headers['Content-Type'] = 'application/json';
+
+    try {
+      const res = await fetch(url, {
+        method: isPost ? 'POST' : 'GET',
+        headers,
+        ...(isPost && { body: JSON.stringify({ status: newStatus }) }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.status) {
+        setUserSettings(prev => {
+          const updated = {
+            ...prev,
+            boilerStatus: data.status === 'on' ? '✅ פועל' : '⛔️ כבוי',
+          };
+          localStorage.setItem('userSettings', JSON.stringify(updated));
+          return updated;
+        });
+
+        if (!isPost) localStorage.setItem('lastBoilerStatusFetch', Date.now());
+      } else {
+        console.error("⚠️ בעיה בתשובת השרת:", data);
+      }
+    } catch (err) {
+      console.error("❌ שגיאה בשליפת סטטוס הדוד:", err);
+    }
+  };
+
+  const toggleBoilerStatus = () => {
+    const next = userSettings.boilerStatus === '✅ פועל' ? 'off' : 'on';
+    fetchBoilerStatus(next);
+  };
+
   const saveSettingsToServer = async ({ preferences, full_name, devices } = {}) => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -67,12 +145,8 @@ export const AppProvider = ({ children }) => {
     if (preferences) payload.preferences = preferences;
     if (full_name) payload.full_name = full_name;
 
-    // אם לא הועבר devices מבחוץ – שלח מתוך ה־state
     if (!devices && userSettings.boilerSize) {
-      payload.devices = [{
-        size: userSettings.boilerSize,
-        withSolar: userSettings.withSolar,
-      }];
+      payload.devices = [{ size: userSettings.boilerSize, withSolar: userSettings.withSolar }];
     } else if (devices) {
       payload.devices = devices;
     }
@@ -105,7 +179,7 @@ export const AppProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     setIsAuthenticated(false);
     setUserSettings({
       location: '',
@@ -115,6 +189,7 @@ export const AppProvider = ({ children }) => {
       devices: [],
       boilerSize: '',
       withSolar: false,
+      boilerStatus: '⛔️ כבוי',
     });
     setUserName('');
   };
@@ -123,79 +198,33 @@ export const AppProvider = ({ children }) => {
     setUserSettings((prev) => ({ ...prev, ...newSettings }));
   };
 
-  const toggleBoilerStatus = () => {
-    setUserSettings((prev) => ({
-      ...prev,
-      boilerStatus: !prev.boilerStatus,
-    }));
-  };
-
-  const fetchBoilerStatus = async (newStatus) => {
-  const token = localStorage.getItem('token');
-  if (!token) return;
-
-  try {
-    const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/status`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status: newStatus }), // 'on' או 'off'
-    });
-
-    const data = await res.json();
-    console.log("Boiler status updated to:", data.status);
-  } catch (err) {
-    console.error("שגיאה בעדכון סטטוס הדוד:",err);}
-};
-
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-  };
-
-  const getBoilerHours = () =>
-    heatingMode === 'auto'
-      ? { start: autoStart, end: autoEnd }
-      : { start: startHour, end: endHour };
-
   useEffect(() => {
-    if (isAuthenticated) fetchUserSettings();
-  }, [isAuthenticated, fetchUserSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('userSettings', JSON.stringify(userSettings));
-  }, [userSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('userName', userName);
-  }, [userName]);
+    const isEmpty = !userSettings?.email || !userSettings?.boilerSize;
+    if (isAuthenticated && isEmpty) fetchUserSettings();
+  }, [isAuthenticated, fetchUserSettings, userSettings]);
 
   return (
     <AppContext.Provider
       value={{
         userSettings,
+        setUserSettings,
         updateSettings,
         saveSettingsToServer,
-        userName,
-        setUserName,
-        weatherData,
-        setWeatherData,
         predictedBoilerTemp,
         setPredictedBoilerTemp,
-        toggleBoilerStatus,
-        fetchBoilerStatus,
-        toggleTheme,
         heatingMode,
         setHeatingMode,
         startHour,
         setStartHour,
         endHour,
         setEndHour,
-        boilerHours: getBoilerHours(),
         autoStart,
         autoEnd,
+        userName,
+        setUserName,
+        toggleBoilerStatus,
+        fetchBoilerStatus,
+        toggleTheme,
         isAuthenticated,
         login,
         logout,

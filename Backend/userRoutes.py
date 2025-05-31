@@ -81,6 +81,7 @@ def login():
 
     if check_password_hash(user["password"], password):
         payload = {
+            "sub": user["username"],  # 🟢 חובה עבור flask_jwt_extended
             "user_id": str(user["_id"]),
             "username": user["username"],
             "exp": datetime.utcnow() + timedelta(hours=1)
@@ -89,7 +90,6 @@ def login():
         return jsonify({"message": "Login successful!", "token": token}), 200
 
     return jsonify({"error": "Invalid password"}), 401
-
 # שליפת פרופיל
 @userApi.route('/profile', methods=['GET'])
 @token_required
