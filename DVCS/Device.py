@@ -14,3 +14,6 @@ class Device:
 
     def get_status(self):
         return "ON" if self.status else "OFF"
+
+    def set_status(self, status):
+        self.status=status

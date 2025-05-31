@@ -130,6 +130,27 @@ export const AppProvider = ({ children }) => {
     }));
   };
 
+  const fetchBoilerStatus = async (newStatus) => {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status: newStatus }), // 'on' או 'off'
+    });
+
+    const data = await res.json();
+    console.log("Boiler status updated to:", data.status);
+  } catch (err) {
+    console.error("שגיאה בעדכון סטטוס הדוד:",err);}
+};
+
+
   const toggleTheme = () => {
     document.documentElement.classList.toggle('dark');
   };
@@ -164,6 +185,7 @@ export const AppProvider = ({ children }) => {
         predictedBoilerTemp,
         setPredictedBoilerTemp,
         toggleBoilerStatus,
+        fetchBoilerStatus,
         toggleTheme,
         heatingMode,
         setHeatingMode,
