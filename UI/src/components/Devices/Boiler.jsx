@@ -3,6 +3,8 @@ import { AppContext } from '../../context/AppContext';
 import HourWheel from '../common/HourWheel';
 import { ThermometerSun, Clock, Pencil, Users } from 'lucide-react';
 import EditBoilerModal from './EditBoilerModal';
+import ShowerReminderModal from './ShowerReminder';
+
 
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -47,10 +49,13 @@ function Boiler() {
   } = useContext(AppContext);
 
   const [family, setFamily] = useState([]);
+const [showerReminder, setShowerReminder] = useState({ visible: false, user: null });
+const [showerReminders, setShowerReminders] = useState([]);
+
   const [showModal, setShowModal] = useState(false);
   const [recommendedBoilerHours, setRecommendedBoilerHours] = useState([]);
 
- useEffect(() => {
+useEffect(() => {
   const token = localStorage.getItem('token');
   if (!token) return;
 
@@ -59,7 +64,6 @@ function Boiler() {
   const oneHour = 1000 * 60 * 60;
   const shouldFetchByTime = !lastBoilerFetch || now - lastBoilerFetch > oneHour;
 
-  // 🆕 תנאי – טען אם נתונים חסרים או ריקים
   const missingData =
     !userSettings.boilerSize ||
     !userSettings.boilerStatus ||
@@ -68,6 +72,8 @@ function Boiler() {
 
   const shouldFetch = shouldFetchByTime || missingData;
 
+  const timers = [];
+
   const fetchFamilyData = async () => {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
@@ -75,6 +81,7 @@ function Boiler() {
       });
 
       const data = await res.json();
+      console.log("📦 נתוני משפחה מהשרת:", data);
       if (res.ok && data.family) {
         setFamily(data.family);
 
@@ -84,6 +91,56 @@ function Boiler() {
             datetime: `${new Date().toISOString().split('T')[0]} ${m.showerTime.trim()}:00`,
             preferredTemp: Number(m.preferredTemp || 38)
           }));
+
+        // 🛎️ תזמון פופאפ לכל מקלחת
+        data.family.forEach(member => {
+          const showerTime = member.showerTime;
+          if (!showerTime || typeof showerTime !== 'string') return;
+
+          const now = new Date();
+          const today = new Date().toISOString().split('T')[0];
+          const showerStart = new Date(`${today}T${showerTime}:00`);
+          const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
+
+          const shownTodayKey = `shower-shown-${member.name}-${today}`;
+        const wasShownToday = localStorage.getItem(shownTodayKey);
+
+        if (!wasShownToday) {
+          setShowerReminders(prev => [...prev, member.name]);
+          localStorage.setItem(shownTodayKey, 'true');
+        }
+
+          if (now >= showerStart && now <= showerEnd) {
+            console.log(`🟢 עכשיו בתוך חלון מקלחת של ${member.name} – הצגת פופאפ`);
+            setShowerReminders(prev => [...prev, member.name]);
+
+            const msUntilAutoClose = showerEnd - now;
+            const autoClose = setTimeout(() => {
+              setShowerReminder({ visible: false, user: null });
+              console.log(`⏱️ פופאפ נסגר אוטומטית (חלון זמן נגמר) למשתמש ${member.name}`);
+            }, msUntilAutoClose);
+
+            timers.push(autoClose);
+          } else if (now < showerStart) {
+            const msUntilPopup = showerStart - now;
+            console.log(`⌛ תיזמון עתידי לפופאפ של ${member.name} בעוד ${msUntilPopup}ms`);
+
+            const timeout = setTimeout(() => {
+              setShowerReminders(prev => [...prev, member.name]);
+
+              const autoClose = setTimeout(() => {
+                setShowerReminder({ visible: false, user: null });
+                console.log(`⏱️ פופאפ נסגר אוטומטית למשתמש ${member.name}`);
+              }, 20 * 60 * 1000);
+
+              timers.push(autoClose);
+            }, msUntilPopup);
+
+            timers.push(timeout);
+          } else {
+            console.log(`❌ חלון הזמן של ${member.name} כבר נגמר – לא יוצג פופאפ`);
+          }
+        });
 
         if (schedule.length > 0 && userSettings.boilerSize) {
           const body = {
@@ -108,7 +165,7 @@ function Boiler() {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        const recData = await recRes.json();
+        const recData = await res.ok ? await recRes.json() : [];
         setRecommendedBoilerHours(recData);
 
         const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
@@ -168,6 +225,10 @@ function Boiler() {
   } else {
     console.log("⏱️ דילוג על שליפה – נתונים קיימים ועדכניים");
   }
+
+  return () => {
+    timers.forEach(clearTimeout);
+  };
 }, [
   fetchUserSettings,
   fetchBoilerStatus,
@@ -178,10 +239,34 @@ function Boiler() {
   family.length
 ]);
 
+useEffect(() => {
+  if (showerReminders.length === 0 || showerReminder.visible) return;
+
+  const nextUser = showerReminders[0];
+  setShowerReminder({ visible: true, user: nextUser });
+}, [showerReminders, showerReminder.visible]);
+
+
+
 
   const getHourRange = () => (heatingMode === 'auto' ? `${autoStart}–${autoEnd}` : `${startHour}–${endHour}`);
   const getBoilerTypeText = () => userSettings.withSolar ? 'חשמל + סולארי' : 'חשמל בלבד';
   const getBoilerSizeText = () => userSettings.boilerSize ? `${parseInt(userSettings.boilerSize)} ליטר` : 'לא הוגדר';
+
+const handleConfirm = () => {
+  console.log(`${showerReminder.user} סיים מקלחת`);
+  setShowerReminder({ visible: false, user: null });
+  setShowerReminders(prev => prev.filter(name => name !== showerReminder.user));
+};
+
+
+const handleCancel = (userName) => {
+  console.log(`${userName} עדיין במקלחת`);
+  setShowerReminders(prev => prev.filter(name => name !== userName));
+  setShowerReminder({ visible: false, user: null });
+};
+
+
 
   return (
     <div className="p-6 max-w-3xl mx-auto text-gray-800 dark:text-white">
@@ -305,6 +390,13 @@ function Boiler() {
       </div>
 
       {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
+      <ShowerReminderModal
+        visible={showerReminder.visible}
+        userName={showerReminder.user}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
+
     </div>
   );
 }
