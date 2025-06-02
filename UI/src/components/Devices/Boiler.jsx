@@ -54,6 +54,16 @@ const [showerReminders, setShowerReminders] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [recommendedBoilerHours, setRecommendedBoilerHours] = useState([]);
+  const [showerDoneTimes, setShowerDoneTimes] = useState({});
+  const [pendingPopupUser, setPendingPopupUser] = useState(null);
+
+  useEffect(() => {
+  console.log("🔍 pendingPopupUser =", pendingPopupUser);
+  console.log("🔍 showerReminder =", showerReminder);
+}, [pendingPopupUser, showerReminder]);
+
+
+
 
 useEffect(() => {
   const token = localStorage.getItem('token');
@@ -74,124 +84,146 @@ useEffect(() => {
 
   const timers = [];
 
-  const fetchFamilyData = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
+const fetchFamilyData = async () => {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
 
-      const data = await res.json();
-      console.log("📦 נתוני משפחה מהשרת:", data);
-      if (res.ok && data.family) {
-        setFamily(data.family);
+    const data = await res.json();
+    console.log("📦 נתוני משפחה מהשרת:", data);
 
-        const schedule = data.family
-          .filter(m => m.showerTime)
-          .map(m => ({
-            datetime: `${new Date().toISOString().split('T')[0]} ${m.showerTime.trim()}:00`,
-            preferredTemp: Number(m.preferredTemp || 38)
-          }));
+    if (res.ok && data.family) {
+      setFamily(data.family);
 
-        // 🛎️ תזמון פופאפ לכל מקלחת
-        data.family.forEach(member => {
-          const showerTime = member.showerTime;
-          if (!showerTime || typeof showerTime !== 'string') return;
+      const schedule = data.family
+        .filter(m => m.showerTime)
+        .map(m => ({
+          datetime: `${new Date().toISOString().split('T')[0]} ${m.showerTime.trim()}:00`,
+          preferredTemp: Number(m.preferredTemp || 38)
+        }));
 
-          const now = new Date();
-          const today = new Date().toISOString().split('T')[0];
-          const showerStart = new Date(`${today}T${showerTime}:00`);
-          const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
+      data.family.forEach(member => {
+        const showerTime = member.showerTime;
+        if (!showerTime || typeof showerTime !== 'string') return;
 
-          const shownTodayKey = `shower-shown-${member.name}-${today}`;
+        const now = new Date();
+        const today = new Date().toISOString().split('T')[0];
+        const showerStart = new Date(`${today}T${showerTime}:00`);
+        const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
+        const shownTodayKey = `shower-shown-${member.name}-${today}`;
         const wasShownToday = localStorage.getItem(shownTodayKey);
 
+        // אם עדיין לא לחצו - נרשום לתזכורת
         if (!wasShownToday) {
           setShowerReminders(prev => [...prev, member.name]);
           localStorage.setItem(shownTodayKey, 'true');
         }
 
-          if (now >= showerStart && now <= showerEnd) {
-            console.log(`🟢 עכשיו בתוך חלון מקלחת של ${member.name} – הצגת פופאפ`);
+        if (now >= showerStart && now <= showerEnd) {
+          // בתוך חלון מקלחת
+          console.log(`🟢 עכשיו בתוך חלון מקלחת של ${member.name} – הצגת פופאפ`);
+          setShowerReminders(prev => [...prev, member.name]);
+
+          const msUntilAutoClose = showerEnd - now;
+
+          const autoClose = setTimeout(() => {
+            setShowerReminder({ visible: false, user: null });
+            console.log(`⏱️ פופאפ נסגר אוטומטית (חלון זמן נגמר) למשתמש ${member.name}`);
+          }, msUntilAutoClose);
+          timers.push(autoClose);
+
+          const popupFallback = setTimeout(() => {
+            const wasClicked = localStorage.getItem(shownTodayKey);
+            if (!wasClicked) {
+              console.log(`🟡 חלון נגמר – מציג פופאפ שקט עבור ${member.name}`);
+              setPendingPopupUser(member.name);
+            }
+          }, msUntilAutoClose);
+          timers.push(popupFallback);
+
+        } else if (now < showerStart) {
+          // לפני מקלחת – תזמון פופאפ עתידי
+          const msUntilPopup = showerStart - now;
+          console.log(`⌛ תיזמון עתידי לפופאפ של ${member.name} בעוד ${msUntilPopup}ms`);
+
+          const timeout = setTimeout(() => {
             setShowerReminders(prev => [...prev, member.name]);
 
-            const msUntilAutoClose = showerEnd - now;
             const autoClose = setTimeout(() => {
               setShowerReminder({ visible: false, user: null });
-              console.log(`⏱️ פופאפ נסגר אוטומטית (חלון זמן נגמר) למשתמש ${member.name}`);
-            }, msUntilAutoClose);
+              console.log(`⏱️ פופאפ עתידי נסגר אוטומטית למשתמש ${member.name}`);
+            }, 20 * 60 * 1000);
 
             timers.push(autoClose);
-          } else if (now < showerStart) {
-            const msUntilPopup = showerStart - now;
-            console.log(`⌛ תיזמון עתידי לפופאפ של ${member.name} בעוד ${msUntilPopup}ms`);
+          }, msUntilPopup);
 
-            const timeout = setTimeout(() => {
-              setShowerReminders(prev => [...prev, member.name]);
+          timers.push(timeout);
 
-              const autoClose = setTimeout(() => {
-                setShowerReminder({ visible: false, user: null });
-                console.log(`⏱️ פופאפ נסגר אוטומטית למשתמש ${member.name}`);
-              }, 20 * 60 * 1000);
-
-              timers.push(autoClose);
-            }, msUntilPopup);
-
-            timers.push(timeout);
-          } else {
-            console.log(`❌ חלון הזמן של ${member.name} כבר נגמר – לא יוצג פופאפ`);
+        } else {
+          // אחרי מקלחת – לבדוק אם עדיין לא נלחץ
+          console.log(`⏰ נכנסנו אחרי זמן המקלחת של ${member.name} – בודק אם להציג פופאפ`);
+          const wasClicked = localStorage.getItem(shownTodayKey);
+          if (!wasClicked) {
+            console.log(`🟡 מציג פופאפ שקט מיידית עבור ${member.name}`);
+            setPendingPopupUser(member.name);
           }
+        }
+      });
+
+      // שליחת לוח זמנים לשרת
+      if (schedule.length > 0 && userSettings.boilerSize) {
+        const body = {
+          schedule,
+          boilerSize: parseInt(userSettings.boilerSize),
+          hasSolar: userSettings.withSolar || false
+        };
+
+        await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/schedule`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
         });
 
-        if (schedule.length > 0 && userSettings.boilerSize) {
-          const body = {
-            schedule,
-            boilerSize: parseInt(userSettings.boilerSize),
-            hasSolar: userSettings.withSolar || false
-          };
-
-          await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/schedule`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(body),
-          });
-
-          localStorage.setItem('lastBoilerFetch', now.toString());
-        }
-
-        const recRes = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-        });
-
-        const recData = await res.ok ? await recRes.json() : [];
-        setRecommendedBoilerHours(recData);
-
-        const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
-        if (activeRec && userSettings.boilerStatus !== '✅ פועל') {
-          await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/heat`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              duration: activeRec.HeatingMinutes,
-              start_temp: activeRec.ForecastTemp
-            }),
-          });
-
-          setUserSettings(prev => ({
-            ...prev,
-            boilerStatus: '✅ פועל'
-          }));
-        }
+        localStorage.setItem('lastBoilerFetch', now.toString());
       }
-    } catch (err) {
-      console.error("❌ שגיאה בטעינת בני משפחה או המלצות:", err);
+
+      // המלצות הפעלה
+      const recRes = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      const recData = await res.ok ? await recRes.json() : [];
+      setRecommendedBoilerHours(recData);
+
+      const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
+      if (activeRec && userSettings.boilerStatus !== '✅ פועל') {
+        await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/heat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            duration: activeRec.HeatingMinutes,
+            start_temp: activeRec.ForecastTemp
+          }),
+        });
+
+        setUserSettings(prev => ({
+          ...prev,
+          boilerStatus: '✅ פועל'
+        }));
+      }
     }
-  };
+  } catch (err) {
+    console.error("❌ שגיאה בטעינת בני משפחה או המלצות:", err);
+  }
+};
+
 
   const fetchForecastTemp = async () => {
     try {
@@ -239,12 +271,12 @@ useEffect(() => {
   family.length
 ]);
 
-useEffect(() => {
-  if (showerReminders.length === 0 || showerReminder.visible) return;
-
-  const nextUser = showerReminders[0];
-  setShowerReminder({ visible: true, user: nextUser });
-}, [showerReminders, showerReminder.visible]);
+// useEffect(() => {
+//   if (showerReminders.length === 0 || showerReminder.visible) return;
+//
+//   const nextUser = showerReminders[0];
+//   setShowerReminder({ visible: true, user: nextUser });
+// }, [showerReminders, showerReminder.visible]);
 
 
 
@@ -253,11 +285,23 @@ useEffect(() => {
   const getBoilerTypeText = () => userSettings.withSolar ? 'חשמל + סולארי' : 'חשמל בלבד';
   const getBoilerSizeText = () => userSettings.boilerSize ? `${parseInt(userSettings.boilerSize)} ליטר` : 'לא הוגדר';
 
-const handleConfirm = () => {
-  console.log(`${showerReminder.user} סיים מקלחת`);
+const handleConfirm = (userName) => {
+  const endTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  console.log(`${userName} סיים מקלחת בשעה ${endTime}`);
+
+  setShowerReminders(prev => prev.filter(name => name !== userName));
   setShowerReminder({ visible: false, user: null });
-  setShowerReminders(prev => prev.filter(name => name !== showerReminder.user));
+
+  // ✨ החלק שמעדכן את המסך
+  setShowerDoneTimes(prev => ({
+    ...prev,
+    [userName]: endTime,
+  }));
 };
+
+
+
 
 
 const handleCancel = (userName) => {
@@ -293,7 +337,7 @@ const handleCancel = (userName) => {
             onClick={() => setShowModal(true)}
             className="flex items-center gap-2 px-5 py-2 border border-gray-300 hover:bg-teal-500 dark:hover:bg-gray-700 rounded-full text-sm"
           >
-            <Pencil size={18} /> ערוך הגדרות דוד
+            <Pencil size={18} />  ערוך הגדרות דוד ומשתמשים
           </button>
         </div>
       </div>
@@ -378,16 +422,72 @@ const handleCancel = (userName) => {
           <p className="text-center text-gray-500">אין משתמשים עדיין.</p>
         ) : (
           <ul className="space-y-2">
-            {family.map((member, index) => (
-              <li key={index} className="bg-gray-100 p-3 rounded-md dark:bg-gray-700">
-                <p className="text-gray-800 dark:text-white font-bold">👤 {member.name}</p>
-                <p className="text-gray-600 dark:text-gray-300">🕒 שעה: {member.showerTime || 'לא הוגדר'}</p>
-                <p className="text-gray-600 dark:text-gray-300">🌡️ טמפ' מועדפת: {member.preferredTemp || 'לא הוגדר'}°C</p>
-              </li>
-            ))}
-          </ul>
+  {family.map((member, index) => {
+    const today = new Date().toISOString().split('T')[0];
+    const showerTimeStr = member.showerTime;
+    const wasShownTodayKey = `shower-shown-${member.name}-${today}`;
+    const wasShownToday = localStorage.getItem(wasShownTodayKey);
+
+    let isInShowerWindow = false;
+    if (showerTimeStr) {
+      const showerStart = new Date(`${today}T${showerTimeStr}:00`);
+      const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
+      const now = new Date();
+      isInShowerWindow = now >= showerStart && now <= showerEnd;
+    }
+
+    return (
+      <li key={index} className="bg-gray-100 p-3 rounded-md dark:bg-gray-700">
+        <p className="text-gray-800 dark:text-white font-bold">👤 {member.name}</p>
+        <p className="text-gray-600 dark:text-gray-300">🕒 שעה: {member.showerTime || 'לא הוגדר'}</p>
+        <p className="text-gray-600 dark:text-gray-300">🌡️ טמפ' מועדפת: {member.preferredTemp || 'לא הוגדר'}°C</p>
+
+{isInShowerWindow && (
+  <>
+    {showerDoneTimes[member.name] ? (
+      <p className="mt-2 text-sm text-gray-500">
+        ⏱️ מקלחת הסתיימה בשעה {showerDoneTimes[member.name]}
+      </p>
+    ) : (
+      <button
+        className="mt-2 px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 text-sm"
+        onClick={() => {
+          handleConfirm(member.name);
+          localStorage.setItem(`shower-shown-${member.name}-${today}`, 'true');
+        }}
+      >
+        ✔️ סיימתי להתקלח
+      </button>
+    )}
+  </>
+)}
+
+      </li>
+    );
+  })}
+</ul>
+
         )}
       </div>
+
+      {pendingPopupUser && (
+  <div className="fixed bottom-4 right-4 bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-50 max-w-sm dark:bg-gray-800">
+    <p className="text-sm text-gray-800 dark:text-white mb-2">
+      האם {pendingPopupUser} סיים/ה את המקלחת?
+    </p>
+    <button
+      className="bg-green-600 text-white px-4 py-1 rounded-full hover:bg-green-700 text-sm"
+      onClick={() => {
+        handleConfirm(pendingPopupUser);
+        localStorage.setItem(`shower-shown-${pendingPopupUser}-${new Date().toISOString().split('T')[0]}`, 'true');
+        setPendingPopupUser(null);
+      }}
+    >
+      ✔️ סיימתי
+    </button>
+  </div>
+)}
+
 
       {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
       <ShowerReminderModal
