@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="fix the modifyData.py and improve the dataTraining.py">
+    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix">
+      <change beforePath="$PROJECT_DIR$/.idea/BrightNest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BrightNest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/userRoutes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/userRoutes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Dashboard/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/context/AppContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/UI/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +44,9 @@
         <option value="REBASE" />
       </set>
     </option>
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -94,7 +99,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/RotemLer/BrightNest.git&quot;,
-    &quot;accountId&quot;: &quot;6c6e2e2a-949e-429c-8082-2471c9fd0f19&quot;
+    &quot;accountId&quot;: &quot;a2e999f8-83b1-4456-91f5-e280c852bce1&quot;
   },
   &quot;recentNewPullRequestHead&quot;: {
     &quot;server&quot;: {
@@ -111,48 +116,51 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2vDWo3nB4D74adZn6KpmHCmUZpK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.App.js.executor": "Run",
-    "Node.js.Boiler.jsx.executor": "Run",
-    "Python.HistoricalWeatherAPI.executor": "Run",
-    "Python.Run Weather API.executor": "Profiler",
-    "Python.app.executor": "Run",
-    "Python.dataGenerator.executor": "Run",
-    "Python.dataTraining.executor": "Run",
-    "Python.finalProject .executor": "Run",
-    "Python.get-pip.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.modifyData.executor": "Run",
-    "Python.selectors.executor": "Run",
-    "Python.start-all.executor": "Run",
-    "Python.test_load_data.executor": "Run",
-    "Python.userRoutes.executor": "Run",
-    "Python.weatherAPIRequest (2).executor": "ConcurrencyExecutor",
-    "Python.weatherAPIRequest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#29 on DVIR-branch",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "ts.external.directory.path": "/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Boiler.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HistoricalWeatherAPI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Run Weather API.executor&quot;: &quot;Profiler&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataTraining.executor&quot;: &quot;Run&quot;,
+    &quot;Python.emailSender.executor&quot;: &quot;Run&quot;,
+    &quot;Python.finalProject .executor&quot;: &quot;Run&quot;,
+    &quot;Python.get-pip.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.modifyData.executor&quot;: &quot;Run&quot;,
+    &quot;Python.selectors.executor&quot;: &quot;Run&quot;,
+    &quot;Python.start-all.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_email_sender.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_load_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.userRoutes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.weatherAPIRequest (2).executor&quot;: &quot;ConcurrencyExecutor&quot;,
+    &quot;Python.weatherAPIRequest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;DAN-branch&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mongo"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mongo&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="BrightNest - final project" />
@@ -363,6 +371,11 @@
       <workItem from="1747318305932" duration="3410000" />
       <workItem from="1747491933121" duration="13679000" />
       <workItem from="1747675833942" duration="887000" />
+      <workItem from="1748777510318" duration="314000" />
+      <workItem from="1748778059353" duration="3919000" />
+      <workItem from="1748782482976" duration="6461000" />
+      <workItem from="1748850533602" duration="11416000" />
+      <workItem from="1748986145575" duration="865000" />
     </task>
     <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
@@ -548,7 +561,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748609568192</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix">
+      <option name="closed" value="true" />
+      <created>1748986396552</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1748986396552</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -653,7 +674,8 @@
     <MESSAGE value="fixed the get and save dat from and to th data base.&#10;update the boiler page and add new window to add the boiler" />
     <MESSAGE value="added logo to the tab" />
     <MESSAGE value="fix the modifyData.py and improve the dataTraining.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix the modifyData.py and improve the dataTraining.py" />
+    <MESSAGE value="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -667,17 +689,19 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/FinalProject$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1747241739709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
     <SUITE FILE_PATH="coverage/FinalProject$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1748703186890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
-    <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747497486828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1748860545376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1748713928304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1747675848644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FinalProject$weatherAPIRequest.coverage" NAME="weatherAPIRequest Coverage Results" MODIFIED="1747239927069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$emailSender.coverage" NAME="emailSender Coverage Results" MODIFIED="1748783790263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1746260659288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$test_email_sender.coverage" NAME="test_email_sender Coverage Results" MODIFIED="1748784655540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747497486828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
