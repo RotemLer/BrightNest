@@ -8,6 +8,8 @@ from DVCS.Device import Device
 import numpy as np
 import os
 import pandas as pd
+import threading
+from UTILS.emailSender import send_alert_to_logged_in_user, get_user_email_from_g
 from datetime import datetime
 
 
@@ -295,6 +297,9 @@ class BoilerManager(Device):
                     target_time=target_time,
                     target_temp=shower_temp
                 )
+                if heating_time:
+                    print(f"✅ Heating required! Email will be scheduled at {heating_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    schedule_heating_email(heating_start_time=heating_time, target_time=target_time)
 
                 if temp_at_start is None:
                     status = "Insufficient - not enough time to heat"
@@ -424,3 +429,31 @@ class BoilerManager(Device):
 
         joblib.dump(scale, scale_path)
         print(f"📈 Updated scale with {scale_temperature:.2f}°C")
+
+def schedule_heating_email(heating_start_time: datetime, target_time: datetime):
+    now = datetime.now()
+    delay_seconds = (heating_start_time - now).total_seconds()
+
+    subject = "🔥 BrightNest: Boiler Heating Started"
+    message = f"The boiler is now starting to heat for your shower scheduled at {target_time.strftime('%H:%M')}."
+
+    # 🔍 Print email debug info early
+    user_email = get_user_email_from_g()
+    if user_email:
+        print(f"📧 Email will be sent to: {user_email}")
+    else:
+        print("⚠️ No email found for current user (maybe not authenticated).")
+
+    print("\n📨 [DEBUG] schedule_heating_email() called")
+    print(f"   ➤ Now: {now}")
+    print(f"   ➤ Heating Start Time: {heating_start_time}")
+    print(f"   ➤ Target Shower Time: {target_time}")
+    print(f"   ➤ Delay Seconds: {delay_seconds:.2f}")
+
+    if delay_seconds <= 0:
+        print("⚠️ Heating time already passed. Sending email immediately.")
+        send_alert_to_logged_in_user(subject=subject, message=message)
+    else:
+        print(f"⏱ Email scheduled in {delay_seconds:.1f} seconds")
+        threading.Timer(delay_seconds, send_alert_to_logged_in_user, args=(subject, message)).start()
+
