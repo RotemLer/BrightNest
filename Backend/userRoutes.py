@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime, timedelta
+from UTILS.emailSender import send_alert_to_logged_in_user
 import jwt
 
 userApi = Blueprint('userApi', __name__)
@@ -193,3 +194,12 @@ def update_device_data():
 @token_required
 def protected():
     return jsonify({"message": f"You accessed a protected route as {g.user['username']}!"})
+
+# @userApi.route('/test-alert', methods=['GET'])
+# @token_required
+# def test_email():
+#     send_alert_to_logged_in_user(
+#         subject="✅ BrightNest Test Email",
+#         message="If you received this, the system is working correctly!"
+#     )
+#     return jsonify({"message": "Test email sent ✅"}), 200

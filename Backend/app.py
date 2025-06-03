@@ -14,11 +14,13 @@ from Backend.userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
+from flask import g
 
 import jwt
 import datetime as dt
 from bson.objectid import ObjectId
 
+from UTILS.emailSender import send_alert_to_logged_in_user
 # === Flask App Initialization ===
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_super_secret_key_here'
@@ -157,7 +159,9 @@ def login():
 
     return jsonify({"message": "התחברת בהצלחה", "token": access_token})
 
+
 @app.route("/boiler/schedule", methods=["POST"])
+@jwt_required()
 def receive_schedule_and_respond():
     try:
         data = request.get_json()
@@ -201,6 +205,15 @@ def get_forecast_prediction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# @app.route("/test-alert", methods=["GET"])
+# @jwt_required()
+# def test_alert_email():
+#     subject = "🔧 BrightNest Test Alert"
+#     message = "This is a test alert email to the currently logged-in user."
+#     send_alert_to_logged_in_user(subject, message)
+#     return jsonify({"message": "Test email sent (if user email found)"}), 200
+
+
 def run_nightly_schedule():
     def job():
         while True:
@@ -213,6 +226,16 @@ def run_nightly_schedule():
             time.sleep(60)
     threading.Thread(target=job, daemon=True).start()
 
+    @app.before_request
+    @jwt_required(optional=True)
+    def load_user_into_g():
+        identity = get_jwt_identity()
+        if identity:
+            g.user = {"_id": identity}
+
+
 if __name__ == "__main__":
     run_nightly_schedule()
     app.run(debug=True, port=5000)
+
+
