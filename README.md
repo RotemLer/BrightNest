@@ -64,7 +64,7 @@ UI/
 
 ---
 
-## 🛠️ Development Tools Used (Bonus)
+## 🛠️ Development Tools Used
 
 - **Postman** – to test and debug backend APIs
 - **Git + GitHub** – for version control and collaboration
@@ -79,30 +79,24 @@ UI/
 
 This project demonstrates how artificial intelligence can optimize electric boiler usage in a residential setting, aiming to reduce energy consumption while keeping the water temperature comfortable for users.
 
-### 🔁 LSTM-Based Forecasting
-We used a recurrent neural network (LSTM) to predict the water temperature inside the boiler for the next few hours. The model takes into account:
-- Ambient temperature and weather conditions (cloud coverage)
-- Boiler size: 50L, 100L, or 150L
-- Presence or absence of a solar heating system
-- Last known boiler temperature
+### 🤖 Smart Boiler Optimization using LSTM Forecasting
+This project includes a custom LSTM (Long Short-Term Memory) neural network that predicts the internal water temperature of an electric boiler over the next 6 hours, based entirely on environmental conditions and boiler configuration.
 
-The LSTM model was trained on synthetic yet realistic weather and usage data, using TensorFlow/Keras, and was evaluated on multiple volume scenarios.
+🔁 LSTM-Based Temperature Forecasting
+The model was trained using real hourly weather data and simulates how external climate affects water temperature inside the boiler. Its inputs include:
 
-### 🧠 Deep Q-Learning Optimization
-In addition to forecasting, we developed a Deep Q-Learning (DQL) agent that decides when to turn the electric heater on or off. Its goal is to achieve the desired temperature for upcoming showers while minimizing power usage.
+Ambient temperature (hourly)
 
-The agent receives as input:
-- Current and forecasted temperatures
-- Upcoming user shower schedule
-- Cost of activation vs. comfort loss
+Cloud coverage (used to approximate solar heating effect)
 
-It learns optimal actions through repeated simulation and reward feedback.
+Boiler size: 50L, 100L, or 150L
 
-### 🧪 Support Modules
-The system includes:
-- A boiler simulator that mimics heat retention and dissipation over time
-- A synthetic weather data generator (CSV-based) that reproduces realistic hourly weather patterns
-- Training and evaluation tools for both forecasting and DQL models
+Whether a solar heating system is installed
+
+The LSTM learns temperature behavior patterns across different weather conditions and boiler types, allowing the system to anticipate natural heating or cooling trends. This forecast enables smarter boiler control decisions — like when to activate heating in advance — based on expected temperature alone.
+
+The model was developed using TensorFlow/Keras, and the forecast output is exported in CSV and JSON formats for seamless integration with the control system.
+
 
 ### 🛠️ Technologies Used
 - Python 3.12
