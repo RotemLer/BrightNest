@@ -1,14 +1,5 @@
 [
   {
-    "time":"2025-06-07T14:00:00.000",
-    "boiler temp for 50 L with solar system":66.7858810425,
-    "boiler temp for 50 L without solar system":20.4046344757,
-    "boiler temp for 100 L with solar system":66.4497909546,
-    "boiler temp for 100 L without solar system":20.5646209717,
-    "boiler temp for 150 L with solar system":64.9278106689,
-    "boiler temp for 150 L without solar system":21.1339893341
-  },
-  {
     "time":"2025-06-07T15:00:00.000",
     "boiler temp for 50 L with solar system":64.7300338745,
     "boiler temp for 50 L without solar system":20.3802947998,
@@ -385,5 +376,14 @@
     "boiler temp for 100 L without solar system":19.7665596008,
     "boiler temp for 150 L with solar system":62.7335510254,
     "boiler temp for 150 L without solar system":20.4301586151
+  },
+  {
+    "time":"2025-06-09T09:00:00.000",
+    "boiler temp for 50 L with solar system":67.1341781616,
+    "boiler temp for 50 L without solar system":19.7398872375,
+    "boiler temp for 100 L with solar system":64.8954391479,
+    "boiler temp for 100 L without solar system":19.9564781189,
+    "boiler temp for 150 L with solar system":64.2543563843,
+    "boiler temp for 150 L without solar system":20.5684432983
   }
 ]
