@@ -34,12 +34,12 @@ jwt = JWTManager(app)
 
 # ✅ CORS CONFIGURATION
 CORS(app,
-     supports_credentials=True,
-     origins=[
+     resources={r"/*": {"origins": [
          "http://localhost:3000",
-         "https://brightnest-ui.onrender.com"
+         "https://brightnest-ui.onrender.com",
          "https://brightnest.onrender.com"
-     ],
+     ]}},
+     supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "OPTIONS", "DELETE"])
 # ✅ Handle OPTIONS (preflight)
