@@ -2,6 +2,7 @@
   "name": "smart-boiler-app",
   "version": "0.1.0",
   "private": true,
+   "homepage": "https://brightnest-ui.onrender.com",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -24,7 +25,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "echo '/* /index.html 200' > build/_redirects",
+    "postbuild": "echo '/*    /index.html    200' > build/_redirects",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
