@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
 import {
-  BrowserRouter as Router,
+    HashRouter as Router,
   Routes,
   Route,
   useLocation
