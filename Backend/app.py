@@ -14,10 +14,10 @@ from userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5000")
-import jwt
-import datetime as dt
-from bson.objectid import ObjectId
+if os.environ.get("RENDER") == "true":
+    BACKEND_URL = "https://brightnest.onrender.com"
+else:
+    BACKEND_URL = "http://127.0.0.1:5000"
 
 # === Flask App Initialization ===
 app = Flask(__name__)
@@ -38,6 +38,7 @@ CORS(app,
      origins=[
          "http://localhost:3000",
          "https://brightnest-ui.onrender.com"
+         "https://brightnest.onrender.com"
      ],
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "OPTIONS", "DELETE"])
