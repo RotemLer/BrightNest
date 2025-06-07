@@ -14,7 +14,7 @@ from userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
-
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5000")
 import jwt
 import datetime as dt
 from bson.objectid import ObjectId
@@ -35,10 +35,12 @@ jwt = JWTManager(app)
 # ✅ CORS CONFIGURATION
 CORS(app,
      supports_credentials=True,
-     origins=["http://localhost:3000"],
+     origins=[
+         "http://localhost:3000",
+         "https://brightnest-ui.onrender.com"
+     ],
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "OPTIONS", "DELETE"])
-
 # ✅ Handle OPTIONS (preflight)
 @app.before_request
 def handle_options():
@@ -151,7 +153,7 @@ def login():
 
     try:
         print("🔁 Triggering schedule calculation on login")
-        requests.post("http://127.0.0.1:5000/boiler/schedule")
+        requests.post(f"{BACKEND_URL}/boiler/schedule")
     except Exception as e:
         print("⚠️ Failed to trigger boiler schedule on login:", e)
 
@@ -207,7 +209,7 @@ def run_nightly_schedule():
             now = datetime.now()
             if now.hour == 0 and now.minute == 0:
                 try:
-                    requests.post("http://127.0.0.1:5000/boiler/schedule")
+                    requests.post(f"{BACKEND_URL}/boiler/schedule")
                 except Exception as e:
                     print("❌ Midnight job failed:", e)
             time.sleep(60)
