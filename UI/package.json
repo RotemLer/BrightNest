@@ -1,8 +1,8 @@
 {
   "name": "smart-boiler-app",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
-   "homepage": "https://brightnest-ui.onrender.com",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

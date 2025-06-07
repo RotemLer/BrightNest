@@ -200,8 +200,11 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const isEmpty = !userSettings?.email || !userSettings?.boilerSize;
-    if (isAuthenticated && isEmpty) fetchUserSettings();
-  }, [isAuthenticated, fetchUserSettings, userSettings]);
+    if (isAuthenticated) {
+      fetchUserSettings();
+      fetchBoilerStatus();
+    }
+  }, [isAuthenticated, fetchUserSettings]);
 
   return (
     <AppContext.Provider

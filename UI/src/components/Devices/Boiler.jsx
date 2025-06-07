@@ -138,7 +138,10 @@ function Boiler() {
 
   const fetchForecastTemp = async () => {
     try {
-     const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/forecast`, {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/forecast`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -153,7 +156,11 @@ function Boiler() {
         const solar = userSettings.withSolar ? "with" : "without";
         const tempKey = `boiler temp for ${size} L ${solar} solar system`;
 
-        if (closest[tempKey]) setPredictedBoilerTemp(closest[tempKey]);
+        if (closest[tempKey]) {
+          setPredictedBoilerTemp(closest[tempKey]);
+        } else {
+          console.warn("⚠️ לא נמצאה תחזית תואמת:", closest);
+        }
       }
     } catch (err) {
       console.error("❌ שגיאה בקבלת תחזית הדוד:", err);
