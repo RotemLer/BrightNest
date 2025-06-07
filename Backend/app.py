@@ -1,17 +1,18 @@
+import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from datetime import datetime
 import pandas as pd
 import sys
 import os
-import json
 import time
 import threading
 import requests
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
 import jwt
