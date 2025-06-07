@@ -9,7 +9,7 @@ import time
 import threading
 import requests
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required
-from Backend.userRoutes import userApi, users_collection
+from userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
