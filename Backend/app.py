@@ -171,9 +171,12 @@ def receive_schedule_and_respond():
         schedule = {
             datetime.fromisoformat(item["datetime"]): {
                 "shower_temp": float(item.get("preferredTemp", 38.0)),
-                "users": 1
-            } for item in schedule_data
+                "users": 1,
+                "name": item.get("name", "משתמש")
+            }
+            for item in schedule_data
         }
+
         boiler = BoilerManager(name="UserBoiler", capacity_liters=capacity, has_solar=has_solar)
         df = boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False)
         df["Time"] = df["Time"].astype(str)
@@ -205,6 +208,27 @@ def get_forecast_prediction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+@app.route("/trigger-email", methods=["POST"])
+def trigger_email():
+    data = request.get_json()
+
+    user_email = data.get("email")
+    subject = data.get("subject")
+    message = data.get("message")
+    name = data.get("name")  # 🔁 NEW
+
+    if not user_email or not subject or not message:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    print(f"📤 Triggering email to: {user_email}")
+    send_alert_to_logged_in_user(subject=subject, message=message, name=name)  # ✅ Pass name
+
+    return jsonify({"message": "Email sent (via internal request)"}), 200
+
+
+
+
 # @app.route("/test-alert", methods=["GET"])
 # @jwt_required()
 # def test_alert_email():
@@ -212,6 +236,16 @@ def get_forecast_prediction():
 #     message = "This is a test alert email to the currently logged-in user."
 #     send_alert_to_logged_in_user(subject, message)
 #     return jsonify({"message": "Test email sent (if user email found)"}), 200
+
+
+@app.before_request
+@jwt_required(optional=True)
+def load_user_into_g():
+    identity = get_jwt_identity()
+    if identity:
+        g.user = {"_id": identity}
+
+
 
 
 def run_nightly_schedule():
@@ -225,13 +259,6 @@ def run_nightly_schedule():
                     print("❌ Midnight job failed:", e)
             time.sleep(60)
     threading.Thread(target=job, daemon=True).start()
-
-    @app.before_request
-    @jwt_required(optional=True)
-    def load_user_into_g():
-        identity = get_jwt_identity()
-        if identity:
-            g.user = {"_id": identity}
 
 
 if __name__ == "__main__":

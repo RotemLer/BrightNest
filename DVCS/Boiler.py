@@ -1,16 +1,29 @@
 # ==== Imports ====
 
+scheduled_email_times = set()
+
+
+# ==== Imports ====
+
+# ==== Imports ====
+
 import joblib
-from tensorflow.keras.models import load_model
-from datetime import datetime, timedelta
-import UTILS.weatherAPIRequest as weather
-from DVCS.Device import Device
-import numpy as np
 import os
+import numpy as np
 import pandas as pd
 import threading
-from UTILS.emailSender import send_alert_to_logged_in_user, get_user_email_from_g
-from datetime import datetime
+import requests
+
+from datetime import datetime, timedelta
+from flask import current_app, jsonify, request, g
+
+from tensorflow.keras.models import load_model
+import UTILS.weatherAPIRequest as weather
+from DVCS.Device import Device
+from UTILS.emailSender import schedule_heating_email, send_alert_to_logged_in_user, get_user_email_from_token
+
+
+
 
 
 # ==== Boiler Initialization ====
@@ -219,6 +232,8 @@ class BoilerManager(Device):
         # No time window in the forecast allows to reach target temperature
         return None, None
 
+
+
     def simulate_day_usage_with_custom_temps(self, schedule: dict, cold_temp: float = 20.0,
                                              liters_per_shower: float = 40.0,
                                              export_csv: bool = True,
@@ -298,8 +313,28 @@ class BoilerManager(Device):
                     target_temp=shower_temp
                 )
                 if heating_time:
-                    print(f"✅ Heating required! Email will be scheduled at {heating_time.strftime('%Y-%m-%d %H:%M:%S')}")
-                    schedule_heating_email(heating_start_time=heating_time, target_time=target_time)
+                    print(
+                        f"✅ Heating required! Email will be scheduled at {heating_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    auth_header = request.headers.get("Authorization")
+
+                    if not auth_header or not auth_header.startswith("Bearer "):
+                        return jsonify({"error": "Missing or invalid token"}), 401
+
+                    email_key = (heating_time.replace(second=0, microsecond=0), target_time)
+
+                    if email_key in scheduled_email_times:
+                        print(f"⚠️ Skipping duplicate schedule for: {email_key}")
+                    else:
+                        scheduled_email_times.add(email_key)
+                        user_context = g.get("user")
+                        user_email = user_context["_id"] if user_context else None
+                        schedule_heating_email(
+                            heating_start_time=heating_time,
+                            target_time=target_time,
+                            app=current_app._get_current_object(),
+                            user_email=user_email,
+                            test_mode=False
+                        )
 
                 if temp_at_start is None:
                     status = "Insufficient - not enough time to heat"
@@ -430,30 +465,30 @@ class BoilerManager(Device):
         joblib.dump(scale, scale_path)
         print(f"📈 Updated scale with {scale_temperature:.2f}°C")
 
-def schedule_heating_email(heating_start_time: datetime, target_time: datetime):
+
+
+def schedule_heating_email(heating_start_time: datetime, target_time: datetime, app, user_email: str, test_mode=False):
     now = datetime.now()
-    delay_seconds = (heating_start_time - now).total_seconds()
+
+    if test_mode:
+        delay_seconds = 10
+        print("🧪 [TEST MODE ENABLED] Email will be sent in 10 seconds.")
+    else:
+        delay_seconds = (heating_start_time - now).total_seconds()
 
     subject = "🔥 BrightNest: Boiler Heating Started"
-    message = f"The boiler is now starting to heat for your shower scheduled at {target_time.strftime('%H:%M')}."
+    message = f"הדוד שלך צריך להתחיל להתחמם עכשיו כדי להגיע לטמפרטורה הרצויה עד {target_time.strftime('%H:%M')}."
 
-    # 🔍 Print email debug info early
-    user_email = get_user_email_from_g()
-    if user_email:
-        print(f"📧 Email will be sent to: {user_email}")
-    else:
-        print("⚠️ No email found for current user (maybe not authenticated).")
-
-    print("\n📨 [DEBUG] schedule_heating_email() called")
-    print(f"   ➤ Now: {now}")
-    print(f"   ➤ Heating Start Time: {heating_start_time}")
-    print(f"   ➤ Target Shower Time: {target_time}")
-    print(f"   ➤ Delay Seconds: {delay_seconds:.2f}")
+    def job():
+        with app.app_context():
+            print(f"📨 [Thread] Triggered at: {datetime.now().strftime('%H:%M:%S')}")
+            send_alert_to_logged_in_user(subject=subject, message=message, user_email=user_email)
 
     if delay_seconds <= 0:
-        print("⚠️ Heating time already passed. Sending email immediately.")
-        send_alert_to_logged_in_user(subject=subject, message=message)
+        print("⚠️ Heating time already passed — sending email immediately.")
+        with app.app_context():
+            print(f"📨 [Immediate] Triggered at: {datetime.now().strftime('%H:%M:%S')}")
+            send_alert_to_logged_in_user(subject=subject, message=message, user_email=user_email)
     else:
-        print(f"⏱ Email scheduled in {delay_seconds:.1f} seconds")
-        threading.Timer(delay_seconds, send_alert_to_logged_in_user, args=(subject, message)).start()
-
+        print(f"⏱ Email scheduled in {delay_seconds:.1f} seconds (target: {target_time.strftime('%H:%M')})")
+        threading.Timer(delay_seconds, job).start()
