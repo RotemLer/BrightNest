@@ -55,18 +55,29 @@ df["weather_description"] = df["weather_description"].where(df["weather_descript
 # === 7. One-hot encode weather_description only ===
 df = pd.get_dummies(df, columns=["weather_description"])
 
-# === 8. Split into train/val/test by day ===
+from sklearn.model_selection import train_test_split
+
+# === 8. Split into train/val/test using sampled days across both years ===
 df["day"] = df["date"].dt.date
 unique_days = df["day"].unique()
+np.random.seed(42)
+np.random.shuffle(unique_days)
+
 n_days = len(unique_days)
-train_days = unique_days[:int(n_days * 0.7)]
-val_days = unique_days[int(n_days * 0.7):int(n_days * 0.85)]
-test_days = unique_days[int(n_days * 0.85):]
+n_train = int(n_days * 0.7)
+n_val = int(n_days * 0.15)
+n_test = n_days - n_train - n_val
+
+train_days = unique_days[:n_train]
+val_days = unique_days[n_train:n_train + n_val]
+test_days = unique_days[n_train + n_val:]
+
 
 train_df = df[df["day"].isin(train_days)].drop(columns="day")
 val_df = df[df["day"].isin(val_days)].drop(columns="day")
 test_df = df[df["day"].isin(test_days)].drop(columns="day")
 
+print(f"📊 Split: {len(train_days)} days train, {len(val_days)} val, {len(test_days)} test.")
 # === 9. Create consistent feature list from TRAIN only ===
 columns_to_exclude = target_columns + ["date"]
 features = sorted([col for col in train_df.columns if col not in columns_to_exclude])
