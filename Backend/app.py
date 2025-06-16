@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
@@ -10,6 +12,8 @@ import time
 import threading
 import requests
 from flask_jwt_extended import JWTManager, create_access_token
+from torch.profiler import schedule
+
 from Backend.userRoutes import userApi, users_collection
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
@@ -49,12 +53,15 @@ def handle_options():
 app.register_blueprint(userApi)
 
 # === Global Boiler Instance ===
-boiler = BoilerManager(name="UserBoiler", capacity_liters=100, has_solar=True)
+boiler = BoilerManager(name="general", capacity_liters=100, has_solar=True)
 
 # === Cache for Weather Forecast ===
 cached_forecast = None
 cached_location = None
 last_fetch_time = None
+
+static_lat=0.0
+static_lon=0.0
 
 @app.route("/")
 def home():
@@ -68,12 +75,16 @@ def get_forecast(lat, lon):
         longitude = float(lon)
         now = datetime.utcnow()
 
+        static_lat = latitude
+        static_lon = longitude
+
         if (cached_forecast and cached_location == (latitude, longitude) and
             last_fetch_time and now.date() == last_fetch_time.date()):
             return jsonify({
                 "location": {"latitude": latitude, "longitude": longitude, "requested_at": now.isoformat() + "Z", "cached": True},
                 "forecast": cached_forecast
             })
+
 
         forecast_df, X_input = get_forecast_dataframe_for_model(latitude, longitude, hours_ahead=96)
         full_df = pd.concat([forecast_df, X_input], axis=1)
@@ -109,7 +120,10 @@ def update_boiler_status():
 @app.route("/boiler/status", methods=["GET"])
 @jwt_required()
 def get_boiler_status():
-    return jsonify({"status": "on" if boiler.status else "off"}), 200
+    return jsonify({
+        "status": "on" if boiler.status else "off",
+        "temperature": boiler.get_temperature()  # ✅ מחזיר מהסקיילר אם יש
+    }), 200
 
 @app.route("/boiler/temperature", methods=["GET"])
 @jwt_required()
@@ -130,11 +144,59 @@ def heat_boiler():
 @app.route("/boiler/cool", methods=["POST"])
 @jwt_required()
 def cool_boiler():
+    user = get_jwt_identity()
     data = request.get_json()
-    used_liters = float(data.get("used_liters", 40))
-    cold_temp = float(data.get("cold_temp", 22))
-    new_temp = boiler.cool(current_temp=boiler.get_temperature(), used_liters=used_liters, cold_water_temp=cold_temp)
-    return jsonify({"new_temperature": new_temp}), 200
+
+    used_liters = data.get("used_liters", 40.0)
+    cold_temp = data.get("cold_temp", 22.0)
+    schedule_data = data.get("schedule", {})
+
+    # ✅ ממירים את המפתחות של schedule לתאריכים
+    try:
+        schedule = {
+            datetime.fromisoformat(k): v for k, v in schedule_data.items()
+        }
+    except Exception as e:
+        return jsonify({"error": f"Invalid schedule format: {e}"}), 400
+
+    # ✅ ודא שקיימות קואורדינטות
+    lat = data.get("lat")
+    lon = data.get("lon")
+
+    if lat is None or lon is None:
+        return jsonify({"error": "Missing lat/lon coordinates"}), 400
+
+    # ✅ טמפרטורה נוכחית מהדוד (אם לא קיימת – ברירת מחדל)
+    current_temp = boiler.get_temperature() or 25.0
+
+    # 🧊 קירור הדוד ועדכון
+    new_temp = boiler.cool(
+        schedule = schedule_data,
+        current_temp=current_temp,
+        used_liters=used_liters,
+        cold_water_temp=cold_temp,
+        lat=lat,
+        lon=lon
+    )
+
+    # 🔁 הרצת סימולציית תחזית עם הטמפ׳ החדשה (משולב inject)
+    boiler.simulate_day_usage_with_custom_temps(
+        schedule=schedule,
+        lat=lat,
+        lon=lon,
+        cold_temp=cold_temp,
+        liters_per_shower=used_liters,
+        export_csv=True,
+        inject_temp=new_temp,
+        inject_until=datetime.now() + dt.timedelta(hours=2)
+    )
+
+    return jsonify({
+        "message": "Boiler cooled and simulation continued",
+        "new_temperature": new_temp
+    })
+
+
 
 
 @app.route("/login", methods=["POST"])
@@ -161,7 +223,10 @@ def login():
 def receive_schedule_and_respond():
     try:
         data = request.get_json()
-        schedule_data = data.get("schedule", [])
+        lat = float(data.get("lat", 31.25))  # ברירת מחדל = באר שבע
+        lon = float(data.get("lon", 34.79))  # ברירת מחדל = באר שבע
+        print(f"📍 קיבלתי מיקום מהמשתמש: lat={lat}, lon={lon}")
+        schedule_data = data.get("schedule", {})
         capacity = int(data.get("boilerSize", 100))
         has_solar = bool(data.get("hasSolar", True))
         schedule = {
@@ -170,9 +235,17 @@ def receive_schedule_and_respond():
                 "users": 1
             } for item in schedule_data
         }
-        boiler = BoilerManager(name="UserBoiler", capacity_liters=capacity, has_solar=has_solar)
-        df = boiler.simulate_day_usage_with_custom_temps(schedule, export_csv=False)
+        print(f"📍schedule_data {schedule_data}")
+
+        if boiler.name == "general":
+            boiler.name = "UserBoiler"
+            boiler.capacity_liters = capacity
+            boiler.has_solar = has_solar
+
+        df = boiler.simulate_day_usage_with_custom_temps(schedule=schedule, lat=lat, lon=lon, export_csv=False)
+        print("after simulate")
         df["Time"] = df["Time"].astype(str)
+        print("g")
         with open("latest_recommendations.json", "w") as f:
             json.dump(df.to_dict(orient="records"), f)
         return jsonify(df.to_dict(orient="records"))
@@ -198,8 +271,10 @@ def get_forecast_prediction():
             with open(path, "r") as f:
                 return jsonify(json.load(f))
         return jsonify([])
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 def run_nightly_schedule():
     def job():
