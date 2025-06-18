@@ -63,6 +63,9 @@ last_fetch_time = None
 static_lat=0.0
 static_lon=0.0
 
+static_new_temp = None
+static_inject_until = None
+
 @app.route("/")
 def home():
     return "Welcome to the Open-Meteo Forecast API!"
@@ -92,11 +95,11 @@ def get_forecast(lat, lon):
         forecast_data = full_df.reset_index(drop=True).fillna(0).to_dict(orient="records")
 
         cached_forecast = forecast_data
-        cached_location = (latitude, longitude)
+        cached_location = (static_lat, static_lon)
         last_fetch_time = now
 
         return jsonify({
-            "location": {"latitude": latitude, "longitude": longitude, "requested_at": now.isoformat() + "Z", "cached": False},
+            "location": {"latitude":static_lat, "longitude":static_lon, "requested_at": now.isoformat() + "Z", "cached": False},
             "forecast": forecast_data
         })
     except Exception as e:
@@ -144,6 +147,7 @@ def heat_boiler():
 @app.route("/boiler/cool", methods=["POST"])
 @jwt_required()
 def cool_boiler():
+    global static_new_temp, static_inject_until
     user = get_jwt_identity()
     data = request.get_json()
 
@@ -168,9 +172,11 @@ def cool_boiler():
 
     # ✅ טמפרטורה נוכחית מהדוד (אם לא קיימת – ברירת מחדל)
     current_temp = boiler.get_temperature() or 25.0
+    print(f"cool route - current temp:  {current_temp}")
+
 
     # 🧊 קירור הדוד ועדכון
-    new_temp = boiler.cool(
+    static_new_temp, static_inject_until = boiler.cool(
         schedule = schedule_data,
         current_temp=current_temp,
         used_liters=used_liters,
@@ -179,6 +185,11 @@ def cool_boiler():
         lon=lon
     )
 
+    print(f"cool route - static_inject_until:  {static_inject_until}")
+    print(f"cool route - static_new_temp:  {static_new_temp}")
+
+    boiler.last_inject_until = static_inject_until
+    boiler.last_static_temp = static_new_temp
     # 🔁 הרצת סימולציית תחזית עם הטמפ׳ החדשה (משולב inject)
     boiler.simulate_day_usage_with_custom_temps(
         schedule=schedule,
@@ -187,13 +198,11 @@ def cool_boiler():
         cold_temp=cold_temp,
         liters_per_shower=used_liters,
         export_csv=True,
-        inject_temp=new_temp,
-        inject_until=datetime.now() + dt.timedelta(hours=2)
     )
 
     return jsonify({
         "message": "Boiler cooled and simulation continued",
-        "new_temperature": new_temp
+        "new_temperature": static_new_temp
     })
 
 
@@ -241,9 +250,22 @@ def receive_schedule_and_respond():
             boiler.name = "UserBoiler"
             boiler.capacity_liters = capacity
             boiler.has_solar = has_solar
-
+        print(f"inject temp in schedule {static_new_temp}")
+        print(f"inject until in schedule {static_inject_until}")
+        boiler.last_inject_until = static_inject_until
+        boiler.last_static_temp = static_new_temp
         df = boiler.simulate_day_usage_with_custom_temps(schedule=schedule, lat=lat, lon=lon, export_csv=False)
         print("after simulate")
+
+        ##
+        boiler.temperature = boiler.load_forecasted_temp_from_prediction_file(
+            capacity_liters=boiler.capacity_liters,
+            has_solar=boiler.has_solar
+        )
+        print(f"📦 התחזית העדכנית לדוד: {boiler.temperature}°C")
+
+        ##
+
         df["Time"] = df["Time"].astype(str)
         print("g")
         with open("latest_recommendations.json", "w") as f:
