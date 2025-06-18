@@ -254,7 +254,7 @@ const fetchFamilyData = async () => {
         headers: { 'Authorization': `Bearer ${token}` },
       });
     console.log("recommendations for boiler")
-      const recData = await res.ok ? await recRes.json() : [];
+      const recData = recRes.ok ? await recRes.json() : [];
       setRecommendedBoilerHours(recData);
 
       const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
