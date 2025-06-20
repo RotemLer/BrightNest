@@ -10,15 +10,16 @@ import time
 import threading
 import requests
 from flask_jwt_extended import JWTManager, create_access_token
-from Backend.userRoutes import userApi, users_collection
+from Backend.userRoutes import userApi, users_collection, token_required
 from DVCS.Boiler import BoilerManager
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
+from flask_jwt_extended import jwt_required
+from Backend.userRoutes import db, users_collection
 from flask import g
+from Backend.dailyStatsLogger import save_daily_summary
 
-import jwt
-import datetime as dt
-from bson.objectid import ObjectId
+
 
 from UTILS.emailSender import send_alert_to_logged_in_user
 # === Flask App Initialization ===
@@ -34,12 +35,14 @@ app.config["JWT_HEADER_NAME"] = "Authorization"
 app.config["JWT_HEADER_TYPE"] = "Bearer"
 jwt = JWTManager(app)
 
+
 # ✅ CORS CONFIGURATION
 CORS(app,
      supports_credentials=True,
      origins=["http://localhost:3000"],
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "OPTIONS", "DELETE"])
+
 
 # ✅ Handle OPTIONS (preflight)
 @app.before_request
@@ -57,6 +60,21 @@ boiler = BoilerManager(name="UserBoiler", capacity_liters=100, has_solar=True)
 cached_forecast = None
 cached_location = None
 last_fetch_time = None
+
+
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+
+@app.before_request
+def load_user_into_g():
+    try:
+        verify_jwt_in_request(optional=True)  # ✅ FIX: wrap with this!
+        identity = get_jwt_identity()
+        if identity:
+            g.user = {"_id": identity}
+    except Exception as e:
+        # Optional: log or silently ignore to avoid crashing CORS preflight/etc.
+        g.user = None
+
 
 @app.route("/")
 def home():
@@ -227,23 +245,12 @@ def trigger_email():
     return jsonify({"message": "Email sent (via internal request)"}), 200
 
 
-
-
-# @app.route("/test-alert", methods=["GET"])
-# @jwt_required()
-# def test_alert_email():
-#     subject = "🔧 BrightNest Test Alert"
-#     message = "This is a test alert email to the currently logged-in user."
-#     send_alert_to_logged_in_user(subject, message)
-#     return jsonify({"message": "Test email sent (if user email found)"}), 200
-
-
-@app.before_request
-@jwt_required(optional=True)
-def load_user_into_g():
-    identity = get_jwt_identity()
-    if identity:
-        g.user = {"_id": identity}
+@app.route('/boiler/stats/save-daily', methods=['GET'])
+@jwt_required()
+def save_today_summary():
+    user_id = get_jwt_identity()  # ✅ now working
+    save_daily_summary(user_id, db, users_collection)
+    return jsonify({"message": f"Daily summary saved for {user_id}"}), 200
 
 
 

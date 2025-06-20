@@ -20,7 +20,7 @@ from flask import current_app, jsonify, request, g
 from tensorflow.keras.models import load_model
 import UTILS.weatherAPIRequest as weather
 from DVCS.Device import Device
-from UTILS.emailSender import schedule_heating_email, send_alert_to_logged_in_user, get_user_email_from_token
+from UTILS.emailSender import schedule_heating_email, send_alert_to_logged_in_user
 
 
 
@@ -316,7 +316,6 @@ class BoilerManager(Device):
                     print(
                         f"✅ Heating required! Email will be scheduled at {heating_time.strftime('%Y-%m-%d %H:%M:%S')}")
                     auth_header = request.headers.get("Authorization")
-
                     if not auth_header or not auth_header.startswith("Bearer "):
                         return jsonify({"error": "Missing or invalid token"}), 401
 
