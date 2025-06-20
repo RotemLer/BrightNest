@@ -8,7 +8,7 @@ output_file = "Updated_With_Boiler_Hourly_Realistic_v4.csv.gz"
 
 # Constants
 BOILER_SIZES = [50, 100, 150]
-MAX_TEMP_NO_SOLAR = 50
+MAX_TEMP_LIMIT = 90
 chunk_size = 100000
 
 # Physical constants
@@ -21,41 +21,48 @@ INSULATION_THICKNESS = 0.05  # m
 MIN_EFFECTIVE_RADIATION = 100
 MAX_COOLING_PER_HOUR = 0.8
 
-# Efficiency by boiler size
 COLLECTOR_EFFICIENCY_PER_SIZE = {
     50: 1.0,
     100: 0.85,
     150: 0.75
 }
 
-# Starting temperatures
+# Starting boiler temperatures
 previous_temps = {
     size: {"with": random.uniform(30, 35), "without": random.uniform(30, 35)}
     for size in BOILER_SIZES
 }
 
 # === Solar heating function ===
-def compute_solar_heating(prev_temp, radiation, cloud_cover, hour, month, volume_liters):
+def compute_solar_heating(prev_temp, radiation, cloud_cover, hour, volume_liters, ambient_temp):
     if 6 <= hour <= 18 and radiation > MIN_EFFECTIVE_RADIATION:
+
         hour_weight = np.exp(-((hour - 13.5) ** 2) / 3.0)
-        temp_loss_factor = max(0.3, 1 - ((prev_temp - 45) / 40))
         cloud_factor = (1 - cloud_cover) ** 1.2
+        temp_loss_factor = max(0.3, 1 - ((prev_temp - 45) / 40))
         size_eff = COLLECTOR_EFFICIENCY_PER_SIZE.get(volume_liters, 0.8)
+
+
+        ambient_factor = np.clip((ambient_temp - 5) / 15, 0.0, 1.0)
+
+        radiation_factor = np.clip((radiation - 100) / 400, 0.0, 1.0)
+
 
         effective_radiation = (
             radiation * cloud_factor *
             SOLAR_EFFICIENCY * hour_weight *
-            temp_loss_factor * size_eff * 1.15
+            temp_loss_factor * size_eff *
+            ambient_factor * radiation_factor * 1.15
         )
+
 
         energy_kWh = (effective_radiation / 1000) * COLLECTOR_AREA
         energy_kJ = energy_kWh * 3600
         mass = volume_liters * WATER_DENSITY
         delta_temp = energy_kJ / (mass * WATER_HEAT_CAPACITY)
-        temp = prev_temp + delta_temp + np.random.normal(0, 0.05)
 
-        seasonal_cap = 68 if 4 <= month <= 9 else 60
-        return min(temp, seasonal_cap)
+        temp = prev_temp + delta_temp + np.random.normal(0, 0.05)
+        return temp
     else:
         return prev_temp
 
@@ -73,6 +80,7 @@ def compute_physical_cooling(prev_temp, ambient_temp, volume_liters, hour, wind_
     Q_kJ = Q_watts * 3600 / 1000
     delta_temp = Q_kJ / (mass * WATER_HEAT_CAPACITY)
 
+    # השפעת שעה ביום
     if hour >= 21 or hour <= 5:
         hour_factor = 1.3
     elif 6 <= hour <= 9 or 18 <= hour <= 20:
@@ -83,6 +91,7 @@ def compute_physical_cooling(prev_temp, ambient_temp, volume_liters, hour, wind_
     if 13 <= hour <= 16 and ambient_temp > 27:
         hour_factor *= 0.6
 
+    # רוח ובידוד
     wind_factor = 1 + 0.05 * wind_speed
     insulation_factor = 1 - (volume_liters - 50) / 300
 
@@ -91,7 +100,7 @@ def compute_physical_cooling(prev_temp, ambient_temp, volume_liters, hour, wind_
 
     return prev_temp - delta_temp + np.random.normal(0, 0.05)
 
-# === Main simulation loop ===
+# === Main loop ===
 updated_chunks = []
 
 for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_bad_lines="warn"):
@@ -101,13 +110,10 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
     for size in BOILER_SIZES:
         chunk[f"boiler temp for {size} L with solar system"] = 0.0
         chunk[f"boiler temp for {size} L without solar system"] = 0.0
-        chunk[f"energy consumption for {size}L boiler with solar system"] = 0.0
-        chunk[f"energy consumption for {size}L boiler without solar system"] = 0.0
 
     for i in range(len(chunk)):
         row = chunk.iloc[i]
         hour = row["date"].hour
-        month = row["date"].month
         ambient_temp = row["temperature_2m"]
         radiation = row.get("direct_radiation", 0)
         cloud_cover = row.get("cloud_cover", 0.0) / 100
@@ -117,26 +123,22 @@ for chunk in pd.read_csv(input_file, chunksize=chunk_size, low_memory=False, on_
             prev_with = previous_temps[size]["with"]
             prev_without = previous_temps[size]["without"]
 
-            temp_with = compute_solar_heating(prev_with, radiation, cloud_cover, hour, month, size)
+            temp_with = compute_solar_heating(prev_with, radiation, cloud_cover, hour, size, ambient_temp)
             temp_with = compute_physical_cooling(temp_with, ambient_temp, size, hour, wind_speed)
 
             temp_without = compute_physical_cooling(prev_without, ambient_temp, size, hour, wind_speed)
 
-            # הגנה: דוד סולארי חם יותר
-            temp_with = max(temp_with, temp_without + 1.5)
 
+            temp_with = max(temp_with, temp_without + 1.5)
             min_temp = 0.6 * ambient_temp
-            temp_with = max(temp_with, min_temp)
-            temp_without = max(temp_without, min_temp)
-            temp_with = min(temp_with, MAX_TEMP_NO_SOLAR + 40)
+            temp_with = np.clip(temp_with, min_temp, MAX_TEMP_LIMIT)
+            temp_without = np.clip(temp_without, min_temp, MAX_TEMP_LIMIT)
 
             previous_temps[size]["with"] = temp_with
             previous_temps[size]["without"] = temp_without
 
             chunk.at[chunk.index[i], f"boiler temp for {size} L with solar system"] = round(temp_with, 2)
             chunk.at[chunk.index[i], f"boiler temp for {size} L without solar system"] = round(temp_without, 2)
-            chunk.at[chunk.index[i], f"energy consumption for {size}L boiler with solar system"] = 0.0
-            chunk.at[chunk.index[i], f"energy consumption for {size}L boiler without solar system"] = 0.0
 
     updated_chunks.append(chunk)
 
@@ -147,6 +149,6 @@ if updated_chunks:
     numeric_columns = df_final.select_dtypes(include=["number"]).columns
     df_final[numeric_columns] = df_final[numeric_columns].round(4)
     df_final.to_csv(output_file, index=False, compression="gzip", float_format="%.4f")
-    print(f"✅ The updated dataset has been saved to: {output_file}")
+    print(f"✅ Dataset saved to: {output_file}")
 else:
     print("❌ No valid data to save.")

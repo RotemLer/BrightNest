@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {
+    HashRouter as Router,
+  Routes,
+  Route,
+  useLocation
+} from 'react-router-dom';
 import HomePage from './components/Auth/HomePage';
 import Dashboard from './components/Dashboard/Dashboard';
 import Layout from './components/Layout/Layout';
