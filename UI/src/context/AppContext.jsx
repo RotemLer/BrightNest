@@ -9,6 +9,9 @@ const shouldRefetch = (key, thresholdMs = 1000 * 60 * 60) => {
 };
 
 export const AppProvider = ({ children }) => {
+  // ✅ MINIMAL FIX: Add token state that loads from localStorage
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
+
   const [userSettings, setUserSettings] = useState(() => {
     const saved = localStorage.getItem('userSettings');
     return saved ? JSON.parse(saved) : {
@@ -32,6 +35,18 @@ export const AppProvider = ({ children }) => {
   const [startHour, setStartHour] = useState('');
   const [endHour, setEndHour] = useState('');
   const [heatingMode, setHeatingMode] = useState('manual');
+
+  // ✅ MINIMAL FIX: Keep token state in sync with localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const currentToken = localStorage.getItem('token');
+      setToken(currentToken);
+    };
+
+    // Listen for storage changes (useful for multiple tabs)
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // ✅ theme loading on startup
   useEffect(() => {
@@ -174,12 +189,14 @@ export const AppProvider = ({ children }) => {
 
   const login = (token) => {
     localStorage.setItem('token', token);
+    setToken(token); // ✅ MINIMAL FIX: Update token state
     setIsAuthenticated(true);
     fetchUserSettings();
   };
 
   const logout = () => {
     localStorage.clear();
+    setToken(null); // ✅ MINIMAL FIX: Clear token state
     setIsAuthenticated(false);
     setUserSettings({
       location: '',
@@ -206,6 +223,7 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
+        token, // ✅ MINIMAL FIX: Add token to context
         userSettings,
         setUserSettings,
         updateSettings,

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 import WeatherForecast from './WeatherForecast';
 import { Plus } from 'lucide-react';
+import EnergySavingsGraph from "./EnergySavingsGraph";
+
 
 function Dashboard() {
   const {
@@ -110,6 +112,14 @@ function Dashboard() {
             lat: userSettings.lat,
             lon: userSettings.lon,
           }} />
+        </div>
+      </div>
+
+            {/* גרף חיסכון באנרגיה */}
+      <div className="mt-6">
+        <div className="card w-full max-w-full mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+          <h2 className="text-xl font-medium mb-4 text-gray-800 dark:text-white text-center"></h2>
+          <EnergySavingsGraph />
         </div>
       </div>
     </div>
