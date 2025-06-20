@@ -1,13 +1,11 @@
 from contextlib import nullcontext
-
+import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from datetime import datetime
 import pandas as pd
 import sys
 import os
-import json
 import time
 import threading
 import requests
@@ -15,13 +13,16 @@ from flask_jwt_extended import JWTManager, create_access_token
 from torch.profiler import schedule
 
 from Backend.userRoutes import userApi, users_collection
-from DVCS.Boiler import BoilerManager
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 
-import jwt
-import datetime as dt
-from bson.objectid import ObjectId
+from flask_jwt_extended import JWTManager, create_access_token,jwt_required
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from DVCS.Boiler import BoilerManager
+
+from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
+if os.environ.get("RENDER") == "true":
+    BACKEND_URL = "https://brightnest.onrender.com"
+else:
+    BACKEND_URL = "http://127.0.0.1:5000"
 
 # === Flask App Initialization ===
 app = Flask(__name__)
@@ -38,11 +39,14 @@ jwt = JWTManager(app)
 
 # ✅ CORS CONFIGURATION
 CORS(app,
+     resources={r"/*": {"origins": [
+         "http://localhost:3000",
+         "https://brightnest-ui.onrender.com",
+         "https://brightnest.onrender.com"
+     ]}},
      supports_credentials=True,
-     origins=["http://localhost:3000"],
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "OPTIONS", "DELETE"])
-
 # ✅ Handle OPTIONS (preflight)
 @app.before_request
 def handle_options():
@@ -222,7 +226,7 @@ def login():
 
     try:
         print("🔁 Triggering schedule calculation on login")
-        requests.post("http://127.0.0.1:5000/boiler/schedule")
+        requests.post(f"{BACKEND_URL}/boiler/schedule")
     except Exception as e:
         print("⚠️ Failed to trigger boiler schedule on login:", e)
 
@@ -304,7 +308,7 @@ def run_nightly_schedule():
             now = datetime.now()
             if now.hour == 0 and now.minute == 0:
                 try:
-                    requests.post("http://127.0.0.1:5000/boiler/schedule")
+                    requests.post(f"{BACKEND_URL}/boiler/schedule")
                 except Exception as e:
                     print("❌ Midnight job failed:", e)
             time.sleep(60)

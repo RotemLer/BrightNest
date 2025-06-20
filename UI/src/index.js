@@ -4,7 +4,7 @@ import './index.css';
 import './App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AppProvider } from './context/AppContext'; // ← חשוב מאוד!
+import { AppProvider } from './context/AppContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
