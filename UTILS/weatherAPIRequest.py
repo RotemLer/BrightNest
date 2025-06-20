@@ -33,7 +33,7 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
 
-    # === Extract current surface pressure
+    # === Extract current surface pressureF
     current = response.Current()
     surface_pressure = current.Variables(0).Value()
 
@@ -47,7 +47,7 @@ def get_forecast_dataframe_for_model(lat, lon, hours_ahead=6):
         inclusive="left"
     )
     rad_df = pd.DataFrame({"date": rad_times, "direct_radiation": rad_values})
-    rad_df["date"] = rad_df["date"].dt.tz_convert("Asia/Jerusalem")  # ✅ convert to local
+    rad_df["date"] = rad_df["date"].dt.tz_convert("Asia/Jerusalem")
     rad_df = rad_df.resample("1h", on="date").mean().reset_index()
 
     # === Extract hourly weather data

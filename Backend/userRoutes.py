@@ -4,8 +4,10 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime, timedelta
-from UTILS.emailSender import send_alert_to_logged_in_user
+from Backend.dailyStatsLogger import save_daily_summary
 import jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import jsonify, g
 
 userApi = Blueprint('userApi', __name__)
 CORS(userApi, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
@@ -66,7 +68,7 @@ def signup():
 
     return jsonify({"message": "User created successfully!"}), 201
 
-# התחברות
+#התחברות
 @userApi.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -149,9 +151,13 @@ def update_family():
     data = request.get_json()
     family = data.get("family", [])
     result = users_collection.update_one({"username": username}, {"$set": {"family": family}})
+
     if result.matched_count == 0:
         return jsonify({"error": "User not found"}), 404
+
+    save_daily_summary(username, db, users_collection)
     return jsonify({"message": "Family updated successfully"}), 200
+
 
 # ✅ שליפת device-data (devices + family)
 @userApi.route('/device-data', methods=['GET'])
@@ -195,11 +201,53 @@ def update_device_data():
 def protected():
     return jsonify({"message": f"You accessed a protected route as {g.user['username']}!"})
 
-# @userApi.route('/test-alert', methods=['GET'])
-# @token_required
-# def test_email():
-#     send_alert_to_logged_in_user(
-#         subject="✅ BrightNest Test Email",
-#         message="If you received this, the system is working correctly!"
-#     )
-#     return jsonify({"message": "Test email sent ✅"}), 200
+
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+
+
+
+
+# REPLACE the /summary/today route with this version:
+@userApi.route('/summary/today', methods=['GET'])
+@jwt_required()  # ✅ Use flask_jwt_extended instead of @token_required
+def get_today_summary():
+    from datetime import datetime
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    username = get_jwt_identity()  # ✅ Get directly from JWT token
+
+    print(f"🔍 Querying summary for user_id: {username} and date: {today}")
+
+    summary = db["dailySummaries"].find_one({
+        "user_id": username,
+        "date": today
+    }, {"_id": 0})
+
+    print("📦 Found summary:", summary)
+
+    if not summary:
+        return jsonify({"message": "No summary for today"}), 204
+
+    return jsonify(summary), 200
+
+@userApi.route('/summaries/week', methods=['GET'])
+@token_required
+def get_weekly_summaries():
+    from datetime import datetime, timedelta
+
+    username = g.user.get("username")
+    if not username:
+        return jsonify({"error": "Missing username"}), 401
+
+    today = datetime.now().date()
+    week_ago = today - timedelta(days=6)
+
+    summaries = list(db["dailySummaries"].find({
+        "user_id": username,
+        "date": {"$gte": week_ago.isoformat()}  # this works even if fewer than 7
+    }, {"_id": 0}).sort("date", 1))
+
+    print("🔍 Weekly summary query result:", summaries)
+
+    return jsonify(summaries[-7:]), 200  # last 7 entries only, if you expect more
+
