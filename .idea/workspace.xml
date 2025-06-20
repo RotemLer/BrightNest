@@ -4,15 +4,469 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="update the app name">
+    <list default="true" id="569ad78c-0470-404c-b594-1af5015f179b" name="Changes" comment="merge rotem and dvir branch">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/.cache.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.cache.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/forecast_prediction.json" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/forecast_prediction.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/latest_recommendations.json" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/latest_recommendations.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/forecast_prediction.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/latest_recommendations.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DVCS/Boiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/DVCS/Boiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/components/Devices/Boiler.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/dayjs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/constant.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/af.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/am.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-dz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-iq.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-kw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-ly.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-ma.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-sa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar-tn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/az.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/be.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bn-bd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/br.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/bs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/cs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/cv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/cy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/da.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/de-at.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/de-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/de.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/dv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/el.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-au.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-gb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-ie.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-il.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-in.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-nz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-sg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en-tt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/en.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/eo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/es-do.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/es-mx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/es-pr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/es-us.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/es.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/et.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/eu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fr-ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fr-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/fy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ga.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/gd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/gl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/gom-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/gu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/he.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/hi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/hr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ht.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/hu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/hy-am.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/id.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/is.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/it-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/it.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ja.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/jv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ka.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/kk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/km.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/kn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ko.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ku.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ky.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/lb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/lo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/lt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/lv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/me.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/mi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/mk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ml.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/mn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/mr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ms-my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/mt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/nb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ne.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/nl-be.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/nl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/nn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/oc-lnc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/pa-in.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/pl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/pt-br.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/pt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/rn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ro.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ru.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/rw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/se.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/si.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sq.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sr-cyrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ss.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sv-fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/sw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ta.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/te.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/th.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tl-ph.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tlh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/types.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tzl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tzm-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/tzm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ug-cn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/uk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/ur.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/uz-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/uz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/vi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/x-pseudo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/yo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/zh-cn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/zh-hk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/zh-tw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/locale/zh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/advancedFormat/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/advancedFormat/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/arraySupport/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/arraySupport/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/badMutable/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/badMutable/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/bigIntSupport/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/bigIntSupport/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/buddhistEra/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/buddhistEra/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/calendar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/calendar/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/customParseFormat/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/customParseFormat/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/dayOfYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/dayOfYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/devHelper/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/devHelper/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/duration/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/duration/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isBetween/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isBetween/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isLeapYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isLeapYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isMoment/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isMoment/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isSameOrAfter/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isSameOrAfter/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isSameOrBefore/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isSameOrBefore/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isToday/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isToday/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isTomorrow/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isTomorrow/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isYesterday/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isYesterday/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isoWeek/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isoWeek/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isoWeeksInYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/isoWeeksInYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/localeData/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/localeData/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/localizedFormat/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/localizedFormat/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/localizedFormat/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/minMax/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/minMax/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/negativeYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/negativeYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/objectSupport/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/objectSupport/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/pluralGetSet/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/pluralGetSet/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/preParsePostFormat/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/preParsePostFormat/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/quarterOfYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/quarterOfYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/relativeTime/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/relativeTime/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/timezone/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/timezone/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/toArray/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/toArray/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/toObject/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/toObject/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/updateLocale/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/updateLocale/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/utc/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/utc/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekOfYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekOfYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekYear/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekYear/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekday/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/plugin/weekday/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/esm/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/af.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/am.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-dz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-iq.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-kw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-ly.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-ma.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-sa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar-tn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/az.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/be.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bn-bd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/br.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/bs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/cs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/cv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/cy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/da.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/de-at.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/de-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/de.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/dv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/el.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-au.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-gb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-ie.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-il.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-in.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-nz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-sg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en-tt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/en.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/eo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/es-do.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/es-mx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/es-pr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/es-us.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/es.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/et.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/eu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fr-ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fr-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/fy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ga.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/gd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/gl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/gom-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/gu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/he.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/hi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/hr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ht.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/hu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/hy-am.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/id.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/is.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/it-ch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/it.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ja.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/jv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ka.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/kk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/km.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/kn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ko.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ku.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ky.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/lb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/lo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/lt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/lv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/me.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/mi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/mk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ml.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/mn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/mr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ms-my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/mt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/nb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ne.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/nl-be.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/nl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/nn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/oc-lnc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/pa-in.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/pl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/pt-br.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/pt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/rn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ro.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ru.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/rw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/se.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/si.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sq.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sr-cyrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ss.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sv-fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/sw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ta.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/te.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/th.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tl-ph.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tlh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/types.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tzl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tzm-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/tzm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ug-cn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/uk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/ur.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/uz-latn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/uz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/vi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/x-pseudo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/yo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/zh-cn.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/zh-hk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/zh-tw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/locale/zh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/advancedFormat.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/advancedFormat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/arraySupport.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/arraySupport.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/badMutable.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/badMutable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/bigIntSupport.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/bigIntSupport.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/buddhistEra.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/buddhistEra.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/calendar.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/calendar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/customParseFormat.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/customParseFormat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/dayOfYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/dayOfYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/devHelper.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/devHelper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/duration.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/duration.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isBetween.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isBetween.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isLeapYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isLeapYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isMoment.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isMoment.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isSameOrAfter.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isSameOrAfter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isSameOrBefore.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isSameOrBefore.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isToday.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isToday.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isTomorrow.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isTomorrow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isYesterday.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isYesterday.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isoWeek.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isoWeek.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isoWeeksInYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/isoWeeksInYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/localeData.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/localeData.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/localizedFormat.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/localizedFormat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/minMax.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/minMax.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/negativeYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/negativeYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/objectSupport.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/objectSupport.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/pluralGetSet.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/pluralGetSet.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/preParsePostFormat.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/preParsePostFormat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/quarterOfYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/quarterOfYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/relativeTime.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/relativeTime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/timezone.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/timezone.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/toArray.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/toArray.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/toObject.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/toObject.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/updateLocale.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/updateLocale.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/utc.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/utc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekOfYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekOfYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekYear.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekYear.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekday.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/dayjs/plugin/weekday.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,10 +498,13 @@
       </set>
     </option>
   </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="master" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master-backup" />
+        <entry key="$PROJECT_DIR$" value="DAN-updated-branch" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,12 +533,12 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
-                    <option name="branchName" value="DVIR-branch" />
-                    <option name="lastUsedInstant" value="1748717228" />
+                    <option name="branchName" value="new-version-branch" />
+                    <option name="lastUsedInstant" value="1750437424" />
                   </RecentBranch>
                   <RecentBranch>
-                    <option name="branchName" value="master-backup" />
-                    <option name="lastUsedInstant" value="1748717161" />
+                    <option name="branchName" value="DVIR-branch" />
+                    <option name="lastUsedInstant" value="1743868308" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="master" />
@@ -99,7 +556,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/RotemLer/BrightNest.git&quot;,
-    &quot;accountId&quot;: &quot;6c6e2e2a-949e-429c-8082-2471c9fd0f19&quot;
+    &quot;accountId&quot;: &quot;a2e999f8-83b1-4456-91f5-e280c852bce1&quot;
   },
   &quot;recentNewPullRequestHead&quot;: {
     &quot;server&quot;: {
@@ -116,6 +573,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2vDWo3nB4D74adZn6KpmHCmUZpK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -124,18 +584,19 @@
   "keyToString": {
     "Node.js.App.js.executor": "Run",
     "Node.js.Boiler.jsx.executor": "Run",
-    "Python.Boiler.executor": "Run",
     "Python.HistoricalWeatherAPI.executor": "Run",
     "Python.Run Weather API.executor": "Profiler",
     "Python.app.executor": "Run",
     "Python.dataGenerator.executor": "Run",
     "Python.dataTraining.executor": "Run",
+    "Python.emailSender.executor": "Run",
     "Python.finalProject .executor": "Run",
     "Python.get-pip.executor": "Run",
     "Python.main.executor": "Run",
     "Python.modifyData.executor": "Run",
     "Python.selectors.executor": "Run",
     "Python.start-all.executor": "Run",
+    "Python.test_email_sender.executor": "Run",
     "Python.test_load_data.executor": "Run",
     "Python.userRoutes.executor": "Run",
     "Python.weatherAPIRequest (2).executor": "ConcurrencyExecutor",
@@ -149,8 +610,8 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "ts.external.directory.path": "/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -220,29 +681,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/app.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_load_data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="FinalProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_load_data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -348,11 +786,6 @@
       <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.test_load_data" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -397,11 +830,19 @@
       <workItem from="1747318305932" duration="3410000" />
       <workItem from="1747491933121" duration="13679000" />
       <workItem from="1747675833942" duration="887000" />
-      <workItem from="1748777847136" duration="3482000" />
-      <workItem from="1749215634597" duration="3512000" />
-      <workItem from="1749819605087" duration="4923000" />
-      <workItem from="1749982359947" duration="13523000" />
-      <workItem from="1750406705075" duration="1503000" />
+      <workItem from="1748777510318" duration="314000" />
+      <workItem from="1748778059353" duration="3919000" />
+      <workItem from="1748782482976" duration="6461000" />
+      <workItem from="1748850533602" duration="11416000" />
+      <workItem from="1748986145575" duration="865000" />
+      <workItem from="1749739624316" duration="8973000" />
+      <workItem from="1749802115812" duration="15505000" />
+      <workItem from="1749915079697" duration="7903000" />
+      <workItem from="1750189960570" duration="4055000" />
+      <workItem from="1750253593290" duration="10785000" />
+      <workItem from="1750287000357" duration="213000" />
+      <workItem from="1750287353622" duration="425000" />
+      <workItem from="1750321753633" duration="23593000" />
     </task>
     <task id="LOCAL‎-00001" summary="try - dvir siksik">
       <option name="closed" value="true" />
@@ -587,191 +1028,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748609568192</updated>
     </task>
-    <task id="LOCAL-00024" summary="now when we trun on / off the boiler from the ui its send it to the backedn.&#10;I reduced the server calls, requests are sent to the server every hour or page update or refresh">
+    <task id="LOCAL-00024" summary="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix">
       <option name="closed" value="true" />
-      <created>1748716608975</created>
+      <created>1748986396552</created>
       <option name="number" value="00024" />
       <option name="presentableId" value="LOCAL-00024" />
       <option name="project" value="LOCAL" />
-      <updated>1748716608975</updated>
+      <updated>1748986396552</updated>
     </task>
-    <task id="LOCAL-00025" summary="now when we trun on / off the boiler from the ui its send it to the backedn.&#10;I reduced the server calls, requests are sent to the server every hour or page update or refresh">
-      <option name="closed" value="true" />
-      <created>1749284980615</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1749284980615</updated>
-    </task>
-    <task id="LOCAL-00026" summary="add transflow to requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749285505363</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1749285505363</updated>
-    </task>
-    <task id="LOCAL-00027" summary="add transflow to requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749285852006</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1749285852006</updated>
-    </task>
-    <task id="LOCAL-00028" summary="add numpy to requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749286039986</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1749286039986</updated>
-    </task>
-    <task id="LOCAL-00029" summary="add kera to requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749286219766</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1749286219766</updated>
-    </task>
-    <task id="LOCAL-00030" summary="updated requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749287518816</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1749287518816</updated>
-    </task>
-    <task id="LOCAL-00031" summary="updated requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749288525477</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1749288525477</updated>
-    </task>
-    <task id="LOCAL-00032" summary="updated requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749292684864</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1749292684864</updated>
-    </task>
-    <task id="LOCAL-00033" summary="updated requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749292906512</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1749292906512</updated>
-    </task>
-    <task id="LOCAL-00034" summary="updated requirements.txt">
-      <option name="closed" value="true" />
-      <created>1749293040800</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1749293040800</updated>
-    </task>
-    <task id="LOCAL-00035" summary="make the code more fir to prodaction">
-      <option name="closed" value="true" />
-      <created>1749293873410</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1749293873410</updated>
-    </task>
-    <task id="LOCAL-00036" summary="update the app to fit to prodaction">
-      <option name="closed" value="true" />
-      <created>1749294911984</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1749294911984</updated>
-    </task>
-    <task id="LOCAL-00037" summary="update the app to fit to prodaction">
-      <option name="closed" value="true" />
-      <created>1749295892202</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1749295892202</updated>
-    </task>
-    <task id="LOCAL-00038" summary="update the app to fit to prodaction">
-      <option name="closed" value="true" />
-      <created>1749296696486</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1749296696486</updated>
-    </task>
-    <task id="LOCAL-00039" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749298617018</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1749298617018</updated>
-    </task>
-    <task id="LOCAL-00040" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749299675651</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1749299675651</updated>
-    </task>
-    <task id="LOCAL-00041" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749300505300</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1749300505300</updated>
-    </task>
-    <task id="LOCAL-00042" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749301735942</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1749301735942</updated>
-    </task>
-    <task id="LOCAL-00043" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749302697456</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1749302697456</updated>
-    </task>
-    <task id="LOCAL-00044" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749303811283</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1749303811283</updated>
-    </task>
-    <task id="LOCAL-00045" summary="add _redirects">
-      <option name="closed" value="true" />
-      <created>1749829199690</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1749829199690</updated>
-    </task>
-    <task id="LOCAL-00046" summary="update the app name">
-      <option name="closed" value="true" />
-      <created>1750407445925</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1750407445925</updated>
-    </task>
-    <option name="localTasksCounter" value="47" />
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -860,6 +1125,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="try - dvir siksik" />
+    <MESSAGE value="dvir commit and push - &#10;weather data API call. &#10;&#10;note: this is the first step only get the weather data. the next step is to use this data with the LSTM model." />
     <MESSAGE value="dvir commit and push - added dataGenerator.py" />
     <MESSAGE value="dvir commit and push - added dataGenerator.py updated" />
     <MESSAGE value="dvir commit and push - modify the modifyData.py file to fit the new data file(now we have only weather data file and we calculate the boilers data)&#10;added a new api call to get historical weather informtion &#10;about the dataTraining.py file we need to see how to chahnge it to fit the new data file (i Believe that should be essy).&#10;now we have also dataGenerator.py file working.&#10;Good Shabbos" />
@@ -874,32 +1141,12 @@
     <MESSAGE value="fixed the get and save dat from and to th data base.&#10;update the boiler page and add new window to add the boiler" />
     <MESSAGE value="added logo to the tab" />
     <MESSAGE value="fix the modifyData.py and improve the dataTraining.py" />
-    <MESSAGE value="..........." />
-    <MESSAGE value="now when we trun on / off the boiler from the ui its send it to the backedn.&#10;I reduced the server calls, requests are sent to the server every hour or page update or refresh" />
-    <MESSAGE value="add transflow to requirements.txt" />
-    <MESSAGE value="add numpy to requirements.txt" />
-    <MESSAGE value="add kera to requirements.txt" />
-    <MESSAGE value="add keras to requirements.txt" />
-    <MESSAGE value="updated requirements.txt" />
-    <MESSAGE value="make the code more fir to prodaction" />
-    <MESSAGE value="update the app to fit to prodaction" />
-    <MESSAGE value="add _redirects" />
-    <MESSAGE value="update the app name" />
-    <option name="LAST_COMMIT_MESSAGE" value="update the app name" />
+    <MESSAGE value="Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix" />
+    <MESSAGE value="merge rotem and dvir branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge rotem and dvir branch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Backend/venv/lib/site-packages/pandas/tests/io/conftest.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DVCS/BoilerManager.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -910,19 +1157,19 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FinalProject$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1750079073539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/FinalProject$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1747241739709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1746260537747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/BrightNest$selectors.coverage" NAME="selectors Coverage Results" MODIFIED="1745662642457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib" />
-    <SUITE FILE_PATH="coverage/FinalProject$Boiler.coverage" NAME="Boiler Coverage Results" MODIFIED="1750424199394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DVCS" />
-    <SUITE FILE_PATH="coverage/FinalProject$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1750079048425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/BrightNest$emailSender.coverage" NAME="emailSender Coverage Results" MODIFIED="1748783790263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
+    <SUITE FILE_PATH="coverage/FinalProject$modifyData.coverage" NAME="modifyData Coverage Results" MODIFIED="1748703186890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
     <SUITE FILE_PATH="coverage/FinalProject$userRoutes.coverage" NAME="userRoutes Coverage Results" MODIFIED="1747497486828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1749982730744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
-    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1746265342484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/FinalProject$app.coverage" NAME="app Coverage Results" MODIFIED="1750437001141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$app.coverage" NAME="app Coverage Results" MODIFIED="1750372779314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/BrightNest$test_email_sender.coverage" NAME="test_email_sender Coverage Results" MODIFIED="1748784655540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
     <SUITE FILE_PATH="coverage/BrightNest$main.coverage" NAME="main Coverage Results" MODIFIED="1746278808365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1745661305330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1750424604726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/FinalProject$start_all.coverage" NAME="start-all Coverage Results" MODIFIED="1750437696691" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FinalProject$weatherAPIRequest.coverage" NAME="weatherAPIRequest Coverage Results" MODIFIED="1747239927069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
-    <SUITE FILE_PATH="coverage/FinalProject$main.coverage" NAME="main Coverage Results" MODIFIED="1749823003831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BrightNest$dataTraining.coverage" NAME="dataTraining Coverage Results" MODIFIED="1746260659288" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UTILS" />
   </component>
 </project>

@@ -1,5 +1,7 @@
 from contextlib import nullcontext
 import json
+
+import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from datetime import datetime
@@ -8,7 +10,6 @@ import sys
 import os
 import time
 import threading
-import requests
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from torch.profiler import schedule
 

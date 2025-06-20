@@ -9,6 +9,7 @@ retry-requests==2.0.0
 pandas==2.2.3
 numpy
 torch
+dotenv
 matplotlib==3.10.1
 scikit-learn==1.6.1
 joblib==1.4.2
