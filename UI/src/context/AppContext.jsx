@@ -25,13 +25,44 @@ export const AppProvider = ({ children }) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
   const [userName, setUserName] = useState(() => localStorage.getItem('userName') || '');
-  const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(0);
+  const [predictedBoilerTemp, setPredictedBoilerTemp] = useState(() => {
+      const settings = localStorage.getItem('userSettings');
+      if (settings) {
+        const location = JSON.parse(settings).location;
+        const storedTemp = location ? localStorage.getItem(`boiler-temp-${location}`) : null;
+        return storedTemp ? parseFloat(storedTemp) : 0;
+      }
+      return 0;
+    });
+
 
   const [autoStart] = useState('19:00');
   const [autoEnd] = useState('21:00');
   const [startHour, setStartHour] = useState('');
   const [endHour, setEndHour] = useState('');
-  const [heatingMode, setHeatingMode] = useState('manual');
+  const [heatingMode, setHeatingMode] = useState(() => {
+    return localStorage.getItem('heating-mode') || null;
+  });
+
+
+  useEffect(() => {
+      if (heatingMode === 'manual' && startHour && endHour) {
+        localStorage.setItem('manual-heating-start', startHour);
+        localStorage.setItem('manual-heating-end', endHour);
+      }
+  }, [heatingMode, startHour, endHour]);
+
+
+  useEffect(() => {
+      const savedStart = localStorage.getItem('manual-heating-start');
+      const savedEnd = localStorage.getItem('manual-heating-end');
+
+      if (savedStart) setStartHour(savedStart);
+      if (savedEnd) setEndHour(savedEnd);
+  }, []);
+
+
+
 
   // ✅ theme loading on startup
   useEffect(() => {
@@ -92,7 +123,7 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchBoilerStatus = async (newStatus = null) => {
+    const fetchBoilerStatus = useCallback(async (newStatus = null) => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
@@ -112,16 +143,23 @@ export const AppProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log("🔥 Boiler status response:", data);
+
 
       if (res.ok && data.status) {
+
         setUserSettings(prev => {
           const updated = {
             ...prev,
             boilerStatus: data.status === 'on' ? '✅ פועל' : '⛔️ כבוי',
+            ...(data.temperature  === "number" && {
+              boilerTemp: `${data.temperature.toFixed(1)}°C`
+            })
           };
           localStorage.setItem('userSettings', JSON.stringify(updated));
           return updated;
         });
+
 
         if (!isPost) localStorage.setItem('lastBoilerStatusFetch', Date.now());
       } else {
@@ -130,12 +168,15 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.error("❌ שגיאה בשליפת סטטוס הדוד:", err);
     }
-  };
+  },[]);
 
-  const toggleBoilerStatus = () => {
+  const toggleBoilerStatus = useCallback(() => {
     const next = userSettings.boilerStatus === '✅ פועל' ? 'off' : 'on';
-    fetchBoilerStatus(next);
-  };
+    (async () => {
+        await fetchBoilerStatus(next);
+      })();
+  }, [userSettings.boilerStatus, fetchBoilerStatus]);
+
 
   const saveSettingsToServer = async ({ preferences, full_name, devices } = {}) => {
     const token = localStorage.getItem('token');
