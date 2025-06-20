@@ -123,45 +123,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.App.js.executor": "Run",
-    "Node.js.Boiler.jsx.executor": "Run",
-    "Python.HistoricalWeatherAPI.executor": "Run",
-    "Python.Run Weather API.executor": "Profiler",
-    "Python.app.executor": "Run",
-    "Python.dataGenerator.executor": "Run",
-    "Python.dataTraining.executor": "Run",
-    "Python.finalProject .executor": "Run",
-    "Python.get-pip.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.modifyData.executor": "Run",
-    "Python.selectors.executor": "Run",
-    "Python.start-all.executor": "Run",
-    "Python.test_load_data.executor": "Run",
-    "Python.userRoutes.executor": "Run",
-    "Python.weatherAPIRequest (2).executor": "ConcurrencyExecutor",
-    "Python.weatherAPIRequest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#54 on DVIR-branch",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "ts.external.directory.path": "/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Boiler.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HistoricalWeatherAPI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Run Weather API.executor&quot;: &quot;Profiler&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataTraining.executor&quot;: &quot;Run&quot;,
+    &quot;Python.finalProject .executor&quot;: &quot;Run&quot;,
+    &quot;Python.get-pip.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.modifyData.executor&quot;: &quot;Run&quot;,
+    &quot;Python.selectors.executor&quot;: &quot;Run&quot;,
+    &quot;Python.start-all.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_load_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.userRoutes.executor&quot;: &quot;Run&quot;,
+    &quot;Python.weatherAPIRequest (2).executor&quot;: &quot;ConcurrencyExecutor&quot;,
+    &quot;Python.weatherAPIRequest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#54 on DVIR-branch&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mongo"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mongo&quot;
     ]
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RunManager" selected="Python.app">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="BrightNest - final project" />
       <option name="ENV_FILES" value="" />
