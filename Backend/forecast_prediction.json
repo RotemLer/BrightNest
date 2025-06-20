@@ -1,389 +1,389 @@
 [
   {
-    "time":"2025-06-20T12:00:00.000",
-    "boiler temp for 50 L with solar system":82.4716873169,
-    "boiler temp for 50 L without solar system":18.984046936,
-    "boiler temp for 100 L with solar system":70.1780166626,
-    "boiler temp for 100 L without solar system":19.1960754395,
-    "boiler temp for 150 L with solar system":67.1622848511,
-    "boiler temp for 150 L without solar system":19.3746700287
-  },
-  {
-    "time":"2025-06-20T13:00:00.000",
-    "boiler temp for 50 L with solar system":81.2467346191,
-    "boiler temp for 50 L without solar system":19.0030975342,
-    "boiler temp for 100 L with solar system":69.4230880737,
-    "boiler temp for 100 L without solar system":19.2099113464,
-    "boiler temp for 150 L with solar system":66.6545715332,
-    "boiler temp for 150 L without solar system":19.3810958862
-  },
-  {
-    "time":"2025-06-20T14:00:00.000",
-    "boiler temp for 50 L with solar system":78.6858901978,
-    "boiler temp for 50 L without solar system":18.9819545746,
-    "boiler temp for 100 L with solar system":67.775718689,
-    "boiler temp for 100 L without solar system":19.1818008423,
-    "boiler temp for 150 L with solar system":65.4741821289,
-    "boiler temp for 150 L without solar system":19.347360611
-  },
-  {
-    "time":"2025-06-20T15:00:00.000",
-    "boiler temp for 50 L with solar system":75.7256469727,
-    "boiler temp for 50 L without solar system":18.90666008,
-    "boiler temp for 100 L with solar system":65.8101196289,
-    "boiler temp for 100 L without solar system":19.1026000977,
-    "boiler temp for 150 L with solar system":64.0048828125,
-    "boiler temp for 150 L without solar system":19.2599239349
-  },
-  {
-    "time":"2025-06-20T16:00:00.000",
-    "boiler temp for 50 L with solar system":72.4677505493,
-    "boiler temp for 50 L without solar system":18.82264328,
-    "boiler temp for 100 L with solar system":63.627571106,
-    "boiler temp for 100 L without solar system":19.0092315674,
-    "boiler temp for 150 L with solar system":62.3452987671,
-    "boiler temp for 150 L without solar system":19.1586551666
-  },
-  {
     "time":"2025-06-20T17:00:00.000",
-    "boiler temp for 50 L with solar system":69.4191665649,
-    "boiler temp for 50 L without solar system":18.7285423279,
-    "boiler temp for 100 L with solar system":61.5376548767,
-    "boiler temp for 100 L without solar system":18.9022960663,
-    "boiler temp for 150 L with solar system":60.7129898071,
-    "boiler temp for 150 L without solar system":19.0352420807
+    "boiler temp for 50 L with solar system":69.021446228,
+    "boiler temp for 50 L without solar system":18.6938591003,
+    "boiler temp for 100 L with solar system":61.2997970581,
+    "boiler temp for 100 L without solar system":18.8501873016,
+    "boiler temp for 150 L with solar system":54.3699989319,
+    "boiler temp for 150 L without solar system":18.9588241577
   },
   {
     "time":"2025-06-20T18:00:00.000",
-    "boiler temp for 50 L with solar system":67.1650848389,
-    "boiler temp for 50 L without solar system":18.6232833862,
-    "boiler temp for 100 L with solar system":59.8994827271,
-    "boiler temp for 100 L without solar system":18.7868938446,
-    "boiler temp for 150 L with solar system":59.3739051819,
-    "boiler temp for 150 L without solar system":18.9007434845
+    "boiler temp for 50 L with solar system":66.7911911011,
+    "boiler temp for 50 L without solar system":18.597448349,
+    "boiler temp for 100 L with solar system":59.6799621582,
+    "boiler temp for 100 L without solar system":18.7426738739,
+    "boiler temp for 150 L with solar system":54.6599998474,
+    "boiler temp for 150 L without solar system":18.8328876495
   },
   {
     "time":"2025-06-20T19:00:00.000",
-    "boiler temp for 50 L with solar system":66.3279266357,
-    "boiler temp for 50 L without solar system":18.6138973236,
-    "boiler temp for 100 L with solar system":59.1616020203,
-    "boiler temp for 100 L without solar system":18.7631874084,
-    "boiler temp for 150 L with solar system":58.7322273254,
-    "boiler temp for 150 L without solar system":18.8472118378
+    "boiler temp for 50 L with solar system":66.1041412354,
+    "boiler temp for 50 L without solar system":18.6043224335,
+    "boiler temp for 100 L with solar system":59.0522918701,
+    "boiler temp for 100 L without solar system":18.7333488464,
+    "boiler temp for 150 L with solar system":54.6599998474,
+    "boiler temp for 150 L without solar system":18.7924671173
   },
   {
     "time":"2025-06-20T20:00:00.000",
-    "boiler temp for 50 L with solar system":66.8289718628,
-    "boiler temp for 50 L without solar system":18.6457309723,
-    "boiler temp for 100 L with solar system":59.3023834229,
-    "boiler temp for 100 L without solar system":18.7909545898,
-    "boiler temp for 150 L with solar system":58.8047943115,
-    "boiler temp for 150 L without solar system":18.8533668518
+    "boiler temp for 50 L with solar system":66.5907897949,
+    "boiler temp for 50 L without solar system":18.6388225555,
+    "boiler temp for 100 L with solar system":59.1851234436,
+    "boiler temp for 100 L without solar system":18.7640266418,
+    "boiler temp for 150 L with solar system":54.6599998474,
+    "boiler temp for 150 L without solar system":18.8043670654
   },
   {
     "time":"2025-06-20T21:00:00.000",
-    "boiler temp for 50 L with solar system":67.3801193237,
-    "boiler temp for 50 L without solar system":18.6730632782,
-    "boiler temp for 100 L with solar system":59.610534668,
-    "boiler temp for 100 L without solar system":18.8168888092,
-    "boiler temp for 150 L with solar system":59.0970306396,
-    "boiler temp for 150 L without solar system":18.8592414856
+    "boiler temp for 50 L with solar system":67.2619094849,
+    "boiler temp for 50 L without solar system":18.6696014404,
+    "boiler temp for 100 L with solar system":59.5773124695,
+    "boiler temp for 100 L without solar system":18.7932281494,
+    "boiler temp for 150 L with solar system":54.6599998474,
+    "boiler temp for 150 L without solar system":18.8140563965
   },
   {
     "time":"2025-06-20T22:00:00.000",
-    "boiler temp for 50 L with solar system":67.4323883057,
-    "boiler temp for 50 L without solar system":18.6900939941,
-    "boiler temp for 100 L with solar system":59.6092605591,
-    "boiler temp for 100 L without solar system":18.8338928223,
-    "boiler temp for 150 L with solar system":59.1227836609,
-    "boiler temp for 150 L without solar system":18.8650932312
+    "boiler temp for 50 L with solar system":67.3864822388,
+    "boiler temp for 50 L without solar system":18.6820068359,
+    "boiler temp for 100 L with solar system":59.6196365356,
+    "boiler temp for 100 L without solar system":18.8056259155,
+    "boiler temp for 150 L with solar system":54.6599998474,
+    "boiler temp for 150 L without solar system":18.816493988
   },
   {
     "time":"2025-06-20T23:00:00.000",
-    "boiler temp for 50 L with solar system":67.2806549072,
-    "boiler temp for 50 L without solar system":18.7055244446,
-    "boiler temp for 100 L with solar system":59.5100860596,
-    "boiler temp for 100 L without solar system":18.8501567841,
-    "boiler temp for 150 L with solar system":59.0592079163,
-    "boiler temp for 150 L without solar system":18.8728923798
+    "boiler temp for 50 L with solar system":67.1863632202,
+    "boiler temp for 50 L without solar system":18.6891613007,
+    "boiler temp for 100 L with solar system":59.480594635,
+    "boiler temp for 100 L without solar system":18.8140525818,
+    "boiler temp for 150 L with solar system":59.05727005,
+    "boiler temp for 150 L without solar system":18.8182029724
   },
   {
     "time":"2025-06-21T00:00:00.000",
-    "boiler temp for 50 L with solar system":68.1558532715,
-    "boiler temp for 50 L without solar system":18.7880954742,
-    "boiler temp for 100 L with solar system":60.1475410461,
-    "boiler temp for 100 L without solar system":18.9499187469,
-    "boiler temp for 150 L with solar system":59.7246704102,
-    "boiler temp for 150 L without solar system":18.9412574768
+    "boiler temp for 50 L with solar system":67.2171783447,
+    "boiler temp for 50 L without solar system":18.7112026215,
+    "boiler temp for 100 L with solar system":59.5344696045,
+    "boiler temp for 100 L without solar system":18.8400363922,
+    "boiler temp for 150 L with solar system":59.1134681702,
+    "boiler temp for 150 L without solar system":18.8367443085
   },
   {
     "time":"2025-06-21T01:00:00.000",
-    "boiler temp for 50 L with solar system":66.4560623169,
-    "boiler temp for 50 L without solar system":18.6905574799,
-    "boiler temp for 100 L with solar system":58.9401741028,
-    "boiler temp for 100 L without solar system":18.844121933,
-    "boiler temp for 150 L with solar system":58.5690231323,
-    "boiler temp for 150 L without solar system":18.8354797363
+    "boiler temp for 50 L with solar system":66.2338104248,
+    "boiler temp for 50 L without solar system":18.676782608,
+    "boiler temp for 100 L with solar system":58.8655548096,
+    "boiler temp for 100 L without solar system":18.8205490112,
+    "boiler temp for 150 L with solar system":58.613319397,
+    "boiler temp for 150 L without solar system":18.8069572449
   },
   {
     "time":"2025-06-21T02:00:00.000",
-    "boiler temp for 50 L with solar system":66.4448776245,
-    "boiler temp for 50 L without solar system":18.7000484467,
-    "boiler temp for 100 L with solar system":58.9531593323,
-    "boiler temp for 100 L without solar system":18.8715438843,
-    "boiler temp for 150 L with solar system":58.6144752502,
-    "boiler temp for 150 L without solar system":18.8574485779
+    "boiler temp for 50 L with solar system":64.2765045166,
+    "boiler temp for 50 L without solar system":18.5639343262,
+    "boiler temp for 100 L with solar system":57.5080986023,
+    "boiler temp for 100 L without solar system":18.7007102966,
+    "boiler temp for 150 L with solar system":57.3520812988,
+    "boiler temp for 150 L without solar system":18.6752090454
   },
   {
     "time":"2025-06-21T03:00:00.000",
-    "boiler temp for 50 L with solar system":66.5654907227,
-    "boiler temp for 50 L without solar system":18.7036018372,
-    "boiler temp for 100 L with solar system":59.0500564575,
-    "boiler temp for 100 L without solar system":18.8872776031,
-    "boiler temp for 150 L with solar system":58.6846542358,
-    "boiler temp for 150 L without solar system":18.8696308136
+    "boiler temp for 50 L with solar system":64.1066207886,
+    "boiler temp for 50 L without solar system":18.5749359131,
+    "boiler temp for 100 L with solar system":57.450012207,
+    "boiler temp for 100 L without solar system":18.7289047241,
+    "boiler temp for 150 L with solar system":57.3467178345,
+    "boiler temp for 150 L without solar system":18.6928920746
   },
   {
     "time":"2025-06-21T04:00:00.000",
-    "boiler temp for 50 L with solar system":67.0001602173,
-    "boiler temp for 50 L without solar system":18.7256755829,
-    "boiler temp for 100 L with solar system":59.3844070435,
-    "boiler temp for 100 L without solar system":18.9132556915,
-    "boiler temp for 150 L with solar system":58.9703521729,
-    "boiler temp for 150 L without solar system":18.8892192841
+    "boiler temp for 50 L with solar system":64.1963195801,
+    "boiler temp for 50 L without solar system":18.583278656,
+    "boiler temp for 100 L with solar system":57.5997009277,
+    "boiler temp for 100 L without solar system":18.7164726257,
+    "boiler temp for 150 L with solar system":57.491859436,
+    "boiler temp for 150 L without solar system":18.6630458832
   },
   {
     "time":"2025-06-21T05:00:00.000",
-    "boiler temp for 50 L with solar system":66.9873199463,
-    "boiler temp for 50 L without solar system":18.7855205536,
-    "boiler temp for 100 L with solar system":59.5582008362,
-    "boiler temp for 100 L without solar system":18.9382247925,
-    "boiler temp for 150 L with solar system":59.1968994141,
-    "boiler temp for 150 L without solar system":18.8842258453
+    "boiler temp for 50 L with solar system":64.6444091797,
+    "boiler temp for 50 L without solar system":18.62317276,
+    "boiler temp for 100 L with solar system":58.038772583,
+    "boiler temp for 100 L without solar system":18.7314472198,
+    "boiler temp for 150 L with solar system":57.9523773193,
+    "boiler temp for 150 L without solar system":18.6601409912
   },
   {
     "time":"2025-06-21T06:00:00.000",
-    "boiler temp for 50 L with solar system":64.2319793701,
-    "boiler temp for 50 L without solar system":18.8152580261,
-    "boiler temp for 100 L with solar system":57.970615387,
-    "boiler temp for 100 L without solar system":18.9113101959,
-    "boiler temp for 150 L with solar system":58.0250091553,
-    "boiler temp for 150 L without solar system":18.8142280579
+    "boiler temp for 50 L with solar system":64.8285522461,
+    "boiler temp for 50 L without solar system":18.6723499298,
+    "boiler temp for 100 L with solar system":58.3906288147,
+    "boiler temp for 100 L without solar system":18.7470645905,
+    "boiler temp for 150 L with solar system":58.3937835693,
+    "boiler temp for 150 L without solar system":18.6547145844
   },
   {
     "time":"2025-06-21T07:00:00.000",
-    "boiler temp for 50 L with solar system":67.7167892456,
-    "boiler temp for 50 L without solar system":18.9358386993,
-    "boiler temp for 100 L with solar system":60.4530487061,
-    "boiler temp for 100 L without solar system":19.0147266388,
-    "boiler temp for 150 L with solar system":60.0805969238,
-    "boiler temp for 150 L without solar system":18.9371147156
+    "boiler temp for 50 L with solar system":64.7697906494,
+    "boiler temp for 50 L without solar system":18.6093006134,
+    "boiler temp for 100 L with solar system":58.3726959229,
+    "boiler temp for 100 L without solar system":18.7037315369,
+    "boiler temp for 150 L with solar system":58.2848091125,
+    "boiler temp for 150 L without solar system":18.6512298584
   },
   {
     "time":"2025-06-21T08:00:00.000",
-    "boiler temp for 50 L with solar system":69.9357452393,
-    "boiler temp for 50 L without solar system":18.9428138733,
-    "boiler temp for 100 L with solar system":61.9570083618,
-    "boiler temp for 100 L without solar system":19.0433273315,
-    "boiler temp for 150 L with solar system":61.1846504211,
-    "boiler temp for 150 L without solar system":19.0206298828
+    "boiler temp for 50 L with solar system":69.2395782471,
+    "boiler temp for 50 L without solar system":18.7515773773,
+    "boiler temp for 100 L with solar system":61.4849128723,
+    "boiler temp for 100 L without solar system":18.8625888824,
+    "boiler temp for 150 L with solar system":60.8292007446,
+    "boiler temp for 150 L without solar system":18.835647583
   },
   {
     "time":"2025-06-21T09:00:00.000",
-    "boiler temp for 50 L with solar system":72.0627441406,
-    "boiler temp for 50 L without solar system":18.9621753693,
-    "boiler temp for 100 L with solar system":63.4098472595,
-    "boiler temp for 100 L without solar system":19.0985164642,
-    "boiler temp for 150 L with solar system":62.3219909668,
-    "boiler temp for 150 L without solar system":19.1016578674
+    "boiler temp for 50 L with solar system":72.8742446899,
+    "boiler temp for 50 L without solar system":18.7890090942,
+    "boiler temp for 100 L with solar system":63.8312416077,
+    "boiler temp for 100 L without solar system":18.9415416718,
+    "boiler temp for 150 L with solar system":62.5561447144,
+    "boiler temp for 150 L without solar system":18.974811554
   },
   {
     "time":"2025-06-21T10:00:00.000",
-    "boiler temp for 50 L with solar system":75.3083724976,
-    "boiler temp for 50 L without solar system":19.0246925354,
-    "boiler temp for 100 L with solar system":65.5596542358,
-    "boiler temp for 100 L without solar system":19.1912155151,
-    "boiler temp for 150 L with solar system":63.9521865845,
-    "boiler temp for 150 L without solar system":19.2452487946
+    "boiler temp for 50 L with solar system":76.998260498,
+    "boiler temp for 50 L without solar system":18.9019088745,
+    "boiler temp for 100 L with solar system":66.5864105225,
+    "boiler temp for 100 L without solar system":19.0799293518,
+    "boiler temp for 150 L with solar system":64.6383285522,
+    "boiler temp for 150 L without solar system":19.1512546539
   },
   {
     "time":"2025-06-21T11:00:00.000",
-    "boiler temp for 50 L with solar system":78.5216598511,
-    "boiler temp for 50 L without solar system":19.0928573608,
-    "boiler temp for 100 L with solar system":67.6979446411,
-    "boiler temp for 100 L without solar system":19.279296875,
-    "boiler temp for 150 L with solar system":65.5592727661,
-    "boiler temp for 150 L without solar system":19.3627204895
+    "boiler temp for 50 L with solar system":79.6701812744,
+    "boiler temp for 50 L without solar system":18.9832172394,
+    "boiler temp for 100 L with solar system":68.3934173584,
+    "boiler temp for 100 L without solar system":19.1739768982,
+    "boiler temp for 150 L with solar system":65.9914474487,
+    "boiler temp for 150 L without solar system":19.2684268951
   },
   {
     "time":"2025-06-21T12:00:00.000",
-    "boiler temp for 50 L with solar system":80.0782165527,
-    "boiler temp for 50 L without solar system":19.1147003174,
-    "boiler temp for 100 L with solar system":68.7312240601,
-    "boiler temp for 100 L without solar system":19.3113670349,
-    "boiler temp for 150 L with solar system":66.3086013794,
-    "boiler temp for 150 L without solar system":19.4128055573
+    "boiler temp for 50 L with solar system":80.8874435425,
+    "boiler temp for 50 L without solar system":19.0126457214,
+    "boiler temp for 100 L with solar system":69.2664794922,
+    "boiler temp for 100 L without solar system":19.2044258118,
+    "boiler temp for 150 L with solar system":66.6650466919,
+    "boiler temp for 150 L without solar system":19.315404892
   },
   {
     "time":"2025-06-21T13:00:00.000",
-    "boiler temp for 50 L with solar system":80.1098556519,
-    "boiler temp for 50 L without solar system":19.0921039581,
-    "boiler temp for 100 L with solar system":68.787940979,
-    "boiler temp for 100 L without solar system":19.2875442505,
-    "boiler temp for 150 L with solar system":66.3552856445,
-    "boiler temp for 150 L without solar system":19.4011363983
+    "boiler temp for 50 L with solar system":79.3238601685,
+    "boiler temp for 50 L without solar system":19.0521602631,
+    "boiler temp for 100 L with solar system":68.2589492798,
+    "boiler temp for 100 L without solar system":19.2388706207,
+    "boiler temp for 150 L with solar system":65.9370422363,
+    "boiler temp for 150 L without solar system":19.3387718201
   },
   {
     "time":"2025-06-21T14:00:00.000",
-    "boiler temp for 50 L with solar system":77.3670043945,
-    "boiler temp for 50 L without solar system":19.0951766968,
-    "boiler temp for 100 L with solar system":66.98878479,
-    "boiler temp for 100 L without solar system":19.2809562683,
-    "boiler temp for 150 L with solar system":65.0309829712,
-    "boiler temp for 150 L without solar system":19.3791408539
+    "boiler temp for 50 L with solar system":78.4035644531,
+    "boiler temp for 50 L without solar system":18.9792137146,
+    "boiler temp for 100 L with solar system":67.6496734619,
+    "boiler temp for 100 L without solar system":19.163980484,
+    "boiler temp for 150 L with solar system":65.4464187622,
+    "boiler temp for 150 L without solar system":19.2780971527
   },
   {
     "time":"2025-06-21T15:00:00.000",
-    "boiler temp for 50 L with solar system":76.5282516479,
-    "boiler temp for 50 L without solar system":18.9783229828,
-    "boiler temp for 100 L with solar system":66.3823013306,
-    "boiler temp for 100 L without solar system":19.1678771973,
-    "boiler temp for 150 L with solar system":64.5168380737,
-    "boiler temp for 150 L without solar system":19.2750701904
+    "boiler temp for 50 L with solar system":75.9573745728,
+    "boiler temp for 50 L without solar system":18.9243469238,
+    "boiler temp for 100 L with solar system":66.0205535889,
+    "boiler temp for 100 L without solar system":19.1018619537,
+    "boiler temp for 150 L with solar system":64.2371063232,
+    "boiler temp for 150 L without solar system":19.2003898621
   },
   {
     "time":"2025-06-21T16:00:00.000",
-    "boiler temp for 50 L with solar system":73.7289886475,
-    "boiler temp for 50 L without solar system":18.9136066437,
-    "boiler temp for 100 L with solar system":64.5025177002,
-    "boiler temp for 100 L without solar system":19.091129303,
-    "boiler temp for 150 L with solar system":63.0969314575,
-    "boiler temp for 150 L without solar system":19.1850738525
+    "boiler temp for 50 L with solar system":73.0936126709,
+    "boiler temp for 50 L without solar system":18.8643550873,
+    "boiler temp for 100 L with solar system":64.1048583984,
+    "boiler temp for 100 L without solar system":19.0265865326,
+    "boiler temp for 150 L with solar system":62.7899856567,
+    "boiler temp for 150 L without solar system":19.1114234924
   },
   {
     "time":"2025-06-21T17:00:00.000",
-    "boiler temp for 50 L with solar system":71.0342788696,
-    "boiler temp for 50 L without solar system":18.8682231903,
-    "boiler temp for 100 L with solar system":62.7009963989,
-    "boiler temp for 100 L without solar system":19.0336704254,
-    "boiler temp for 150 L with solar system":61.812877655,
-    "boiler temp for 150 L without solar system":19.0953578949
+    "boiler temp for 50 L with solar system":70.1665344238,
+    "boiler temp for 50 L without solar system":18.7743644714,
+    "boiler temp for 100 L with solar system":62.0956077576,
+    "boiler temp for 100 L without solar system":18.9223918915,
+    "boiler temp for 150 L with solar system":61.22498703,
+    "boiler temp for 150 L without solar system":18.9959182739
   },
   {
     "time":"2025-06-21T18:00:00.000",
-    "boiler temp for 50 L with solar system":69.5243225098,
-    "boiler temp for 50 L without solar system":18.8061656952,
-    "boiler temp for 100 L with solar system":61.5836181641,
-    "boiler temp for 100 L without solar system":18.960269928,
-    "boiler temp for 150 L with solar system":60.9710350037,
-    "boiler temp for 150 L without solar system":18.9982013702
+    "boiler temp for 50 L with solar system":67.8957290649,
+    "boiler temp for 50 L without solar system":18.6616954803,
+    "boiler temp for 100 L with solar system":60.4450950623,
+    "boiler temp for 100 L without solar system":18.8019771576,
+    "boiler temp for 150 L with solar system":59.8763427734,
+    "boiler temp for 150 L without solar system":18.8660316467
   },
   {
     "time":"2025-06-21T19:00:00.000",
-    "boiler temp for 50 L with solar system":69.005569458,
-    "boiler temp for 50 L without solar system":18.7877235413,
-    "boiler temp for 100 L with solar system":61.0466537476,
-    "boiler temp for 100 L without solar system":18.9315319061,
-    "boiler temp for 150 L with solar system":60.4526329041,
-    "boiler temp for 150 L without solar system":18.9668178558
+    "boiler temp for 50 L with solar system":66.6705780029,
+    "boiler temp for 50 L without solar system":18.6371097565,
+    "boiler temp for 100 L with solar system":59.4428062439,
+    "boiler temp for 100 L without solar system":18.7677497864,
+    "boiler temp for 150 L with solar system":59.0151672363,
+    "boiler temp for 150 L without solar system":18.8204193115
   },
   {
     "time":"2025-06-21T20:00:00.000",
-    "boiler temp for 50 L with solar system":69.9881973267,
-    "boiler temp for 50 L without solar system":18.8302459717,
-    "boiler temp for 100 L with solar system":61.5389137268,
-    "boiler temp for 100 L without solar system":18.9840373993,
-    "boiler temp for 150 L with solar system":60.9016914368,
-    "boiler temp for 150 L without solar system":18.9993419647
+    "boiler temp for 50 L with solar system":67.6221313477,
+    "boiler temp for 50 L without solar system":18.7082672119,
+    "boiler temp for 100 L with solar system":59.9357948303,
+    "boiler temp for 100 L without solar system":18.8324298859,
+    "boiler temp for 150 L with solar system":59.4907264709,
+    "boiler temp for 150 L without solar system":18.8420886993
   },
   {
     "time":"2025-06-21T21:00:00.000",
-    "boiler temp for 50 L with solar system":69.7936172485,
-    "boiler temp for 50 L without solar system":18.8116607666,
-    "boiler temp for 100 L with solar system":61.2808952332,
-    "boiler temp for 100 L without solar system":18.9650764465,
-    "boiler temp for 150 L with solar system":60.6473007202,
-    "boiler temp for 150 L without solar system":18.9652519226
+    "boiler temp for 50 L with solar system":67.3499603271,
+    "boiler temp for 50 L without solar system":18.693025589,
+    "boiler temp for 100 L with solar system":59.6354904175,
+    "boiler temp for 100 L without solar system":18.805639267,
+    "boiler temp for 150 L with solar system":59.2069015503,
+    "boiler temp for 150 L without solar system":18.788105011
   },
   {
     "time":"2025-06-21T22:00:00.000",
-    "boiler temp for 50 L with solar system":69.2121200562,
-    "boiler temp for 50 L without solar system":18.8322963715,
-    "boiler temp for 100 L with solar system":60.8145713806,
-    "boiler temp for 100 L without solar system":18.9902019501,
-    "boiler temp for 150 L with solar system":60.2500915527,
-    "boiler temp for 150 L without solar system":18.9739761353
+    "boiler temp for 50 L with solar system":67.3877487183,
+    "boiler temp for 50 L without solar system":18.7090587616,
+    "boiler temp for 100 L with solar system":59.6127967834,
+    "boiler temp for 100 L without solar system":18.8194026947,
+    "boiler temp for 150 L with solar system":59.1742973328,
+    "boiler temp for 150 L without solar system":18.783159256
   },
   {
     "time":"2025-06-21T23:00:00.000",
-    "boiler temp for 50 L with solar system":69.4937744141,
-    "boiler temp for 50 L without solar system":18.8849048615,
-    "boiler temp for 100 L with solar system":61.0139160156,
-    "boiler temp for 100 L without solar system":19.0572929382,
-    "boiler temp for 150 L with solar system":60.4627494812,
-    "boiler temp for 150 L without solar system":19.029378891
+    "boiler temp for 50 L with solar system":67.3477706909,
+    "boiler temp for 50 L without solar system":18.7378120422,
+    "boiler temp for 100 L with solar system":59.573135376,
+    "boiler temp for 100 L without solar system":18.8525600433,
+    "boiler temp for 150 L with solar system":59.1130332947,
+    "boiler temp for 150 L without solar system":18.8048324585
   },
   {
     "time":"2025-06-22T00:00:00.000",
-    "boiler temp for 50 L with solar system":70.3309936523,
-    "boiler temp for 50 L without solar system":18.9189968109,
-    "boiler temp for 100 L with solar system":61.5897140503,
-    "boiler temp for 100 L without solar system":19.1050167084,
-    "boiler temp for 150 L with solar system":60.9275817871,
-    "boiler temp for 150 L without solar system":19.0720710754
+    "boiler temp for 50 L with solar system":67.5476455688,
+    "boiler temp for 50 L without solar system":18.7813396454,
+    "boiler temp for 100 L with solar system":59.7128829956,
+    "boiler temp for 100 L without solar system":18.9081192017,
+    "boiler temp for 150 L with solar system":59.2094192505,
+    "boiler temp for 150 L without solar system":18.8504390717
   },
   {
     "time":"2025-06-22T01:00:00.000",
-    "boiler temp for 50 L with solar system":69.7219085693,
-    "boiler temp for 50 L without solar system":18.891702652,
-    "boiler temp for 100 L with solar system":61.0960197449,
-    "boiler temp for 100 L without solar system":19.0945167542,
-    "boiler temp for 150 L with solar system":60.4520301819,
-    "boiler temp for 150 L without solar system":19.0677661896
+    "boiler temp for 50 L with solar system":65.5240707397,
+    "boiler temp for 50 L without solar system":18.7288856506,
+    "boiler temp for 100 L with solar system":58.267036438,
+    "boiler temp for 100 L without solar system":18.8684997559,
+    "boiler temp for 150 L with solar system":57.9148864746,
+    "boiler temp for 150 L without solar system":18.8120918274
   },
   {
     "time":"2025-06-22T02:00:00.000",
-    "boiler temp for 50 L with solar system":68.157371521,
-    "boiler temp for 50 L without solar system":18.8282089233,
-    "boiler temp for 100 L with solar system":60.0452194214,
-    "boiler temp for 100 L without solar system":19.0208778381,
-    "boiler temp for 150 L with solar system":59.5403823853,
-    "boiler temp for 150 L without solar system":18.9762210846
+    "boiler temp for 50 L with solar system":62.0251235962,
+    "boiler temp for 50 L without solar system":18.6435642242,
+    "boiler temp for 100 L with solar system":55.9425468445,
+    "boiler temp for 100 L without solar system":18.7643489838,
+    "boiler temp for 150 L with solar system":55.9914169312,
+    "boiler temp for 150 L without solar system":18.6756401062
   },
   {
     "time":"2025-06-22T03:00:00.000",
-    "boiler temp for 50 L with solar system":69.282951355,
-    "boiler temp for 50 L without solar system":18.8317947388,
-    "boiler temp for 100 L with solar system":60.8309783936,
-    "boiler temp for 100 L without solar system":19.0251045227,
-    "boiler temp for 150 L with solar system":60.2054405212,
-    "boiler temp for 150 L without solar system":18.990650177
+    "boiler temp for 50 L with solar system":61.2920074463,
+    "boiler temp for 50 L without solar system":18.6248149872,
+    "boiler temp for 100 L with solar system":55.5591163635,
+    "boiler temp for 100 L without solar system":18.7383594513,
+    "boiler temp for 150 L with solar system":55.7761192322,
+    "boiler temp for 150 L without solar system":18.6463279724
   },
   {
     "time":"2025-06-22T04:00:00.000",
-    "boiler temp for 50 L with solar system":70.6461868286,
-    "boiler temp for 50 L without solar system":18.8637390137,
-    "boiler temp for 100 L with solar system":61.8799438477,
-    "boiler temp for 100 L without solar system":19.0323028564,
-    "boiler temp for 150 L with solar system":61.1080780029,
-    "boiler temp for 150 L without solar system":19.0023956299
+    "boiler temp for 50 L with solar system":60.8054389954,
+    "boiler temp for 50 L without solar system":18.606508255,
+    "boiler temp for 100 L with solar system":55.3373451233,
+    "boiler temp for 100 L without solar system":18.7329654694,
+    "boiler temp for 150 L with solar system":55.702457428,
+    "boiler temp for 150 L without solar system":18.6448116302
   },
   {
     "time":"2025-06-22T05:00:00.000",
-    "boiler temp for 50 L with solar system":68.8168182373,
-    "boiler temp for 50 L without solar system":18.890537262,
-    "boiler temp for 100 L with solar system":60.8634681702,
-    "boiler temp for 100 L without solar system":19.009344101,
-    "boiler temp for 150 L with solar system":60.3784866333,
-    "boiler temp for 150 L without solar system":18.9478397369
+    "boiler temp for 50 L with solar system":61.0814590454,
+    "boiler temp for 50 L without solar system":18.619096756,
+    "boiler temp for 100 L with solar system":55.7065963745,
+    "boiler temp for 100 L without solar system":18.7208862305,
+    "boiler temp for 150 L with solar system":56.1058692932,
+    "boiler temp for 150 L without solar system":18.6203517914
   },
   {
     "time":"2025-06-22T06:00:00.000",
-    "boiler temp for 50 L with solar system":67.0093841553,
-    "boiler temp for 50 L without solar system":18.9038085938,
-    "boiler temp for 100 L with solar system":59.9149551392,
-    "boiler temp for 100 L without solar system":18.9727134705,
-    "boiler temp for 150 L with solar system":59.7188186646,
-    "boiler temp for 150 L without solar system":18.8835868835
+    "boiler temp for 50 L with solar system":61.523765564,
+    "boiler temp for 50 L without solar system":18.6959972382,
+    "boiler temp for 100 L with solar system":56.2620048523,
+    "boiler temp for 100 L without solar system":18.7681179047,
+    "boiler temp for 150 L with solar system":56.7175064087,
+    "boiler temp for 150 L without solar system":18.6579437256
+  },
+  {
+    "time":"2025-06-22T07:00:00.000",
+    "boiler temp for 50 L with solar system":64.6851425171,
+    "boiler temp for 50 L without solar system":18.8393115997,
+    "boiler temp for 100 L with solar system":58.5019187927,
+    "boiler temp for 100 L without solar system":18.9017906189,
+    "boiler temp for 150 L with solar system":58.5791854858,
+    "boiler temp for 150 L without solar system":18.8046131134
+  },
+  {
+    "time":"2025-06-22T08:00:00.000",
+    "boiler temp for 50 L with solar system":66.8245925903,
+    "boiler temp for 50 L without solar system":18.9279708862,
+    "boiler temp for 100 L with solar system":59.9931716919,
+    "boiler temp for 100 L without solar system":18.9935646057,
+    "boiler temp for 150 L with solar system":59.7371711731,
+    "boiler temp for 150 L without solar system":18.9098720551
+  },
+  {
+    "time":"2025-06-22T09:00:00.000",
+    "boiler temp for 50 L with solar system":69.0264434814,
+    "boiler temp for 50 L without solar system":19.0047492981,
+    "boiler temp for 100 L with solar system":61.5326728821,
+    "boiler temp for 100 L without solar system":19.0870342255,
+    "boiler temp for 150 L with solar system":60.9405250549,
+    "boiler temp for 150 L without solar system":19.0294132233
+  },
+  {
+    "time":"2025-06-22T10:00:00.000",
+    "boiler temp for 50 L with solar system":70.952796936,
+    "boiler temp for 50 L without solar system":19.0430145264,
+    "boiler temp for 100 L with solar system":62.8142623901,
+    "boiler temp for 100 L without solar system":19.1515445709,
+    "boiler temp for 150 L with solar system":61.9357872009,
+    "boiler temp for 150 L without solar system":19.1266345978
+  },
+  {
+    "time":"2025-06-22T11:00:00.000",
+    "boiler temp for 50 L with solar system":74.0808944702,
+    "boiler temp for 50 L without solar system":19.1121349335,
+    "boiler temp for 100 L with solar system":64.8920288086,
+    "boiler temp for 100 L without solar system":19.2366600037,
+    "boiler temp for 150 L with solar system":63.5255088806,
+    "boiler temp for 150 L without solar system":19.2539920807
   }
 ]
