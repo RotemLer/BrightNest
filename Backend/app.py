@@ -9,7 +9,7 @@ import os
 import time
 import threading
 import requests
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from torch.profiler import schedule
 
 from Backend.userRoutes import userApi, users_collection

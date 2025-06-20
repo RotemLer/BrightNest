@@ -249,16 +249,9 @@ const fetchFamilyData = async () => {
         localStorage.setItem('lastBoilerFetch', now.toString());
       }
 
+      // המלצות הפעלה
       const recRes = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
         headers: { 'Authorization': `Bearer ${token}` },
-
-  const fetchForecastTemp = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/forecast`, {
-        headers: { Authorization: `Bearer ${token}` },
       });
     console.log("recommendations for boiler")
       const recData = recRes.ok ? await recRes.json() : [];
@@ -322,14 +315,14 @@ const fetchForecastTemp = async () => {
       const closest = data.reduce((prev, curr) =>
         Math.abs(new Date(curr.time) - now) < Math.abs(new Date(prev.time) - now) ? curr : prev
       );
-        if (closest[tempKey]) {
-          setPredictedBoilerTemp(closest[tempKey]);
-          localStorage.setItem("real_temp_from_scale", "false");
 
-          if (locationKey) {
-            localStorage.setItem(locationKey, closest[tempKey].toString());
-        } else {
-          console.warn("⚠️ לא נמצאה תחזית תואמת:", closest);
+      if (closest[tempKey]) {
+        console.log("🔵 תחזית מז\"א לפי מודל:", closest[tempKey]);
+        setPredictedBoilerTemp(closest[tempKey]);
+        localStorage.setItem("real_temp_from_scale", "false");
+
+        if (locationKey) {
+          localStorage.setItem(locationKey, closest[tempKey].toString());
         }
       }
     }
