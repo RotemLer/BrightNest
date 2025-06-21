@@ -89,7 +89,7 @@ export default function EnergySavingsGraph() {
     );
   }
 
-  return (
+   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6">
       {/* Header with gradient background */}
       <div className="text-center mb-8">
@@ -142,17 +142,6 @@ export default function EnergySavingsGraph() {
               </div>
             </div>
           </div>
-
-          {/* Navigation Button */}
-          <div className="text-center">
-            <button
-              onClick={() => navigate("/graphs/money")}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:from-orange-400 hover:to-blue-400 transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="text-lg">📊</span>
-              עבור לגרף שבועי
-            </button>
-          </div>
         </div>
       ) : (
         <div className="text-center py-16">
@@ -167,6 +156,17 @@ export default function EnergySavingsGraph() {
           </p>
         </div>
       )}
+
+      {/* Always visible navigation button */}
+      <div className="text-center mt-6">
+        <button
+          onClick={() => navigate("/graphs/money")}
+          className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:from-orange-400 hover:to-blue-400 transform hover:scale-105 transition-all duration-200"
+        >
+          <span className="text-lg">📊</span>
+          עבור לגרף שבועי
+        </button>
+      </div>
     </div>
   );
 }
