@@ -21,18 +21,7 @@ function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-200 via-gray-300/60 to-gray-400/40 dark:from-gray-900 dark:via-gray-800/90 dark:to-gray-900 transition-all duration-500 relative overflow-hidden">
-
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0 opacity-[0.12] dark:opacity-[0.08]">
-        <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-orange-400 to-pink-400 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-60 right-16 w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute bottom-40 left-1/4 w-48 h-48 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-32 right-1/3 w-36 h-36 bg-gradient-to-br from-purple-400 to-violet-400 rounded-full blur-3xl animate-pulse" style={{animationDelay: '3s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-br from-orange-300/30 to-blue-300/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '0.5s'}}></div>
-        <div className="absolute top-1/4 right-1/4 w-28 h-28 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
-        <div className="absolute bottom-1/4 left-1/3 w-44 h-44 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2.5s'}}></div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-300 via-gray-300/60 to-gray-400/40 dark:from-gray-900 dark:via-gray-700 dark:to-blue-950 transition-all duration-500 relative overflow-hidden">
 
       {/* Animated Geometric Patterns */}
       <div className="absolute inset-0 opacity-[0.06] dark:opacity-[0.04]">
@@ -73,7 +62,7 @@ function Dashboard() {
               <span className="text-2xl">🏠</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-950 to-blue-950 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-950 to-blue-950 bg-clip-text text-transparent dark:text-white">
                 לוח בקרה
               </h1>
               <p className="text-gray-600 dark:text-gray-300 text-sm">ניהול מכשירי הבית החכם</p>
@@ -95,7 +84,6 @@ function Dashboard() {
         <div className="space-y-8">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-right text-gray-800 dark:text-gray-100 flex items-center gap-3">
-              <span className="w-8 h-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-full"></span>
               המכשירים שלי
             </h2>
             <button
@@ -112,7 +100,7 @@ function Dashboard() {
               {devices.map(device => (
                 <div
                   key={device.id}
-                  className="w-full bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-300/40 dark:border-gray-700/50 overflow-hidden group hover:scale-[1.02]"
+                  className="w-full bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-400/40 dark:border-gray-400/50 overflow-hidden group hover:scale-[1.02]"
                 >
                   <Link to={device.path} className="block">
                     <div className="p-8 text-center relative">
@@ -166,7 +154,7 @@ function Dashboard() {
                       </div>
 
                       {/* Enhanced Schedule Display */}
-                      <div className="bg-gradient-to-r from-gray-50/80 to-blue-50/60 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 border border-gray-300/30 dark:border-gray-600">
+                      <div className="bg-gradient-to-r from-gray-50/80 to-blue-50/60 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 border border-gray-600/30 dark:border-gray-500">
                         <div className="space-y-3">
                           <div className="flex items-center justify-center gap-2 mb-4">
                             <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-blue-700 rounded-full flex items-center justify-center">
@@ -207,13 +195,12 @@ function Dashboard() {
           {/* Weather Forecast Section - Takes 2/3 of the width */}
           <div className="xl:col-span-6 space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center flex items-center justify-center gap-3">
-              <span className="w-8 h-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-full"></span>
               תחזית מזג האוויר
             </h2>
 
-            <div className="bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-300/40 dark:border-gray-700/50 overflow-hidden">
+            <div className="bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-500/40 dark:border-gray-400/50 overflow-hidden">
               <div className="p-8">
-                <div className="bg-gradient-to-r from-gray-50/80 to-blue-50/60 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 mb-8 border border-gray-300/30 dark:border-gray-600">
+                <div className="bg-gradient-to-r from-gray-50/80 to-blue-50/60 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 mb-8 border border-gray-500/30 dark:border-gray-600">
                   <div className="flex items-center justify-center gap-3">
                     <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-blue-700 rounded-full flex items-center justify-center">
                       <span className="text-white text-sm">📍</span>
@@ -239,11 +226,10 @@ function Dashboard() {
           {/* Energy Savings Graph Section - Takes 1/3 of the width */}
           <div className="xl:col-span-4 space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center flex items-center justify-center gap-3">
-              <span className="w-8 h-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-full"></span>
               חיסכון באנרגיה
             </h2>
 
-            <div className="group bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl transition-all duration-500 border border-gray-300/40 dark:border-gray-700/50 overflow-hidden hover:scale-[1.015] hover:shadow-[0_0_25px_rgba(255,160,0,0.4)] dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]">
+            <div className="group bg-gray-100/60 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl transition-all duration-500 border border-gray-500/40 dark:border-gray-400/50 overflow-hidden hover:scale-[1.015] hover:shadow-[0_0_25px_rgba(255,160,0,0.4)] dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]">
 
               <div className="p-8">
                 <EnergySavingsGraph />

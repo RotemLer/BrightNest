@@ -84,15 +84,15 @@ const handleSubmit = async (e) => {
         >
           הירשם
         </button>
-
-
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          כבר יש לך חשבון?{' '}
-          <a href="/login" className="text-[#1FA7FF] hover:underline">
+        <div className="flex justify-center items-center gap-3 text-sm text-gray-600 dark:text-gray-400" dir="rtl">
+          <span>כבר יש לך חשבון?</span>
+          <a
+            href="/login"
+            className="px-3 py-1 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 transition-colors"
+          >
             התחבר
           </a>
-
-        </p>
+        </div>
       </form>
     </div>
   );

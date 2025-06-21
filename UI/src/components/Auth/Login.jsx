@@ -73,15 +73,15 @@ function Login() {
         >
           התחבר
         </button>
-
-
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          אין לך משתמש?{' '}
-          <a href="/register" className="text-[#FF6D2E] hover:underline">
+        <div className="flex justify-center items-center gap-3 text-sm text-gray-600 dark:text-gray-400" dir="rtl">
+          <span>אין לך משתמש?</span>
+          <a
+            href="/register"
+            className="px-3 py-1 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors"
+          >
             הרשמה
           </a>
-
-        </p>
+        </div>
       </form>
     </div>
   );

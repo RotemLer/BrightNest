@@ -483,184 +483,328 @@ const handleCancel = (userName) => {
 
 
 
-  return (
-    <div className="p-6 max-w-3xl mx-auto text-gray-800 dark:text-white">
-      <h1 className="text-3xl font-bold mb-6 text-center">שליטה בדוד</h1>
-
-      <div className="mb-6 text-center">
-        <p className="text-xl">
-          סטטוס דוד:
-          <span className={userSettings.boilerStatus === '✅ פועל' ? 'text-green-600' : 'text-red-600'}>
-            {userSettings.boilerStatus}
-          </span>
-        </p>
-        <p className="text-sm text-gray-500 mt-1">
-          סוג: {getBoilerTypeText()} | נפח: {getBoilerSizeText()}
-        </p>
-        <div className="flex justify-center gap-4 mt-3">
-          <button
-            onClick={toggleBoilerStatus}
-            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-          >
-            {userSettings.boilerStatus === '✅ פועל' ? 'כבה' : 'הדלק'} את הדוד
-          </button>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-5 py-2 border border-gray-300 hover:bg-teal-500 dark:hover:bg-gray-700 rounded-full text-sm"
-          >
-            <Pencil size={18} />  ערוך הגדרות דוד ומשתמשים
-          </button>
-        </div>
-      </div>
-
-      <div className="mb-8 text-center">
-        <h2 className="text-xl font-bold mb-3 flex items-center justify-center gap-2">
-          טמפרטורה חזויה של המים בדוד:
-        </h2>
-        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold">
-          <ThermometerSun />
-          <span className={predictedBoilerTemp > 42 ? 'text-red-600' : 'text-blue-600'}>
-            {Math.round(predictedBoilerTemp)}°C
-          </span>
-          <span>{predictedBoilerTemp > 42 ? '🔥' : '💧'}</span>
+return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-300 via-gray-300/60 to-gray-400/40 dark:from-gray-900 dark:via-gray-700 dark:to-blue-950 p-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+            שליטה בדוד
+          </h1>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full"></div>
         </div>
 
-        {predictedBoilerTemp > 42 && (
-          <p className="text-sm text-red-500 mt-2">⚠️ המים עלולים להיות חמים מדי למקלחת לילדים</p>
-        )}
-      </div>
+        {/* Main Content Grid */}
+        <div className="grid gap-6 lg:grid-cols-2">
 
-
-      <div className="mb-8 text-center">
-        <h2 className="text-xl font-bold mb-3">מצב חימום</h2>
-        <div className="flex justify-center gap-4">
-        <button
-          className={`px-5 py-2 rounded-full font-medium transition duration-200 shadow-sm ${heatingMode === 'auto' ? 'bg-green-600 text-white' : 'bg-blue-600 border border-gray-300 hover:bg-teal-500'}`}
-          onClick={() => {
-            setHeatingMode('auto');
-            localStorage.setItem('heating-mode', 'auto');
-          }}
-        >
-          אוטומטי
-        </button>
-
-        <button
-          className={`px-5 py-2 rounded-full font-medium transition duration-200 shadow-sm ${heatingMode === 'manual' ? 'bg-green-600 text-white' : 'bg-blue-600 border border-gray-300 hover:bg-teal-500'}`}
-          onClick={() => {
-            setHeatingMode('manual');
-            localStorage.setItem('heating-mode', 'manual');
-          }}
-        >
-          ידני
-        </button>
-        </div>
-      </div>
-
-    {hasChosenMode && heatingMode === 'manual' && (
-        <>
-          <div className="mb-10">
-            <h2 className="text-lg font-semibold mb-4 text-center">בחר טווח שעות להפעלה</h2>
-            <div className="flex justify-center gap-8">
-              <div>
-                <p className="text-sm text-center mb-2">שעת סיום</p>
-                <HourWheel selectedHour={endHour} onSelect={setEndHour} />
+          {/* Boiler Status Card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+              <h2 className="text-2xl font-bold mb-4 text-center">סטטוס הדוד</h2>
+              <div className="text-center">
+                <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-xl font-bold ${
+                  userSettings.boilerStatus === '✅ פועל' 
+                    ? 'bg-green-500 bg-opacity-20 border-2 border-green-300' 
+                    : 'bg-red-500 bg-opacity-20 border-2 border-red-300'
+                }`}>
+                  <span className="text-2xl">
+                    {userSettings.boilerStatus === '✅ פועל' ? '🔥' : '💤'}
+                  </span>
+                  {userSettings.boilerStatus}
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-center mb-2">שעת התחלה</p>
-                <HourWheel selectedHour={startHour} onSelect={setStartHour} />
+            </div>
+
+            <div className="p-6">
+              <div className="flex justify-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-6">
+                <span className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+                  סוג: {getBoilerTypeText()}
+                </span>
+                <span className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+                  נפח: {getBoilerSizeText()}
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={toggleBoilerStatus}
+                  className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    userSettings.boilerStatus === '✅ פועל'
+                      ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-200'
+                      : 'bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-200'
+                  }`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    {userSettings.boilerStatus === '✅ פועל' ? '⏹️' : '▶️'}
+                    {userSettings.boilerStatus === '✅ פועל' ? 'כבה' : 'הדלק'} את הדוד
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="flex-1 py-3 px-6 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Pencil size={18} />
+                    ערוך הגדרות
+                  </span>
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="mb-10">
-            <h2 className="text-xl font-bold mb-3 text-center flex justify-center items-center gap-2">
-              <Clock /> שעות פעילות היום
-            </h2>
-            <div className="flex justify-center text-blue-800 text-lg font-semibold" dir="ltr">
-              {getHourRange()}
-            </div>
-          </div>
-        </>
-      )}
+          {/* Temperature Prediction Card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white flex items-center justify-center gap-2">
+                <ThermometerSun className="text-orange-500" />
+                טמפרטורה חזויה
+              </h2>
 
-      {hasChosenMode && heatingMode === 'auto' && recommendedBoilerHours.length > 0 && (
-        <div className="text-center mt-8">
-          <h2 className="text-xl font-bold mb-3">⏱️ מתי להפעיל את הדוד</h2>
-          <ul className="space-y-1">
-            {recommendedBoilerHours.map((rec, index) => (
-              <li key={index} className="text-sm text-gray-700 dark:text-gray-200">
-                🕒 {rec.Time} – {rec.Status}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+              <div className="text-center">
+                <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full border-8 ${
+                  predictedBoilerTemp > 42 
+                    ? 'border-red-300 bg-red-50 dark:bg-red-900/20' 
+                    : 'border-blue-300 bg-blue-50 dark:bg-blue-900/20'
+                }`}>
+                  <div className="text-center">
+                    <div className={`text-3xl font-bold ${
+                      predictedBoilerTemp > 42 ? 'text-red-600' : 'text-blue-600'
+                    }`}>
+                      {Math.round(predictedBoilerTemp)}°C
+                    </div>
+                    <div className="text-2xl">
+                      {predictedBoilerTemp > 42 ? '🔥' : '💧'}
+                    </div>
+                  </div>
+                </div>
 
-
-      <div className="mb-10">
-        <h2 className="text-xl font-bold mb-4 text-center flex justify-center gap-2">
-          <Users /> לוח זמנים מועדף
-        </h2>
-        {family.length === 0 ? (
-          <p className="text-center text-gray-500">אין משתמשים עדיין.</p>
-        ) : (
-          <ul className="space-y-2">
-        {family.map((member, index) => {
-          const today = new Date().toISOString().split('T')[0];
-          const showerTimeStr = member.showerTime;
-          const wasShownTodayKey = `shower-shown-${member.name}-${today}`;
-          const wasShownToday = localStorage.getItem(wasShownTodayKey);
-
-          const popupShownOnTimeKey = `popup-shown-on-time-${member.name}-${today}`;
-          const wasPopupShownOnTime = localStorage.getItem(popupShownOnTimeKey);
-
-          let isInShowerWindow = false;
-          if (showerTimeStr) {
-            const showerStart = new Date(`${today}T${showerTimeStr}:00`);
-            const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
-            const now = new Date();
-            isInShowerWindow = now >= showerStart && now <= showerEnd;
-          }
-
-          const shouldShowLateConfirmButton =
-            !wasPopupShownOnTime &&
-            !showerDoneTimes[member.name] &&
-            !isInShowerWindow;
-
-          return (
-            <li key={index} className="bg-gray-100 p-3 rounded-md dark:bg-gray-700">
-              <p className="text-gray-800 dark:text-white font-bold">👤 {member.name}</p>
-              <p className="text-gray-600 dark:text-gray-300">🕒 שעה: {member.showerTime || 'לא הוגדר'}</p>
-              <p className="text-gray-600 dark:text-gray-300">🌡️ טמפ' מועדפת: {member.preferredTemp || 'לא הוגדר'}°C</p>
-
-              {(isInShowerWindow) && (
-                <>
-                  {showerDoneTimes[member.name] ? (
-                    <p className="mt-2 text-sm text-gray-500">
-                      ⏱️ מקלחת הסתיימה בשעה {showerDoneTimes[member.name]}
+                {predictedBoilerTemp > 42 && (
+                  <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-sm text-red-600 dark:text-red-400 font-medium">
+                      ⚠️ המים עלולים להיות חמים מדי למקלחת לילדים
                     </p>
-                  ) : (
-                    <button
-                      className="mt-2 px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 text-sm"
-                      onClick={() => {
-                        handleConfirm(member.name);
-                        localStorage.setItem(`shower-shown-${member.name}-${today}`, 'true');
-                      }}
-                    >
-                      ✔️ סיימתי להתקלח
-                    </button>
-                  )}
-                </>
-              )}
-            </li>
-          );
-        })}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
-</ul>
+        {/* Heating Mode Card */}
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">מצב חימום</h2>
+            <div className="flex justify-center gap-4">
+              <button
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
+                  heatingMode === 'auto' 
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-green-200' 
+                    : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                }`}
+                onClick={() => {
+                  setHeatingMode('auto');
+                  localStorage.setItem('heating-mode', 'auto');
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  🤖 אוטומטי
+                </span>
+              </button>
 
+              <button
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${
+                  heatingMode === 'manual' 
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-200' 
+                    : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                }`}
+                onClick={() => {
+                  setHeatingMode('manual');
+                  localStorage.setItem('heating-mode', 'manual');
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  ✋ ידני
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Manual Mode Settings */}
+        {hasChosenMode && heatingMode === 'manual' && (
+          <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white">
+                ⏰ בחר טווח שעות להפעלה
+              </h2>
+              <div className="flex justify-center gap-12 mb-8">
+                <div className="text-center">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">שעת התחלה</p>
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-xl">
+                    <HourWheel selectedHour={startHour} onSelect={setStartHour} />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">שעת סיום</p>
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-4 rounded-xl">
+                    <HourWheel selectedHour={endHour} onSelect={setEndHour} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white flex justify-center items-center gap-2">
+                  <Clock className="text-blue-500" />
+                  שעות פעילות היום
+                </h3>
+                <div className="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-bold text-lg shadow-lg" dir="ltr">
+                  {getHourRange()}
+                </div>
+              </div>
+            </div>
+          </div>
         )}
+
+        {/* Auto Mode Recommendations */}
+        {hasChosenMode && heatingMode === 'auto' && recommendedBoilerHours.length > 0 && (
+          <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-6 text-center text-gray-800 dark:text-white">
+                ⏱️ מתי להפעיל את הדוד
+              </h2>
+              <div className="grid gap-3">
+                {recommendedBoilerHours.map((rec, index) => (
+                  <div key={index} className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                    <div className="flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                      <span className="text-green-600 text-xl">🕒</span>
+                      <span className="font-semibold">{rec.Time}</span>
+                      <span className="text-gray-600 dark:text-gray-400">–</span>
+                      <span>{rec.Status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Family Schedule Card */}
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white flex justify-center gap-2">
+              <Users className="text-blue-500" />
+              לוח זמנים מועדף
+            </h2>
+
+            {family.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">👥</div>
+                <p className="text-gray-500 dark:text-gray-400 text-lg">אין משתמשים עדיין</p>
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">הוסף משתמשים כדי לנהל לוח זמנים</p>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {family.map((member, index) => {
+                  const today = new Date().toISOString().split('T')[0];
+                  const showerTimeStr = member.showerTime;
+                  const wasShownTodayKey = `shower-shown-${member.name}-${today}`;
+                  const wasShownToday = localStorage.getItem(wasShownTodayKey);
+
+                  const popupShownOnTimeKey = `popup-shown-on-time-${member.name}-${today}`;
+                  const wasPopupShownOnTime = localStorage.getItem(popupShownOnTimeKey);
+
+                  let isInShowerWindow = false;
+                  if (showerTimeStr) {
+                    const showerStart = new Date(`${today}T${showerTimeStr}:00`);
+                    const showerEnd = new Date(showerStart.getTime() + 20 * 60 * 1000);
+                    const now = new Date();
+                    isInShowerWindow = now >= showerStart && now <= showerEnd;
+                  }
+
+                  const shouldShowLateConfirmButton =
+                    !wasPopupShownOnTime &&
+                    !showerDoneTimes[member.name] &&
+                    !isInShowerWindow;
+
+                  return (
+                    <div key={index} className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 ${
+                      isInShowerWindow 
+                        ? 'border-green-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-lg' 
+                        : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700'
+                    }`}>
+                      {isInShowerWindow && (
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-emerald-500"></div>
+                      )}
+
+                      <div className="p-5">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                              <span className="text-2xl">👤</span>
+                              {member.name}
+                            </h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                <span className="text-blue-500">🕒</span>
+                                <span className="text-sm font-medium">
+                                  {member.showerTime || 'לא הוגדר'}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                <span className="text-red-500">🌡️</span>
+                                <span className="text-sm font-medium">
+                                  {member.preferredTemp || 'לא הוגדר'}°C
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {isInShowerWindow && (
+                            <div className="flex flex-col items-center">
+                              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                                פעיל עכשיו
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {isInShowerWindow && (
+                          <>
+                            {showerDoneTimes[member.name] ? (
+                              <div className="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-lg p-3">
+                                <p className="text-sm text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
+                                  <span>✅</span>
+                                  מקלחת הסתיימה בשעה {showerDoneTimes[member.name]}
+                                </p>
+                              </div>
+                            ) : (
+                              <button
+                                className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                onClick={() => {
+                                  handleConfirm(member.name);
+                                  localStorage.setItem(`shower-shown-${member.name}-${today}`, 'true');
+                                }}
+                              >
+                                <span className="flex items-center justify-center gap-2">
+                                  ✔️ סיימתי להתקלח
+                                </span>
+                              </button>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
- {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
+
+      {/* Modals */}
+      {showModal && <EditBoilerModal onClose={() => setShowModal(false)} />}
       <ShowerReminderModal
         visible={showerReminder.visible}
         userName={showerReminder.user}
