@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+Backend/.env
+__pycache__/
+*.sqlite
+*.json
+.idea/
+.idea_backup/

@@ -1,6 +1,8 @@
 # ==== Imports ====
 import json
 
+scheduled_email_times = set()
+
 import joblib
 import pytz
 from sympy.physics.units import temperature
@@ -11,7 +13,11 @@ from DVCS.Device import Device
 import numpy as np
 import os
 import pandas as pd
-from datetime import datetime
+import threading
+import requests
+from flask import current_app, jsonify, request, g
+from UTILS.emailSender import schedule_heating_email, send_alert_to_logged_in_user
+
 
 
 # Constants
@@ -40,7 +46,7 @@ COLLECTOR_EFFICIENCY_PER_SIZE = {
 
 # ==== Boiler Initialization ====
 class BoilerManager(Device):
-    def __init__(self, name: str, capacity_liters: int, has_solar: bool = True, power_usage: float = None):
+    def __init__(self, name: str, capacity_liters: int,  has_solar: bool = True, power_usage: float = None):
         if power_usage is None:
             power_map = {50: 2.0, 100: 3.0, 150: 4.0}
             power_usage = power_map.get(capacity_liters, 3.0)
@@ -199,7 +205,6 @@ class BoilerManager(Device):
         return current_temp
 
     def get_temperature(self):
-        print(f"in boiler - het temperature = {self.temperature}")
         return self.temperature
 
     def str(self):
@@ -339,18 +344,6 @@ class BoilerManager(Device):
                 print(f"⚠ Missing feature: {col} — filling with 0")
                 l_input[col] = 0.0
 
-        # if inject_temp is not None:
-        #     column_name = f"prev_boiler_temp_{self.capacity_liters}_{'solar' if self.has_solar else 'no_solar'}"
-        #     print(f"column name = {column_name}")
-        #     print(f"l_input.columns = {l_input.columns}")
-        #     if column_name in l_input.columns:
-        #         natural_profile = self.generate_natural_heating_profile(start_temp=inject_temp)
-        #         for time, temp in natural_profile.items():
-        #             print(f"time: {time}")
-        #             if time in l_forecast["date"].values:
-        #                 l_input.loc[l_forecast["date"] == time, column_name] = temp
-        #         print(f"✅ Injected natural heating profile from {inject_temp}°C")
-
         l_input = l_input[self.expected_features].astype(np.float32)
 
         forecast_temps, time_stamps = [], []
@@ -438,8 +431,8 @@ class BoilerManager(Device):
         # === חלק הסימולציה מהקוד הישן ===
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
         effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
-        log = []
 
+        log = []
         print(f"\n📅 Simulating daily usage with per-user temperatures: {schedule}")
 
         for target_time, details in schedule.items():
@@ -451,16 +444,41 @@ class BoilerManager(Device):
                 num_users = details.get("users", 1)
                 shower_temp = details.get("shower_temp", 40.0)
                 needed_liters = num_users * liters_per_shower * 1.1
+
+                # Init values
                 usable_liters = 0
                 heating_duration = 0
                 forecast_temp = 0.0
 
+                # Try to find when to start heating
                 heating_time, temp_at_start = self.calc_start_heating_time(
                     forecast_df=df_forecast,
                     boiler_key=key,
                     target_time=target_time,
                     target_temp=shower_temp
                 )
+                if heating_time:
+                    print(
+                        f"✅ Heating required! Email will be scheduled at {heating_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    auth_header = request.headers.get("Authorization")
+                    if not auth_header or not auth_header.startswith("Bearer "):
+                        return jsonify({"error": "Missing or invalid token"}), 401
+
+                    email_key = (heating_time.replace(second=0, microsecond=0), target_time)
+
+                    if email_key in scheduled_email_times:
+                        print(f"⚠️ Skipping duplicate schedule for: {email_key}")
+                    else:
+                        scheduled_email_times.add(email_key)
+                        user_context = g.get("user")
+                        user_email = user_context["_id"] if user_context else None
+                        schedule_heating_email(
+                            heating_start_time=heating_time,
+                            target_time=target_time,
+                            app=current_app._get_current_object(),
+                            user_email=user_email,
+                            test_mode=False
+                        )
 
                 if temp_at_start is None:
                     status = "Insufficient - not enough time to heat"
@@ -756,3 +774,31 @@ class BoilerManager(Device):
         except Exception as e:
             print(f"❌ שגיאה בטעינת תחזית מהקובץ: {e}")
             return None
+
+
+
+def schedule_heating_email(heating_start_time: datetime, target_time: datetime, app, user_email: str, test_mode=False):
+    now = datetime.now()
+
+    if test_mode:
+        delay_seconds = 10
+        print("🧪 [TEST MODE ENABLED] Email will be sent in 10 seconds.")
+    else:
+        delay_seconds = (heating_start_time - now).total_seconds()
+
+    subject = "🔥 BrightNest: Boiler Heating Started"
+    message = f"הדוד שלך צריך להתחיל להתחמם עכשיו כדי להגיע לטמפרטורה הרצויה עד {target_time.strftime('%H:%M')}."
+
+    def job():
+        with app.app_context():
+            print(f"📨 [Thread] Triggered at: {datetime.now().strftime('%H:%M:%S')}")
+            send_alert_to_logged_in_user(subject=subject, message=message, user_email=user_email)
+
+    if delay_seconds <= 0:
+        print("⚠️ Heating time already passed — sending email immediately.")
+        with app.app_context():
+            print(f"📨 [Immediate] Triggered at: {datetime.now().strftime('%H:%M:%S')}")
+            send_alert_to_logged_in_user(subject=subject, message=message, user_email=user_email)
+    else:
+        print(f"⏱ Email scheduled in {delay_seconds:.1f} seconds (target: {target_time.strftime('%H:%M')})")
+        threading.Timer(delay_seconds, job).start()

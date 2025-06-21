@@ -1,0 +1,113 @@
+* [33m085f95d[m[33m ([m[1;32mDan-branch[m[33m)[m WIP: saving changes before switching to DAN-old-branch
+* [33maa2c4e0[m Full version with emailSender and graph features
+* [33m30c2369[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDAN-old-branch[m[33m, [m[1;31morigin/Dan-branch[m[33m, [m[1;31morigin/DAN-old-branch[m[33m)[m ✨ Add boiler email scheduling logic
+* [33m96892b4[m Added an email sender based on the time to turn the boiler.  - Now it works, we make a POST request and we send the email using the functions from emailSender.py
+* [33m8632caa[m Added an email sender based on the time to turn the boiler.  - Not working because jwt internal Complications, need to fix
+* [33m51160a9[m WIP: Email alert feature in progress
+[31m|[m *   [33mad37dd6[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #53 from RotemLer/DVIR-branch
+[31m|[m [32m|[m[33m\[m  
+[31m|[m [32m|[m * [33m62c997d[m[33m ([m[1;31morigin/DVIR-branch[m[33m)[m add _redirects
+[31m|[m * [33m|[m [33m8c91b58[m Merge pull request #52 from RotemLer/DVIR-branch
+[31m|[m [34m|[m[33m\[m[33m|[m 
+[31m|[m [34m|[m * [33m5b43eb2[m add _redirects
+[31m|[m * [35m|[m [33m1c73ab0[m Merge pull request #51 from RotemLer/DVIR-branch
+[31m|[m [36m|[m[35m\[m[35m|[m 
+[31m|[m [36m|[m * [33mba976fd[m add _redirects
+[31m|[m * [1;31m|[m [33m64e87bc[m Merge pull request #50 from RotemLer/DVIR-branch
+[31m|[m [1;32m|[m[1;31m\[m[1;31m|[m 
+[31m|[m [1;32m|[m * [33mbd749ae[m add _redirects
+[31m|[m * [1;33m|[m [33m57ba534[m Merge pull request #49 from RotemLer/DVIR-branch
+[31m|[m [1;34m|[m[1;33m\[m[1;33m|[m 
+[31m|[m [1;34m|[m * [33m9b087ea[m add _redirects
+[31m|[m * [1;35m|[m [33m58f29e6[m Merge pull request #48 from RotemLer/DVIR-branch
+[31m|[m [1;36m|[m[1;35m\[m[1;35m|[m 
+[31m|[m [1;36m|[m * [33m35e94e6[m add _redirects
+[31m|[m * [31m|[m [33me60db0e[m Merge pull request #47 from RotemLer/DVIR-branch
+[31m|[m [32m|[m[31m\[m[31m|[m 
+[31m|[m [32m|[m * [33ma5e04a4[m add _redirects
+[31m|[m * [33m|[m [33m5f6721a[m Merge pull request #46 from RotemLer/DVIR-branch
+[31m|[m [34m|[m[33m\[m[33m|[m 
+[31m|[m [34m|[m * [33m01c845a[m update the app to fit to prodaction
+[31m|[m * [35m|[m [33mdedbef5[m Merge pull request #45 from RotemLer/DVIR-branch
+[31m|[m [36m|[m[35m\[m[35m|[m 
+[31m|[m [36m|[m * [33mbd20577[m update the app to fit to prodaction
+[31m|[m * [1;31m|[m [33m96781f5[m Merge pull request #44 from RotemLer/DVIR-branch
+[31m|[m [1;32m|[m[1;31m\[m[1;31m|[m 
+[31m|[m [1;32m|[m * [33m6e9f1d9[m update the app to fit to prodaction
+[31m|[m * [1;33m|[m [33m9f69116[m Merge pull request #43 from RotemLer/DVIR-branch
+[31m|[m [1;34m|[m[1;33m\[m[1;33m|[m 
+[31m|[m [1;34m|[m * [33m550ecae[m make the code more fir to prodaction
+[31m|[m * [1;35m|[m [33m9ddf831[m Merge pull request #42 from RotemLer/DVIR-branch
+[31m|[m [1;36m|[m[1;35m\[m[1;35m|[m 
+[31m|[m [1;36m|[m * [33m544ef8e[m updated requirements.txt
+[31m|[m * [31m|[m [33mf30ad76[m Merge pull request #41 from RotemLer/DVIR-branch
+[31m|[m [32m|[m[31m\[m[31m|[m 
+[31m|[m [32m|[m * [33m27c32b3[m updated requirements.txt
+[31m|[m * [33m|[m [33m14fdf3e[m Merge pull request #40 from RotemLer/DVIR-branch
+[31m|[m [34m|[m[33m\[m[33m|[m 
+[31m|[m [34m|[m * [33m9eab1f3[m updated requirements.txt
+[31m|[m * [35m|[m [33m0dd71f2[m Merge pull request #39 from RotemLer/DVIR-branch
+[31m|[m [36m|[m[35m\[m[35m|[m 
+[31m|[m [36m|[m * [33m8f725a9[m updated requirements.txt
+[31m|[m * [1;31m|[m [33m77fc5b2[m Merge pull request #38 from RotemLer/DVIR-branch
+[31m|[m [1;32m|[m[1;31m\[m[1;31m|[m 
+[31m|[m [1;32m|[m * [33m8d9f082[m updated requirements.txt
+[31m|[m * [1;33m|[m [33m01606a7[m Merge pull request #37 from RotemLer/DVIR-branch
+[31m|[m [1;34m|[m[1;33m\[m[1;33m|[m 
+[31m|[m [1;34m|[m * [33mfcfb647[m add kera to requirements.txt
+[31m|[m * [1;35m|[m [33m24ea647[m Merge pull request #36 from RotemLer/DVIR-branch
+[31m|[m [1;36m|[m[1;35m\[m[1;35m|[m 
+[31m|[m [1;36m|[m * [33mf27c327[m add numpy to requirements.txt
+[31m|[m * [31m|[m [33m8ec5933[m Merge pull request #35 from RotemLer/DVIR-branch
+[31m|[m [32m|[m[31m\[m[31m|[m 
+[31m|[m [32m|[m * [33me53a62e[m add transflow to requirements.txt
+[31m|[m * [33m|[m [33m154e692[m Merge pull request #34 from RotemLer/DVIR-branch
+[31m|[m [34m|[m[33m\[m[33m|[m 
+[31m|[m [34m|[m * [33m40a83c7[m add transflow to requirements.txt
+[31m|[m [34m|[m * [33mb19913d[m now when we trun on / off the boiler from the ui its send it to the backedn. I reduced the server calls, requests are sent to the server every hour or page update or refresh
+[31m|[m [34m|[m * [33mcff2458[m Update Procfile
+[31m|[m [34m|[m * [33m38bb61b[m Update requirements.txt
+[31m|[m [34m|[m * [33m411166b[m Update README.md
+[31m|[m [34m|[m * [33m4b023bc[m Update README.md
+[31m|[m [34m|[m * [33m3562056[m Delete Backend/venv/Lib/site-packages directory
+[31m|[m [34m|[m * [33m0579691[m ...........
+[31m|[m * [35m|[m [33m9f20626[m ...........
+[31m|[m * [35m|[m [33m0b2784d[m Delete Backend/venv/Lib/site-packages directory
+[31m|[m * [35m|[m   [33m610c283[m Merge pull request #33 from RotemLer/DVIR-branch
+[31m|[m [36m|[m[1;31m\[m [35m\[m  
+[31m|[m [36m|[m * [35m\[m   [33mb280ada[m Merge branch 'master' into DVIR-branch
+[31m|[m [36m|[m [35m|[m[36m\[m [35m\[m  
+[31m|[m [36m|[m [35m|[m[36m/[m [35m/[m  
+[31m|[m [36m|[m[36m/[m[35m|[m [35m/[m   
+[31m|[m [36m|[m [35m|[m[35m/[m    
+[31m|[m * [35m|[m [33m57d0104[m Update Procfile
+[31m|[m * [35m|[m [33m7bbea01[m Update requirements.txt
+[31m|[m * [35m|[m [33m952ed4c[m ...........
+[31m|[m * [35m|[m   [33m50f7536[m Merge pull request #31 from RotemLer/DVIR-branch
+[31m|[m [1;34m|[m[1;35m\[m [35m\[m  
+[31m|[m * [1;35m|[m [35m|[m [33m4b2b05d[m Update README.md
+[31m|[m * [1;35m|[m [35m|[m [33meec0489[m Update README.md
+[31m|[m[31m/[m [1;35m/[m [35m/[m  
+[31m|[m [1;35m|[m * [33m544373c[m ...........
+[31m|[m [1;35m|[m * [33me761d41[m ...........
+[31m|[m [1;35m|[m[1;35m/[m  
+[31m|[m * [33m6b5a680[m ....
+[31m|[m[31m/[m  
+[31m|[m * [33ma607528[m[33m ([m[1;35mrefs/stash[m[33m)[m On Dan-branch: Temporary stash before cherry-pick
+[31m|[m[31m/[m[31m|[m 
+[31m|[m * [33m6d1ca4c[m index on Dan-branch: 809b260 now when we trun on / off the boiler from the ui its send it to the backedn. I reduced the server calls, requests are sent to the server every hour or page update or refresh
+[31m|[m[31m/[m  
+[31m|[m * [33m4905e8d[m[33m ([m[1;31morigin/Rotem-branch[m[33m)[m not popup window - but showed on user. try to make pop up if the user didnt press the button - but not working yet.
+[31m|[m * [33mb07d3c4[m popup window while showering + 20 minutes - if the user finished to shower.
+[31m|[m[31m/[m  
+* [33m809b260[m[33m ([m[1;31morigin/master-backup[m[33m, [m[1;32mRotem-branch[m[33m)[m now when we trun on / off the boiler from the ui its send it to the backedn. I reduced the server calls, requests are sent to the server every hour or page update or refresh
+* [33m247153b[m conection between back&front for turn boilr on-off syncronizaed
+*   [33m38b442b[m Merge branch 'DVIR-branch' of https://github.com/RotemLer/BrightNest into Rotem-branch
+[33m|[m[34m\[m  
+[33m|[m * [33ma4dccfa[m fix the boiler prediction in the ui now it not try to take a data from the local storge
+[33m|[m * [33md5c1364[m fix the modifyData.py and improve the dataTraining.py
+[33m|[m * [33mf1d8bc2[m fix the modifyData.py and improve the dataTraining.py
+* [34m|[m   [33mdbc865b[m Merge branch 'DVIR-branch' of https://github.com/RotemLer/BrightNest into Rotem-branch
+[34m|[m[36m\[m [34m\[m  
+[34m|[m [36m|[m[34m/[m  
+[34

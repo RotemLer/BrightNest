@@ -18,6 +18,8 @@ import { AppContext } from './context/AppContext';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import AddDevice from './components/Devices/AddDevice';
+import WeeklyGraph from './components/Dashboard/WeeklyGraph';
+import MoneySavedGraph from './components/Dashboard/MoneySavedGraph';
 import 'react-toastify/dist/ReactToastify.css';
 
 function AppRoutes() {
@@ -33,6 +35,8 @@ function AppRoutes() {
       <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
       <Route path="/devices/boiler" element={<ProtectedRoute><Boiler /></ProtectedRoute>} />
       <Route path="/devices/addDevice" element={<ProtectedRoute><AddDevice /></ProtectedRoute>} />
+      <Route path="/weekly-graph" element={<ProtectedRoute><WeeklyGraph /></ProtectedRoute>} />
+      <Route path="/graphs/money" element={<ProtectedRoute><MoneySavedGraph /></ProtectedRoute>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
     </Routes>

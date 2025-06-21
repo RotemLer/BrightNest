@@ -1,7 +1,4 @@
-from contextlib import nullcontext
 import json
-
-import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from datetime import datetime
@@ -10,15 +7,14 @@ import sys
 import os
 import time
 import threading
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
-from torch.profiler import schedule
-
-from Backend.userRoutes import userApi, users_collection
-
+import requests
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from userRoutes import userApi, users_collection,db
 from DVCS.Boiler import BoilerManager
-
+from flask import g
+from Backend.dailyStatsLogger import save_daily_summary
+from UTILS.emailSender import send_alert_to_logged_in_user
 from UTILS.weatherAPIRequest import get_forecast_dataframe_for_model
 if os.environ.get("RENDER") == "true":
     BACKEND_URL = "https://brightnest.onrender.com"
@@ -71,6 +67,21 @@ static_lon=0.0
 static_new_temp = None
 static_inject_until = None
 
+
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+
+@app.before_request
+def load_user_into_g():
+    try:
+        verify_jwt_in_request(optional=True)  # ✅ FIX: wrap with this!
+        identity = get_jwt_identity()
+        if identity:
+            g.user = {"_id": identity}
+    except Exception as e:
+        # Optional: log or silently ignore to avoid crashing CORS preflight/etc.
+        g.user = None
+
+
 @app.route("/")
 def home():
     return "Welcome to the Open-Meteo Forecast API!"
@@ -92,7 +103,6 @@ def get_forecast(lat, lon):
                 "location": {"latitude": latitude, "longitude": longitude, "requested_at": now.isoformat() + "Z", "cached": True},
                 "forecast": cached_forecast
             })
-
 
         forecast_df, X_input = get_forecast_dataframe_for_model(latitude, longitude, hours_ahead=96)
         full_df = pd.concat([forecast_df, X_input], axis=1)
@@ -246,8 +256,10 @@ def receive_schedule_and_respond():
         schedule = {
             datetime.fromisoformat(item["datetime"]): {
                 "shower_temp": float(item.get("preferredTemp", 38.0)),
-                "users": 1
-            } for item in schedule_data
+                "users": 1,
+                "name": item.get("name", "משתמש")
+            }
+            for item in schedule_data
         }
         print(f"📍schedule_data {schedule_data}")
 
@@ -298,9 +310,36 @@ def get_forecast_prediction():
             with open(path, "r") as f:
                 return jsonify(json.load(f))
         return jsonify([])
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/trigger-email", methods=["POST"])
+def trigger_email():
+    data = request.get_json()
+
+    user_email = data.get("email")
+    subject = data.get("subject")
+    message = data.get("message")
+    name = data.get("name")  # 🔁 NEW
+
+    if not user_email or not subject or not message:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    print(f"📤 Triggering email to: {user_email}")
+    send_alert_to_logged_in_user(subject=subject, message=message, name=name)  # ✅ Pass name
+
+    return jsonify({"message": "Email sent (via internal request)"}), 200
+
+
+@app.route('/boiler/stats/save-daily', methods=['GET'])
+@jwt_required()
+def save_today_summary():
+    user_id = get_jwt_identity()  # ✅ now working
+    save_daily_summary(user_id, db, users_collection)
+    return jsonify({"message": f"Daily summary saved for {user_id}"}), 200
+
+
 
 
 def run_nightly_schedule():
