@@ -481,7 +481,33 @@ class BoilerManager(Device):
                         )
 
                 if temp_at_start is None:
-                    status = "Insufficient - not enough time to heat"
+                    # Try using real-time boiler temperature instead
+                    temp_now = self.get_temperature()
+                    available_minutes = int((target_time - datetime.now()).total_seconds() // 60)
+
+                    if available_minutes > 0:
+                        heating_profile = self.simulate_heating_profile(
+                            start_time=datetime.now(),
+                            start_temp=temp_now,
+                            max_duration_minutes=available_minutes,
+                            step_minutes=1
+                        )
+
+
+                        if heating_profile:
+                            max_temp_reached = list(heating_profile.values())[-1]
+                            if max_temp_reached >= shower_temp:
+                                status = (
+                                    f"We will reach {shower_temp}°C by {target_time.strftime('%H:%M')}"
+                                )
+                            else:
+                                status = (
+                                    f"We will not reach {shower_temp}°C by {target_time.strftime('%H:%M')}, "
+                                    f"but we can reach about {max_temp_reached:.1f}°C"
+                                )
+                    else:
+                        status = "Insufficient - not enough time to heat"
+
                 else:
                     forecast_temp = temp_at_start
                     if forecast_temp < shower_temp:
@@ -500,7 +526,7 @@ class BoilerManager(Device):
                     else:
                         usable_liters = self.capacity_liters * (forecast_temp - cold_temp) / (shower_temp - cold_temp)
                         if usable_liters >= needed_liters:
-                            status = "Sufficient - no heating"
+                            status = "Sufficient - no heating needed"
                             heating_duration = 0
                             effective_volume -= needed_liters
                         else:
