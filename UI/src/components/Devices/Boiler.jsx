@@ -4,7 +4,7 @@ import HourWheel from '../common/HourWheel';
 import { ThermometerSun, Clock, Pencil, Users } from 'lucide-react';
 import EditBoilerModal from './EditBoilerModal';
 import ShowerReminderModal from './ShowerReminder';
-const isProduction = process.env.NODE_ENV === 'production';
+
 
 
 
@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 dayjs.extend(isSameOrAfter);
 
+const isProduction = process.env.NODE_ENV === 'production';
 const baseUrl = isProduction
   ? process.env.REACT_APP_API_URL
   : 'http://127.0.0.1:5000';
@@ -150,7 +151,7 @@ useEffect(() => {
 
 const fetchFamilyData = async () => {
   try {
-    const res = await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/family`, {
+    const res = await fetch(`${baseUrl}/family`, {
       headers: { 'Authorization': `Bearer ${token}` },
     });
 
@@ -247,7 +248,7 @@ const fetchFamilyData = async () => {
           lon: userSettings.lon,
         };
 
-        await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/boiler/schedule`, {
+        await fetch(`${baseUrl}/boiler/schedule`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -260,7 +261,7 @@ const fetchFamilyData = async () => {
       }
 
       // המלצות הפעלה
-      const recRes = await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/boiler/recommendations`, {
+      const recRes = await fetch(`${baseUrl}/boiler/recommendations`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
     console.log("recommendations for boiler")
@@ -269,7 +270,7 @@ const fetchFamilyData = async () => {
 
       const activeRec = recData.find(rec => shouldBoilerBeOnNow(rec));
       if (activeRec && userSettings.boilerStatus !== '✅ פועל') {
-        await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/boiler/heat`, {
+        await fetch(`${baseUrl}/boiler/heat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -457,7 +458,7 @@ const handleConfirm = async (userName) => {
     const lat = location.lat || 31.25;
     const lon = location.lon || 34.79;
     const token = localStorage.getItem('token');
-    const res = await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/boiler/cool`, {
+    const res = await fetch(`${baseUrl}/boiler/cool`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

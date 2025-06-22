@@ -7,8 +7,8 @@ const shouldRefetch = (key, thresholdMs = 1000 * 60 * 60) => {
   const now = Date.now();
   return !lastFetch || now - parseInt(lastFetch) > thresholdMs;
 };
-const isProduction = process.env.NODE_ENV === 'production';
 
+const isProduction = process.env.NODE_ENV === 'production';
 const baseUrl = isProduction
   ? process.env.REACT_APP_API_URL
   : 'http://127.0.0.1:5000';
@@ -114,7 +114,7 @@ export const AppProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const res = await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/profile`, {
+      const res = await fetch(`${baseUrl}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -152,7 +152,7 @@ export const AppProvider = ({ children }) => {
     if (!token) return;
 
     const isPost = !!newStatus;
-    const url = `${baseUrl || 'http://127.0.0.1:5000'}/boiler/status`;
+    const url = `${baseUrl}/boiler/status`;
 
     if (!isPost && !shouldRefetch('lastBoilerStatusFetch')) return;
 
@@ -218,7 +218,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const res = await fetch(
-        `${baseUrl || 'http://127.0.0.1:5000'}/profile/update`,
+        `${baseUrl}/profile/update`,
         {
           method: 'PUT',
           headers: {
