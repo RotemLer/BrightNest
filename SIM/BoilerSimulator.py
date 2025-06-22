@@ -61,29 +61,29 @@ class BoilerSimulator:
         reward = 0
         temp_diff = self.boiler_temp - self.target_temp
 
-        # ענישה על טמפרטורה נמוכה מדי
+
         if temp_diff < 0:
             reward -= abs(temp_diff) * 0.3
 
-        # תגמול קטן אם בטווח הרצוי
+
         elif 0 <= temp_diff <= 3:
             reward += 2
 
-        # ענישה על חימום יתר
+
         elif temp_diff > 10:
             reward -= 3
         else:
             reward -= 0.5
 
-        # ענישה קלה על הדלקת גוף החימום
+
         if action == 1:
             reward -= 0.5
 
-        # בונוס נוסף לשעות שיא (אם חם מספיק)
+
         if 18 <= (self.hour % 24) <= 21:
             if self.boiler_temp >= self.target_temp:
                 reward += 3
             else:
-                reward -= 1  # עונש אם לא הספיק להתחמם
+                reward -= 1
 
         return reward

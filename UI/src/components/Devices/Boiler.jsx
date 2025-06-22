@@ -106,10 +106,9 @@ useEffect(() => {
       if (!startHour || !endHour) return false;
 
       if (startHour <= endHour) {
-        // טווח רגיל
         return currentHourMin >= startHour && currentHourMin <= endHour;
       } else {
-        // טווח שחוצה חצות
+
         return currentHourMin >= startHour || currentHourMin <= endHour;
       }
     })();
@@ -123,7 +122,7 @@ useEffect(() => {
       console.log("🧊 מצב ידני: מכבה דוד");
       toggleBoilerStatus();
     }
-  }, 60 * 1000); // כל דקה
+  }, 60 * 1000);
 
   return () => clearInterval(interval);
 }, [heatingMode, startHour, endHour, userSettings.boilerStatus]);
@@ -179,14 +178,14 @@ const fetchFamilyData = async () => {
         const shownTodayKey = `shower-shown-${member.name}-${today}`;
         const wasShownToday = localStorage.getItem(shownTodayKey);
 
-        // אם עדיין לא לחצו - נרשום לתזכורת
+
         if (!wasShownToday) {
           setShowerReminders(prev => [...prev, member.name]);
           localStorage.setItem(shownTodayKey, 'true');
         }
 
         if (now >= showerStart && now <= showerEnd) {
-          // בתוך חלון מקלחת
+
           console.log(`🟢 עכשיו בתוך חלון מקלחת של ${member.name} – הצגת פופאפ`);
           setShowerReminders(prev => [...prev, member.name]);
 
@@ -228,7 +227,7 @@ const fetchFamilyData = async () => {
           timers.push(timeout);
 
         } else {
-          // אחרי מקלחת – לבדוק אם עדיין לא נלחץ
+
           console.log(`⏰ נכנסנו אחרי זמן המקלחת של ${member.name} – בודק אם להציג פופאפ`);
           const wasClicked = localStorage.getItem(shownTodayKey);
           if (!wasClicked) {
@@ -238,7 +237,7 @@ const fetchFamilyData = async () => {
         }
       });
 
-      // שליחת לוח זמנים לשרת
+
       if (schedule.length > 0 && userSettings.boilerSize) {
         const body = {
           schedule,
@@ -260,7 +259,7 @@ const fetchFamilyData = async () => {
         localStorage.setItem('lastBoilerFetch', now.toString());
       }
 
-      // המלצות הפעלה
+
       const recRes = await fetch(`${baseUrl}/boiler/recommendations`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -305,7 +304,7 @@ const fetchForecastTemp = async () => {
     const tempKey = `boiler temp for ${size} L ${solar} solar system`;
     const locationKey = userSettings.location ? `boiler-temp-${userSettings.location}` : null;
 
-    // ✅ טמפ' אמיתית מתוך סקיילר (מדידה אחרי מקלחת)
+
     if (Array.isArray(data) && data.length === 1 && data[0][tempKey]) {
       const realTemp = data[0][tempKey];
       console.log("🟢 טמפ' אמיתית מהסקיילר:", realTemp);
@@ -320,7 +319,7 @@ const fetchForecastTemp = async () => {
       return;
     }
 
-    // 🔵 fallback – תחזית רגילה מהמודל
+
     if (Array.isArray(data) && data.length > 0) {
       const now = new Date();
       const closest = data.reduce((prev, curr) =>
@@ -373,7 +372,7 @@ if (shouldFetch || locationChanged || !alreadyHasForecast) {
   console.log("⏱️ דילוג על שליפה – נתונים קיימים ועדכניים");
 }
 
-// 🕒 בדיקה אם צריך להפעיל או לכבות את הדוד לפי מצב ידני
+
 if (heatingMode === 'manual' && startHour && endHour && userSettings.boilerStatus) {
   const now = new Date();
   const currentHourMin = now.toTimeString().slice(0, 5); // HH:MM
@@ -382,7 +381,6 @@ if (heatingMode === 'manual' && startHour && endHour && userSettings.boilerStatu
     if (startHour <= endHour) {
       return currentHourMin >= startHour && currentHourMin <= endHour;
     } else {
-      // טווח שעובר חצות
       return currentHourMin >= startHour || currentHourMin <= endHour;
     }
   })();
@@ -437,22 +435,22 @@ const handleConfirm = async (userName) => {
     [userName]: endTime,
   }));
 
-    // ✅ שמירה גם ב־localStorage
+
   const today = new Date().toISOString().split('T')[0];
   localStorage.setItem(`shower-done-${userName}-${today}`, endTime);
 
 
-  // 🔢 שלב 1: כמות האנשים שהתקלחו (אפשר לשפר אם מתקלחים יחד)
+
   const numUsers = 1;
 
-  // 📦 שלב 2: נפח הדוד מתוך ההגדרות
+
   const boilerSize = parseInt(userSettings.boilerSize || "100");
 
-  // 💧 שלב 3: חישוב כמות מים חמים שהשתמשו בהם
+
   const litersPerUser = 40;
   const usedLiters = numUsers * litersPerUser;
 
-  // 🧊 שלב 4: שליחת בקשה לצינון
+
   try {
       const location = JSON.parse(localStorage.getItem("location")) || {};
     const lat = location.lat || 31.25;
@@ -466,7 +464,7 @@ const handleConfirm = async (userName) => {
       },
       body: JSON.stringify({
         used_liters: usedLiters,
-        cold_temp: 22,  // או לפי מז"א בעתיד
+        cold_temp: 22,
         lat: lat,
         lon: lon
       }),
@@ -475,7 +473,7 @@ const handleConfirm = async (userName) => {
     const data = await res.json();
     if (res.ok) {
       console.log(`🧊 טמפ' אחרי מקלחת: ${data.new_temperature}°C`);
-      // setPredictedBoilerTemp(data.new_temperature); ← אם רוצים לעדכן במסך
+
     } else {
       console.error("❌ שגיאה בצינון:", data.error);
     }

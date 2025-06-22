@@ -140,7 +140,7 @@ def update_boiler_status():
 def get_boiler_status():
     return jsonify({
         "status": "on" if boiler.status else "off",
-        "temperature": boiler.get_temperature()  # ✅ מחזיר מהסקיילר אם יש
+        "temperature": boiler.get_temperature()
     }), 200
 
 @app.route("/boiler/temperature", methods=["GET"])
@@ -170,7 +170,7 @@ def cool_boiler():
     cold_temp = data.get("cold_temp", 22.0)
     schedule_data = data.get("schedule", {})
 
-    # ✅ ממירים את המפתחות של schedule לתאריכים
+
     try:
         schedule = {
             datetime.fromisoformat(k): v for k, v in schedule_data.items()
@@ -178,19 +178,19 @@ def cool_boiler():
     except Exception as e:
         return jsonify({"error": f"Invalid schedule format: {e}"}), 400
 
-    # ✅ ודא שקיימות קואורדינטות
+
     lat = data.get("lat")
     lon = data.get("lon")
 
     if lat is None or lon is None:
         return jsonify({"error": "Missing lat/lon coordinates"}), 400
 
-    # ✅ טמפרטורה נוכחית מהדוד (אם לא קיימת – ברירת מחדל)
+
     current_temp = boiler.get_temperature() or 25.0
     print(f"cool route - current temp:  {current_temp}")
 
 
-    # 🧊 קירור הדוד ועדכון
+
     static_new_temp, static_inject_until = boiler.cool(
         schedule = schedule_data,
         current_temp=current_temp,
@@ -205,7 +205,7 @@ def cool_boiler():
 
     boiler.last_inject_until = static_inject_until
     boiler.last_static_temp = static_new_temp
-    # 🔁 הרצת סימולציית תחזית עם הטמפ׳ החדשה (משולב inject)
+
     boiler.simulate_day_usage_with_custom_temps(
         schedule=schedule,
         lat=lat,
@@ -276,14 +276,14 @@ def receive_schedule_and_respond():
         df = boiler.simulate_day_usage_with_custom_temps(schedule=schedule, lat=lat, lon=lon, export_csv=False)
         print("after simulate")
 
-        ##
+
         boiler.temperature = boiler.load_forecasted_temp_from_prediction_file(
             capacity_liters=boiler.capacity_liters,
             has_solar=boiler.has_solar
         )
         print(f"📦 התחזית העדכנית לדוד: {boiler.temperature}°C")
 
-        ##
+
 
         df["Time"] = df["Time"].astype(str)
         print("g")

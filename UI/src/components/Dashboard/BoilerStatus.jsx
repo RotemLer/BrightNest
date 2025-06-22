@@ -1,7 +1,7 @@
 import React from 'react';
 
 function BoilerStatus({ isOn, predictedTemp, toggleBoiler }) {
-  // חישוב צבע הרקע בהתאם לטמפרטורה
+
   const getTempColorClass = () => {
     if (predictedTemp >= 45) return 'bg-red-500'; // red
     if (predictedTemp >= 42) return 'bg-purple-500'; // perple
