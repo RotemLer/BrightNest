@@ -85,7 +85,7 @@ The system is fully deployed via **Render** – both frontend and backend – un
 >⚠️ Note: Due to deployment size limitations on Render, user registration is disabled in the live version. For full functionality, including registration and personalized scheduling, we recommend running the project locally.
 
 To access the live system:
-###1.Open the link above.
+### 1.Open the link above.
 2.Because user registration is disabled in the deployed version, please use the following demo credentials:
   Email: BrightNest@gmail.com
   Password: 2025
