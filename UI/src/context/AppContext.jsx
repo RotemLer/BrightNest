@@ -7,6 +7,15 @@ const shouldRefetch = (key, thresholdMs = 1000 * 60 * 60) => {
   const now = Date.now();
   return !lastFetch || now - parseInt(lastFetch) > thresholdMs;
 };
+const isProduction = process.env.NODE_ENV === 'production';
+
+const baseUrl = isProduction
+  ? process.env.REACT_APP_API_URL
+  : 'http://127.0.0.1:5000';
+
+if (isProduction && !baseUrl) {
+  throw new Error("❌ Environment variable REACT_APP_API_URL is missing in production!");
+}
 
 export const AppProvider = ({ children }) => {
   // ✅ MINIMAL FIX: Add token state that loads from localStorage
@@ -105,7 +114,7 @@ export const AppProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/profile`, {
+      const res = await fetch(`${baseUrl || 'http://127.0.0.1:5000'}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -143,7 +152,7 @@ export const AppProvider = ({ children }) => {
     if (!token) return;
 
     const isPost = !!newStatus;
-    const url = `${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/boiler/status`;
+    const url = `${baseUrl || 'http://127.0.0.1:5000'}/boiler/status`;
 
     if (!isPost && !shouldRefetch('lastBoilerStatusFetch')) return;
 
@@ -209,7 +218,7 @@ export const AppProvider = ({ children }) => {
 
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/profile/update`,
+        `${baseUrl || 'http://127.0.0.1:5000'}/profile/update`,
         {
           method: 'PUT',
           headers: {
