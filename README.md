@@ -82,11 +82,15 @@ React will run on `http://localhost:3000`
 The system is fully deployed via **Render** – both frontend and backend – under a single link:
 👉 **[https://brightnest.onrender.com](https://brightnest.onrender.com)**
 
-To access the live system:
+>⚠️ Note: Due to deployment size limitations on Render, user registration is disabled in the live version. For full functionality, including registration and personalized scheduling, we recommend running the project locally.
 
-1. Open the link above.
-2. Register or log in.
-3. Use the app as described below.
+To access the live system:
+1.Open the link above.
+2.Because user registration is disabled in the deployed version, please use the following demo credentials:
+  Email: BrightNest@gmail.com
+  Password: 2025
+3.If you cannot register a new user, use this demo account to explore the system.
+4. Use the app as described below.
 
 > Note: No separate `.env` configuration is needed in deployment – both services are integrated behind the scenes.
 
