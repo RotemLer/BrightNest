@@ -87,8 +87,8 @@ The system is fully deployed via **Render** – both frontend and backend – un
 To access the live system:
 #### 1.Open the link above.
 #### 2.Because user registration is disabled in the deployed version, please use the following demo credentials:
-  Email: BrightNest@gmail.com
-  Password: 2025
+  * Email: BrightNest@gmail.com
+  * Password: 2025
 #### 3.If you cannot register a new user, use this demo account to explore the system.
 #### 4. Use the app as described below.
 
