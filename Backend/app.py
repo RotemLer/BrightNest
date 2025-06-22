@@ -224,6 +224,7 @@ def cool_boiler():
 
 
 @app.route("/login", methods=["POST"])
+@jwt_required()
 def login():
     data = request.get_json()
     email = data.get("username")
@@ -244,6 +245,7 @@ def login():
     return jsonify({"message": "התחברת בהצלחה", "token": access_token})
 
 @app.route("/boiler/schedule", methods=["POST"])
+@jwt_required()
 def receive_schedule_and_respond():
     try:
         data = request.get_json()
@@ -292,6 +294,7 @@ def receive_schedule_and_respond():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/boiler/recommendations", methods=["GET"])
+@jwt_required()
 def get_latest_recommendations():
     try:
         if os.path.exists("latest_recommendations.json"):
@@ -303,6 +306,7 @@ def get_latest_recommendations():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/boiler/forecast", methods=["GET"])
+@jwt_required()
 def get_forecast_prediction():
     try:
         path = os.path.join(os.getcwd(), "forecast_prediction.json")
@@ -315,6 +319,7 @@ def get_forecast_prediction():
 
 
 @app.route("/trigger-email", methods=["POST"])
+@jwt_required()
 def trigger_email():
     data = request.get_json()
 
