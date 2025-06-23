@@ -10,7 +10,6 @@ function UserSettings() {
   const handleDeleteAccount = () => {
     if (window.confirm('האם אתה בטוח שברצונך למחוק את החשבון?')) {
       console.log('החשבון נמחק');
-      // שליחת בקשה לשרת למחיקת החשבון
     }
   };
 

@@ -18,8 +18,6 @@ import requests
 from flask import current_app, jsonify, request, g
 from UTILS.emailSender import schedule_heating_email, send_alert_to_logged_in_user
 
-
-
 # Constants
 BOILER_SIZES = [50, 100, 150]
 MAX_TEMP_NO_SOLAR = 50
@@ -41,8 +39,6 @@ COLLECTOR_EFFICIENCY_PER_SIZE = {
     100: 0.85,
     150: 0.75
 }
-
-
 
 # ==== Boiler Initialization ====
 class BoilerManager(Device):
@@ -212,7 +208,6 @@ class BoilerManager(Device):
         return f"Boiler '{self.name}' ({self.capacity_liters}L, {solar}) - {self.get_status()}, {self.temperature:.1f}°C"
 
     def boiler_manager(self, scheduled_shower_time: datetime):
-
         return 0
 
     def cool(self, schedule: dict, current_temp: float, lat: float, lon: float,
@@ -222,7 +217,6 @@ class BoilerManager(Device):
         self.lat = lat
         self.lon = lon
         total_liters = self.capacity_liters
-
 
         mixing_factor = 0.6
         effective_liters = used_liters * mixing_factor
@@ -254,7 +248,6 @@ class BoilerManager(Device):
                 )
             except Exception as e:
                 print(f"❌ Error during forecast update after cooling: {e}")
-
 
         return new_temp, inject_until
 
@@ -379,7 +372,6 @@ class BoilerManager(Device):
 
                 for idx, row in df_forecast.iterrows():
                     forecast_time = row["time"]
-                    # ⭐ הפוך אותו ל־tz-aware
                     if forecast_time.tzinfo is None:
                         forecast_time = pytz.timezone("Asia/Jerusalem").localize(forecast_time)
 
@@ -426,7 +418,7 @@ class BoilerManager(Device):
             print("saving JSON")
             forecast_json_path = os.path.join(os.getcwd(), "forecast_prediction.json")
             df_forecast.to_json(forecast_json_path, orient="records", force_ascii=False, indent=2, date_format="iso")
-            print("📋 תחזית שנשמרה:")
+            print("📋forecast saved:")
             print(df_forecast[["time", "boiler temp for 150 L with solar system"]].head(10))
 
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
@@ -437,7 +429,7 @@ class BoilerManager(Device):
 
         for target_time, details in schedule.items():
             if not isinstance(target_time, datetime):
-                print(f"❌ שגיאה: מפתח בלו״ז אינו מסוג datetime: {target_time}")
+                print(f"❌ error: schedule item not from type datetime: {target_time}")
                 continue
 
             try:
@@ -492,7 +484,6 @@ class BoilerManager(Device):
                             max_duration_minutes=available_minutes,
                             step_minutes=1
                         )
-
 
                         if heating_profile:
                             max_temp_reached = list(heating_profile.values())[-1]
@@ -563,7 +554,6 @@ class BoilerManager(Device):
             output_path = os.path.join(os.getcwd(), filename)
             log_df.to_csv(output_path, index=False)
             print(f"\n📄 Usage log exported to: {output_path}")
-
 
         return log_df
 
@@ -643,9 +633,7 @@ class BoilerManager(Device):
             delta_T = Q / (mass_kg * c)
             current_temp = min(current_temp + delta_T, MAX_TEMP)
 
-
             heating_profile[current_time] = round(current_temp, 2)
-
 
             elapsed_minutes += step_minutes
             current_time += timedelta(minutes=step_minutes)
@@ -701,7 +689,6 @@ class BoilerManager(Device):
         except Exception as e:
             print(f"⚠️ Error saving natural forecast: {e}")
 
-    # === Solar heating function ===
     def compute_solar_heating(self, prev_temp, radiation, cloud_cover, hour, month, volume_liters):
 
         if 6 <= hour <= 18 and radiation > MIN_EFFECTIVE_RADIATION:
@@ -766,7 +753,7 @@ class BoilerManager(Device):
         try:
             path = "forecast_prediction.json"
             if not os.path.exists(path):
-                print("⚠️ קובץ התחזיות לא נמצא.")
+                print("⚠️ forecast prediction file wasn't found.")
                 return None
 
             with open(path, "r") as f:
@@ -774,7 +761,7 @@ class BoilerManager(Device):
             df = pd.DataFrame(records)
 
             if "time" not in df.columns:
-                print("⚠️ עמודת 'time' לא קיימת בקובץ.")
+                print("⚠️ 'timr' coloumn doesnt exist.")
                 return None
 
             df["time"] = pd.to_datetime(df["time"], errors="coerce")
@@ -786,13 +773,13 @@ class BoilerManager(Device):
 
             key = f"boiler temp for {capacity_liters} L {'with' if has_solar else 'without'} solar system"
             if key not in row:
-                print(f"⚠️ העמודה '{key}' לא נמצאה.")
+                print(f"⚠️ coloumn '{key}' wasnt found.")
                 return None
 
             return round(row[key], 2)
 
         except Exception as e:
-            print(f"❌ שגיאה בטעינת תחזית מהקובץ: {e}")
+            print(f"❌ error loading forecast from file: {e}")
             return None
 
 

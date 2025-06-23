@@ -31,7 +31,7 @@ function Profile() {
     setUserData((prev) => ({
       ...prev,
       name: userName || '',
-      email: userSettings.email || '',  // מוצג אך לא נשלח
+      email: userSettings.email || '',
       location: userSettings.location || '',
       lat: userSettings.lat || null,
       lon: userSettings.lon || null
@@ -65,7 +65,7 @@ function Profile() {
       lon: userData.lon
     };
 
-    updateSettings({ ...preferences, email: userData.email });  // רק ל־UI
+    updateSettings({ ...preferences, email: userData.email });
     setUserName(userData.name);
 
     await saveSettingsToServer({

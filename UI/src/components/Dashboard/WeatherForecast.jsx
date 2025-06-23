@@ -149,7 +149,7 @@ function WeatherForecast({ selectedLocation }) {
         return 'Thunderstorm with heavy hail';
       default:
         console.warn("🌀 Unknown weather code:", weatherCode);
-        return 'Clear sky'; // ברירת מחדל
+        return 'Clear sky'; //default
     }
   };
   const handleDaySelect = (key) => {

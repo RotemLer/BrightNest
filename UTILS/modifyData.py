@@ -80,7 +80,7 @@ def compute_physical_cooling(prev_temp, ambient_temp, volume_liters, hour, wind_
     Q_kJ = Q_watts * 3600 / 1000
     delta_temp = Q_kJ / (mass * WATER_HEAT_CAPACITY)
 
-    # השפעת שעה ביום
+    # Effect of time of day
     if hour >= 21 or hour <= 5:
         hour_factor = 1.3
     elif 6 <= hour <= 9 or 18 <= hour <= 20:
@@ -91,7 +91,7 @@ def compute_physical_cooling(prev_temp, ambient_temp, volume_liters, hour, wind_
     if 13 <= hour <= 16 and ambient_temp > 27:
         hour_factor *= 0.6
 
-    # רוח ובידוד
+    # Wind and insulation
     wind_factor = 1 + 0.05 * wind_speed
     insulation_factor = 1 - (volume_liters - 50) / 300
 

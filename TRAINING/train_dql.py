@@ -61,8 +61,8 @@ else:
     print("🔎 Starting fresh training.")
 
 # --- Training settings ---
-n_episodes = 50  # 🔽 קיצור מספר אפיזודות
-episode_length = 24  # 🔽 רק יום אחד
+n_episodes = 50
+episode_length = 24  # one day
 batch_size = 32
 rewards_per_episode = []
 
@@ -79,7 +79,7 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
         state = next_state
         total_episode_reward += reward
 
-        if time % 20 == 0:  # 🔽 Replay פחות תדיר
+        if time % 20 == 0:  # 🔽 Replay less frequent
             agent.replay(batch_size)
 
     if e % 5 == 0:
@@ -109,7 +109,6 @@ for e in trange(start_episode, n_episodes, desc="Training episodes"):
     if (e + 1) % 5 == 0:
         print(f"Episode {e+1}/{n_episodes} - Total Reward: {total_episode_reward:.2f} - Epsilon: {agent.epsilon:.2f}")
 
-# ✅ תיקון: שימוש בחישוב מפורש כי e כבר לא מוגדר מחוץ ללולאה
 final_episode = start_episode + len(rewards_per_episode)
 print(f"✅ Training finished successfully at episode {final_episode}!")
 

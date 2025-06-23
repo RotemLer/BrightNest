@@ -73,12 +73,11 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 @app.before_request
 def load_user_into_g():
     try:
-        verify_jwt_in_request(optional=True)  # ✅ FIX: wrap with this!
+        verify_jwt_in_request(optional=True)
         identity = get_jwt_identity()
         if identity:
             g.user = {"_id": identity}
     except Exception as e:
-        # Optional: log or silently ignore to avoid crashing CORS preflight/etc.
         g.user = None
 
 
@@ -249,8 +248,8 @@ def login():
 def receive_schedule_and_respond():
     try:
         data = request.get_json()
-        lat = float(data.get("lat", 31.25))  # ברירת מחדל = באר שבע
-        lon = float(data.get("lon", 34.79))  # ברירת מחדל = באר שבע
+        lat = float(data.get("lat", 31.25))  # Default: Beer Sheva
+        lon = float(data.get("lon", 34.79))  # Default: Beer Sheva
         print(f"📍 קיבלתי מיקום מהמשתמש: lat={lat}, lon={lon}")
         schedule_data = data.get("schedule", {})
         capacity = int(data.get("boilerSize", 100))
@@ -326,13 +325,13 @@ def trigger_email():
     user_email = data.get("email")
     subject = data.get("subject")
     message = data.get("message")
-    name = data.get("name")  # 🔁 NEW
+    name = data.get("name")
 
     if not user_email or not subject or not message:
         return jsonify({"error": "Missing required fields"}), 400
 
     print(f"📤 Triggering email to: {user_email}")
-    send_alert_to_logged_in_user(subject=subject, message=message, name=name)  # ✅ Pass name
+    send_alert_to_logged_in_user(subject=subject, message=message, name=name)
 
     return jsonify({"message": "Email sent (via internal request)"}), 200
 
@@ -340,7 +339,7 @@ def trigger_email():
 @app.route('/boiler/stats/save-daily', methods=['GET'])
 @jwt_required()
 def save_today_summary():
-    user_id = get_jwt_identity()  # ✅ now working
+    user_id = get_jwt_identity()
     save_daily_summary(user_id, db, users_collection)
     return jsonify({"message": f"Daily summary saved for {user_id}"}), 200
 

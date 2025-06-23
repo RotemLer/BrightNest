@@ -25,7 +25,7 @@ function AddDevice() {
         }
 
       } catch (err) {
-        console.error("❌ שגיאה בטעינת המידע:", err);
+        console.error("❌error loading data:", err);
       }
     };
 

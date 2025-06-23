@@ -9,10 +9,10 @@ function BoilerStatus({ isOn, predictedTemp, toggleBoiler }) {
     if (predictedTemp >= 40 && predictedTemp < 42) return 'bg-pink-500'; // pink
     if (predictedTemp >= 39 && predictedTemp < 40) return 'bg-rose-500'; // rose
     if (predictedTemp >= 38 && predictedTemp < 39) return 'bg-amber-500'; // amber
-    if (predictedTemp >= 38 && predictedTemp < 40) return 'bg-teal-500'; // טורקיז
-    if (predictedTemp >= 37 && predictedTemp < 38) return 'bg-green-500'; // ירוק
-    if (predictedTemp >= 40) return 'bg-orange-500'; // כתום
-    if (predictedTemp >= 35) return 'bg-yellow-500'; // צהוב
+    if (predictedTemp >= 38 && predictedTemp < 40) return 'bg-teal-500'; // turkiz
+    if (predictedTemp >= 37 && predictedTemp < 38) return 'bg-green-500'; // green
+    if (predictedTemp >= 40) return 'bg-orange-500'; // orange
+    if (predictedTemp >= 35) return 'bg-yellow-500'; // yellow
     return 'bg-blue-500'; // blue
   };
 

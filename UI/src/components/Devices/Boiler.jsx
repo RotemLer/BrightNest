@@ -4,10 +4,6 @@ import HourWheel from '../common/HourWheel';
 import { ThermometerSun, Clock, Pencil, Users } from 'lucide-react';
 import EditBoilerModal from './EditBoilerModal';
 import ShowerReminderModal from './ShowerReminder';
-
-
-
-
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 dayjs.extend(isSameOrAfter);
@@ -63,8 +59,8 @@ const hasChosenMode = heatingMode !== null;
 
 
   const [family, setFamily] = useState([]);
-const [showerReminder, setShowerReminder] = useState({ visible: false, user: null });
-const [showerReminders, setShowerReminders] = useState([]);
+  const [showerReminder, setShowerReminder] = useState({ visible: false, user: null });
+  const [showerReminders, setShowerReminders] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [recommendedBoilerHours, setRecommendedBoilerHours] = useState([]);
@@ -114,12 +110,12 @@ useEffect(() => {
     })();
 
     if (isInRange && userSettings.boilerStatus !== '✅ פועל') {
-      console.log("🔥 מצב ידני: מדליק דוד");
+      console.log("🔥manual mode - turn on boiler");
       toggleBoilerStatus();
     }
 
     if (!isInRange && userSettings.boilerStatus === '✅ פועל') {
-      console.log("🧊 מצב ידני: מכבה דוד");
+      console.log("🧊 manual mode - turn off boiler");
       toggleBoilerStatus();
     }
   }, 60 * 1000);
@@ -155,7 +151,7 @@ const fetchFamilyData = async () => {
     });
 
     const data = await res.json();
-    console.log("📦 נתוני משפחה מהשרת:", data);
+    console.log("📦 family data from server:", data);
 
     if (res.ok && data.family) {
       setFamily(data.family);
@@ -186,7 +182,7 @@ const fetchFamilyData = async () => {
 
         if (now >= showerStart && now <= showerEnd) {
 
-          console.log(`🟢 עכשיו בתוך חלון מקלחת של ${member.name} – הצגת פופאפ`);
+          console.log(`🟢On shower window of ${member.name} –show popup`);
           setShowerReminders(prev => [...prev, member.name]);
 
           const msUntilAutoClose = showerEnd - now;
@@ -195,30 +191,30 @@ const fetchFamilyData = async () => {
 
           const autoClose = setTimeout(() => {
             setShowerReminder({ visible: false, user: null });
-            console.log(`⏱️ פופאפ נסגר אוטומטית (חלון זמן נגמר) למשתמש ${member.name}`);
+            console.log(`⏱️popup closed automaticly (shower window is over) for user ${member.name}`);
           }, msUntilAutoClose);
           timers.push(autoClose);
 
           const popupFallback = setTimeout(() => {
             const wasClicked = localStorage.getItem(shownTodayKey);
             if (!wasClicked) {
-              console.log(`🟡 חלון נגמר – מציג פופאפ שקט עבור ${member.name}`);
+              console.log(`🟡shower window is over showing popup ${member.name}`);
               setPendingPopupUser(member.name);
             }
           }, msUntilAutoClose);
           timers.push(popupFallback);
 
         } else if (now < showerStart) {
-          // לפני מקלחת – תזמון פופאפ עתידי
+          //before shower - timing future popup
           const msUntilPopup = showerStart - now;
-          console.log(`⌛ תיזמון עתידי לפופאפ של ${member.name} בעוד ${msUntilPopup}ms`);
+          console.log(`⌛ future timing popup for ${member.name} in ${msUntilPopup}ms`);
 
           const timeout = setTimeout(() => {
             setShowerReminders(prev => [...prev, member.name]);
 
             const autoClose = setTimeout(() => {
               setShowerReminder({ visible: false, user: null });
-              console.log(`⏱️ פופאפ עתידי נסגר אוטומטית למשתמש ${member.name}`);
+              console.log(`⏱future popup closed automaticly for user ${member.name}`);
             }, 20 * 60 * 1000);
 
             timers.push(autoClose);
@@ -228,10 +224,10 @@ const fetchFamilyData = async () => {
 
         } else {
 
-          console.log(`⏰ נכנסנו אחרי זמן המקלחת של ${member.name} – בודק אם להציג פופאפ`);
+          console.log(`⏰Entered after shower time of ${member.name} –check if ahow popup`);
           const wasClicked = localStorage.getItem(shownTodayKey);
           if (!wasClicked) {
-            console.log(`🟡 מציג פופאפ שקט מיידית עבור ${member.name}`);
+            console.log(`🟡 present immediatly quiet popup for ${member.name}`);
             setPendingPopupUser(member.name);
           }
         }
@@ -288,7 +284,7 @@ const fetchFamilyData = async () => {
       }
     }
   } catch (err) {
-    console.error("❌ שגיאה בטעינת בני משפחה או המלצות:", err);
+    console.error("❌ error loading family members or recommendations:", err);
   }
 };
 
@@ -307,7 +303,7 @@ const fetchForecastTemp = async () => {
 
     if (Array.isArray(data) && data.length === 1 && data[0][tempKey]) {
       const realTemp = data[0][tempKey];
-      console.log("🟢 טמפ' אמיתית מהסקיילר:", realTemp);
+      console.log("🟢real temp from scaler:", realTemp);
 
       setPredictedBoilerTemp(realTemp);
       localStorage.setItem("real_temp_from_scale", "true");
@@ -327,7 +323,7 @@ const fetchForecastTemp = async () => {
       );
 
       if (closest[tempKey]) {
-        console.log("🔵 תחזית מז\"א לפי מודל:", closest[tempKey]);
+        console.log("🔵forecast from model or forecast scheduale", closest[tempKey]);
         setPredictedBoilerTemp(closest[tempKey]);
         localStorage.setItem("real_temp_from_scale", "false");
 
@@ -337,7 +333,7 @@ const fetchForecastTemp = async () => {
       }
     }
   } catch (err) {
-    console.error("❌ שגיאה בקבלת תחזית הדוד:", err);
+    console.error("❌error getting boiler prediction:", err);
   }
 };
 
@@ -349,7 +345,7 @@ const alreadyHasForecast = locationKey && localStorage.getItem(locationKey);
 const locationChanged = previousLocation && currentLocation && previousLocation !== currentLocation;
 
 if (locationChanged) {
-  console.log(`📍 מיקום השתנה מ־${previousLocation} ל־${currentLocation} – מאפס תחזית קודמת`);
+  console.log(`📍 location changed from ${previousLocation} to ${currentLocation} – reset previous forecast`);
   localStorage.removeItem(`boiler-temp-${previousLocation}`);
   localStorage.setItem("last_forecast_location", currentLocation);
 }
@@ -367,9 +363,9 @@ if (shouldFetch || locationChanged || !alreadyHasForecast) {
   fetchForecastTemp();
 } else {
   const temp = parseFloat(localStorage.getItem(locationKey));
-  console.log(`💾 טמפ׳ מה־localStorage למיקום ${currentLocation}: ${temp}°C`);
+  console.log(`💾temperature from localStorage to location ${currentLocation}: ${temp}°C`);
   setPredictedBoilerTemp(temp);
-  console.log("⏱️ דילוג על שליפה – נתונים קיימים ועדכניים");
+  console.log("⏱️Skip retrieval - current existing data");
 }
 
 
@@ -385,18 +381,18 @@ if (heatingMode === 'manual' && startHour && endHour && userSettings.boilerStatu
     }
   })();
 
-  console.log("⌛ השעה כעת:", currentHourMin);
-  console.log("🕘 טווח ידני:", startHour, "-", endHour);
-  console.log("🧠 בתוך טווח?", isInRange);
-  console.log("📟 סטטוס נוכחי:", userSettings.boilerStatus);
+  console.log("⌛Time now:", currentHourMin);
+  console.log("🕘Manual range:", startHour, "-", endHour);
+  console.log("🧠In range?", isInRange);
+  console.log("📟Current status:", userSettings.boilerStatus);
 
   if (isInRange && userSettings.boilerStatus !== '✅ פועל') {
-    console.log("🔥 מדליק דוד לפי מצב ידני");
+    console.log("🔥turn boiler on - manually");
     toggleBoilerStatus();
   }
 
   if (!isInRange && userSettings.boilerStatus === '✅ פועל') {
-    console.log("🧊 מכבה דוד לפי מצב ידני");
+    console.log("🧊 turn boiler off - manually");
     toggleBoilerStatus();
   }
 }
@@ -472,20 +468,20 @@ const handleConfirm = async (userName) => {
 
     const data = await res.json();
     if (res.ok) {
-      console.log(`🧊 טמפ' אחרי מקלחת: ${data.new_temperature}°C`);
+      console.log(`🧊temperature after shower: ${data.new_temperature}°C`);
 
     } else {
-      console.error("❌ שגיאה בצינון:", data.error);
+      console.error("❌error cooling:", data.error);
     }
   } catch (err) {
-    console.error("❌ שגיאה בשליחת בקשה לצינון:", err);
+    console.error("❌error request cooling:", err);
   }
 };
 
 
 
 const handleCancel = (userName) => {
-  console.log(`${userName} עדיין במקלחת`);
+  console.log(`${userName} still in shower`);
   setShowerReminders(prev => prev.filter(name => name !== userName));
   setShowerReminder({ visible: false, user: null });
 };

@@ -26,7 +26,7 @@ function EditBoilerModal({ onClose }) {
         const data = await res.json();
         if (data.family) setFamily(data.family);
       } catch (err) {
-        console.error('שגיאה בטעינת בני משפחה:', err);
+        console.error('error loading family members:', err);
       }
     };
 
@@ -39,15 +39,12 @@ function EditBoilerModal({ onClose }) {
     if (!token) return;
 
     try {
-      // עדכון ל־context
       updateSettings({ boilerSize, withSolar });
 
-      // שמירת devices דרך /profile/update
       await saveSettingsToServer({
         devices: [{ size: boilerSize, withSolar }]
       });
 
-      // שמירת family דרך /family/update
       const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000'}/family/update`, {
         method: 'PUT',
         headers: {

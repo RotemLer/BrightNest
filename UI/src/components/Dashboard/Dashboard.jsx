@@ -106,7 +106,6 @@ function Dashboard() {
                     <div className="p-8 text-center relative">
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
                       <div className="relative z-10">
                         <div className="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
                           {device.icon}
