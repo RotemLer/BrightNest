@@ -1,7 +1,7 @@
 // src/components/Auth/HomePage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../icons/brightNest_logo.png'; // ודא שזה הנתיב הנכון
+import logo from '../icons/brightNest_logo.png';
 
 function HomePage() {
   const navigate = useNavigate();

@@ -12,8 +12,8 @@ class DQLAgent:
         self.gamma = 0.99
         self.epsilon = 1.0
         self.epsilon_min = 0.05
-        self.epsilon_decay = 0.997  # האטה בקצב ההפחתה
-        self.learning_rate = 0.001  # מהיר יותר מהגרסה הקודמת
+        self.epsilon_decay = 0.997
+        self.learning_rate = 0.001
         self.model = self._build_model()
         self.target_model = self._build_model()
         self.update_target_model()

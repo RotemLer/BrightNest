@@ -105,7 +105,7 @@ class BoilerManager(Device):
                     print("✅ Forecast CSV created.")
                 except Exception as e:
                     print(f"❌ Failed to create forecast CSV: {e}")
-                    return  # לא נמשיך עם העדכון
+                    return
 
             if os.path.exists(csv_path):
                 df = pd.read_csv(csv_path)
@@ -223,8 +223,8 @@ class BoilerManager(Device):
         self.lon = lon
         total_liters = self.capacity_liters
 
-        # דגם עירוב חלקי – מדמה את העובדה שלא כל המים מתערבבים
-        mixing_factor = 0.6  # אפשר לשנות ל־0.5 או 0.7 לפי בדיקות אמפיריות
+
+        mixing_factor = 0.6
         effective_liters = used_liters * mixing_factor
         remaining_liters = total_liters - effective_liters
         if remaining_liters < 0:
@@ -237,7 +237,7 @@ class BoilerManager(Device):
 
         self.update_boiler_temperature(new_temp)
 
-        # שמירת זמן סיום מקלחת
+
         with open("shower_end_time.save", "w") as f:
             f.write(pd.Timestamp.now().isoformat())
 
@@ -391,7 +391,7 @@ class BoilerManager(Device):
                         df_forecast.at[idx, key] = np.float32(current_temp)
                         continue
 
-                    # שליפת משתנים סביבתיים מהתחזית
+
                     mask = l_forecast["date"] == forecast_time
                     print(f"forecast time: {forecast_time}")
 
@@ -405,7 +405,7 @@ class BoilerManager(Device):
                     hour = forecast_time.hour
                     month = forecast_time.month
 
-                    # חישוב טמפ׳ לפי סוג הדוד
+
                     if self.has_solar:
                         current_temp = self.compute_solar_heating(
                             prev_temp=current_temp,
@@ -428,7 +428,7 @@ class BoilerManager(Device):
             df_forecast.to_json(forecast_json_path, orient="records", force_ascii=False, indent=2, date_format="iso")
             print("📋 תחזית שנשמרה:")
             print(df_forecast[["time", "boiler temp for 150 L with solar system"]].head(10))
-        # === חלק הסימולציה מהקוד הישן ===
+
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
         effective_volume = self.capacity_liters * (0.7 if self.has_solar else 1.0)
 
@@ -624,10 +624,7 @@ class BoilerManager(Device):
 
     def simulate_heating_profile(self, start_time: datetime, start_temp: float, max_duration_minutes: int = 90,
                                  step_minutes: int = 10):
-        """
-        מדמה את החימום של הדוד לאחר מקלחת לאורך זמן.
-        מחזירה מילון של {datetime: temp} עבור כל צעד זמן בחימום.
-        """
+
         MAX_TEMP = 68.0
         c = 4.186  # kJ/kg°C
         mass_kg = self.capacity_liters
@@ -641,15 +638,15 @@ class BoilerManager(Device):
         heating_profile = {}
 
         while elapsed_minutes <= max_duration_minutes and current_temp < MAX_TEMP:
-            # חישוב אנרגיה
+
             Q = power_kj_per_min * step_minutes * efficiency
             delta_T = Q / (mass_kg * c)
             current_temp = min(current_temp + delta_T, MAX_TEMP)
 
-            # הוספה למילון
+
             heating_profile[current_time] = round(current_temp, 2)
 
-            # עדכון זמן ודקות
+
             elapsed_minutes += step_minutes
             current_time += timedelta(minutes=step_minutes)
 
@@ -657,10 +654,7 @@ class BoilerManager(Device):
 
     def generate_natural_heating_profile(self, start_temp: float, hours: int = 4, step_minutes: int = 60,
                                          delta_per_hour: float = 0.5):
-        """
-        מדמה התחממות טבעית של מים בדוד (ללא הפעלת גוף חימום)
-        עלייה הדרגתית של delta_per_hour כל שעה.
-        """
+
         profile = {}
         now = pd.Timestamp.now().replace(minute=0, second=0, microsecond=0)
         for i in range(0, hours * 60 + 1, step_minutes):
@@ -675,7 +669,7 @@ class BoilerManager(Device):
 
         now = pd.Timestamp.now()
         if now >= self.last_inject_until:
-            return  # התחזית הטבעית הסתיימה
+            return
 
         hours_remaining = int((self.last_inject_until - now).total_seconds() // 3600)
         profile = self.generate_natural_heating_profile(
@@ -685,7 +679,7 @@ class BoilerManager(Device):
 
         self.natural_heating_forecast = profile
 
-        # שמירה לקובץ JSON
+
         key = f"boiler temp for {self.capacity_liters} L {'with' if self.has_solar else 'without'} solar system"
         json_path = "natural_boiler_forecast.json"
         try:
