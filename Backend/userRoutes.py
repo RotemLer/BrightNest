@@ -7,6 +7,8 @@ from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
 from Backend.dailyStatsLogger import save_daily_summary
+from dotenv import load_dotenv
+import os
 
 # === Blueprint ===
 userApi = Blueprint('userApi', __name__)
@@ -16,7 +18,9 @@ CORS(userApi, resources={r"/*": {"origins": [
 ]}}, supports_credentials=True)
 
 # === MongoDB Connection ===
-client = MongoClient("mongodb+srv://Rotem1234:12341234@smarthouseoptimizationd.thazr.mongodb.net/?retryWrites=true&w=majority&appName=SmartHouseOptimizationDB")
+load_dotenv()
+mongo_uri = os.getenv("MONGO_DB_URI")
+client = MongoClient(mongo_uri)
 db = client["SmartHouseOptimizationDB"]
 users_collection = db["users"]
 
