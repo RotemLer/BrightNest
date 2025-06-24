@@ -21,7 +21,7 @@ CORS(userApi, resources={r"/*": {"origins": [
 # === MongoDB Connection ===
 
 load_dotenv()
-mongo_uri = os.getenv("MONGODB_URI")
+mongo_uri = os.getenv("MONGO_DB_URI")
 client = MongoClient(mongo_uri)
 db = client["SmartHouseOptimizationDB"]
 users_collection = db["users"]
